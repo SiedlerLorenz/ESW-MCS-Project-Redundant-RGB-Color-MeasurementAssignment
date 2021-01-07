@@ -1,17 +1,22 @@
 /*
  * @file Cpu0_Main.c
- * @date 26.11.2020
+ * @date 10.07.2020
  * @version v0.1
- * @author Siedler Lorenz
+ * @author Beneder Roman
  *
  * @brief This application configures the UART Interface Module #3 to 115200,8N1.
- *        Within the main-loop the UART RX-FIFO is checked if any bytes are
+ *        Furthermore, it configures a timer module TOM1CH0 to interrupt every
+ *        ms. Within the main-loop the UART RX-FIFO is checked if any bytes are
  *        received. If a determined start-byte '#' is received the trailing bytes
  *        are received until a dedicated end-byte '$' is received. If there is a
  *        mismatch with the start-byte an error-message is sent via the UART TX-
- *        FIFO. If the correct command is recognized Core 1 get signaled. As soon
- *        as the Core gets back the timer_value, it get transformed to a string
- *        and get transmit to the PC via UART.
+ *        FIFO. If the correct start-byte and end-byte are recognized the string
+ *        is copied into a TX buffer which is sent via the UART TX-FIFO back to
+ *        the sender. Hence, every main-loop cycle a mutex semaphore is checked, if
+ *        it is acquired (which means the a time of 1ms * UPDATE_RATE_MS has passed).
+ *        If the mutex is acquired the mutex is released to be re-acquired and the
+ *        µC-Pin P33.2 is toggled.
+ *
  */
 
 /******************************************************************************/
@@ -26,19 +31,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <unistd.h>
 
 #include <main.h>
 #include <aurix_tc27x_uart_app.h>
-
-#include <I2c/I2c/IfxI2c_I2c.h>
 
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
 /******************************************************************************/
 
 #define LED_toggle_P33(Col_LED) IfxPort_togglePin(&MODULE_P33,Col_LED)
-#define LED_toggle_P10(Col_LED) IfxPort_togglePin(&MODULE_P10,Col_LED)
 #define LED_on_P33(Col_LED) IfxPort_setPinHigh(&MODULE_P33,Col_LED)
 #define LED_off_P33(Col_LED) IfxPort_setPinLow(&MODULE_P33,Col_LED)
 #define DBG_LED 2
@@ -54,31 +55,6 @@
 
 #define RX_START_BYTE 0x23 /* '#' */
 #define RX_END_BYTE 0x24   /* '$' */
-
-/* TCS34725 I2C Address */
-#define Device_ADDRESS 0x29 // 7 bit slave device address
-
-#define Enable_Register 		0x00
-#define RGBC_Timing_Register 	0x01
-#define Wait_Time_Register		0x03
-#define Configuration_Register	0x0D
-#define Control_Register		0x0F
-#define ID_Register				0x12
-#define Status_Register			0x13
-#define Clear_data_low_byte		0x14
-#define Clear_data_high_byte	0x15
-#define Red_data_low_byte		0x16
-#define Red_data_high_byte		0x17
-#define Green_data_low_byte		0x18
-#define Green_data_high_byte	0x19
-#define Blue_data_low_byte		0x1A
-#define Blue_data_high_byte		0x1B
-
-#define Length_of_Address_Write		2
-#define Length_of_Address			1
-#define Length_of_Return_Address	28
-
-
 
 /******************************************************************************/
 /*------------------------------Global variables------------------------------*/
@@ -103,15 +79,6 @@ typedef struct
 
 App_GtmTomTimer GtmTomTimer;
 IfxCpu_mutexLock tim_ms_mutex;
-
-/* I2C */
-// used globally
-App_I2cBasic g_I2cBasic;
-
-RGB_memory g_Color;
-
-long int timer;
-
 
 /******************************************************************************/
 /*------------------------Inline/Private Function Prototypes------------------*/
@@ -169,12 +136,9 @@ void ISR_TIM_MS(void)
 {
   IfxGtm_Tom_Timer_acknowledgeTimerIrq(&GtmTomTimer.drivers.timerOneMs);
   GtmTomTimer.isrCounter.slotOneMs++;
-  //milliseconds
-  timer++;
 
   if (GtmTomTimer.isrCounter.slotOneMs % UPDATE_RATE_MS == 0)
   {
-	//seconds
     /* UPDATE_RATE_MS declares how often various debug-values are retrieved */
     IfxCpu_acquireMutex(&tim_ms_mutex);
   }
@@ -191,16 +155,18 @@ int core0_main (void)
   IfxGtm_Tom_Timer_Config timer_struct;
   uint16 idx = 0;
   uint8 tx_buffer[TX_BUFFER_SIZE] = {0};
-  uint8 Line_Terminator[2] = {"\n\r"};
+  uint8 rx_buffer[RX_BUFFER_SIZE] = {0};
+  uint8 rx_error[RX_BUFFER_SIZE] = {"wrong start byte\n"};
   uint16 tx_buffer_size = TX_BUFFER_SIZE-1;
+  uint16 rx_buffer_size = RX_BUFFER_SIZE-1;
+  sint32 rx_fifo_bytes_available = 0;
 
-
-  /*
-  * !!WATCHDOG0 AND SAFETY WATCHDOG ARE DISABLED HERE!!
-  * Enable the watchdog in the demo if it is required and also service the watchdog periodically
-  * */
-  IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
-  IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
+	/*
+	 * !!WATCHDOG0 AND SAFETY WATCHDOG ARE DISABLED HERE!!
+	 * Enable the watchdog in the demo if it is required and also service the watchdog periodically
+	 * */
+	IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
+	IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
 
   /* Enable the global interrupts of this CPU */
   IfxCpu_enableInterrupts();
@@ -210,67 +176,11 @@ int core0_main (void)
   IfxPort_setPinPadDriver(&MODULE_P33, 2u, IfxPort_PadDriver_ttlSpeed1);
   IfxPort_setPinLow(&MODULE_P33, 2u);
 
-  IfxPort_setPinMode (&MODULE_P10, 2u, IfxPort_Mode_outputPushPullGeneral);
-  IfxPort_setPinPadDriver(&MODULE_P10, 2u, IfxPort_PadDriver_ttlSpeed1);
-  IfxPort_setPinLow(&MODULE_P10, 2u);
-
   /* fill the struct "uart_struct" with the desired settings */
   uart_init_struct(&uart_struct);
 
   /* initialize the UART interface with settings defined by "uart_struct" */
   uart_init(&uart_struct);
-
-  /*		         	I2C								  */
-
-  /* disable interrupts */
-  boolean   interruptState = IfxCpu_disableInterrupts();
-
-  g_I2cBasic.i2cAddr = Device_ADDRESS << 1; // 0x29=30; standard Device specific address TCS34725
-
-  /* subsection IfxLld_I2c_I2c_Init Module Initialisation */
-  // create config structure
-  IfxI2c_I2c_Config config;
-
-  // fill structure with default values and Module address
-  IfxI2c_I2c_initConfig(&config, &MODULE_I2C0);
-
-  // configure pins
-  const IfxI2c_Pins pins = {
-      &IfxI2c0_SCL_P02_5_INOUT,
-      &IfxI2c0_SDA_P02_4_INOUT,
-      //IfxPort_PadDriver_cmosAutomotiveSpeed1,
-	  IfxPort_PadDriver_ttlSpeed1
-  };
-
-  config.pins = &pins;
-  //config.baudrate = 100000;       /*Standard 400 kHz=400000 ,Changed to 100kHz*/
-  config.baudrate = 400000;   // 400 kHz - same as required for TCS34725
-
-  // initialize module
-  IfxI2c_I2c_initModule(&g_I2cBasic.i2c, &config);
-
-  //IfxPort_setPinMode (&MODULE_P02, 5, IfxPort_OutputIdx_alt5);
-
-  /* subsection IfxLld_I2c_I2c_InitDevice Device Initialisation */
-  //Here the i2c device handle is initialized.
-
-  // create device config
-  IfxI2c_I2c_deviceConfig i2cDeviceConfig;
-
-  // fill structure with default values and i2c Handler
-  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_I2cBasic.i2c); /* Device config for Bus of i2c handle */
-
-  // set device specifig values.
-  //i2cDeviceConfig.deviceAddress = 0x29; //TCS34725 manual p.3 slave device address = 0x29  // 8 bit device address
-
-  // initialize the i2c device handle
-  i2cDeviceConfig.deviceAddress = g_I2cBasic.i2cAddr;				// 0x29
-
-  IfxI2c_I2c_initDevice(&g_I2cBasic.i2cDev, &i2cDeviceConfig);	// initialize registers/address
-
-  /* enable interrupts again */
-  IfxCpu_restoreInterrupts(interruptState);
-  /*		         	END I2C							  */
 
   /* enable clock sources for GTM module */
   timer_enable_clocks();
@@ -278,129 +188,53 @@ int core0_main (void)
   /* initialize the Timer interface with settings defined by "timer_struct" */
   timer_init_struct(&timer_struct);
 
-  /* I2C */
-  //uint32    i;
-  uint8 readbuffer[28]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-  uint8 i2cTxBuffer_Enable[Length_of_Address_Write] = {Enable_Register,0x03};
-  char number_to_String[4];
-
-  //while(IfxI2c_I2c_write(&g_I2cBasic.i2cDev, &i2cTxBuffer_RBGC[0], Length_of_Address) == IfxI2c_I2c_Status_nak); // von der adresse
-  while(IfxI2c_I2c_write(&g_I2cBasic.i2cDev, &i2cTxBuffer_Enable[0], Length_of_Address_Write) == IfxI2c_I2c_Status_nak); // von der adresse
-  while(IfxI2c_I2c_read(&g_I2cBasic.i2cDev, &readbuffer[0], Length_of_Return_Address) == IfxI2c_I2c_Status_nak);
-
-  if(readbuffer[18] == 0x44){
-      LED_toggle_P33(DBG_LED);
-      LED_toggle_P10(DBG_LED);
-  }
-
-  timer = 0;
-  while (timer != 3){};
-
-  for (int i = 0; i < 27; i++){
-	  readbuffer[i] = 0;
-  }
-
   while (TRUE){
-	while((readbuffer[19] & 00000001) != 0x01){
-
-		while(IfxI2c_I2c_read(&g_I2cBasic.i2cDev, &readbuffer[0], Length_of_Return_Address) == IfxI2c_I2c_Status_nak);
-	}
-
-	g_Color.clear = ((uint16)readbuffer[21] << 8) + readbuffer[20];
-	g_Color.red = ((uint16)readbuffer[23] << 8) + readbuffer[22];
-	g_Color.green = ((uint16)readbuffer[25] << 8) + readbuffer[24];
-	g_Color.blue = ((uint16)readbuffer[27] << 8) + readbuffer[26];
-
-	timer = 0;
-	while (timer != 1000){};
-
-	//UART-COM
-    memset(&tx_buffer,0,tx_buffer_size);
-    memcpy(&tx_buffer[0],"Sensor values: \n\r",strlen((char *)"Sensor values: \n\r"));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-	timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    memcpy(&tx_buffer[0],"Clear: ",strlen((char *)"Clear: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-	timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.clear);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-	timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
+    /* check if UART-FIFO received any symbols */
+    rx_fifo_bytes_available = uart_app_getread_count();
+    /* if UART-FIFO has received any symbols */
+    if(rx_fifo_bytes_available != 0)
     {
-      /* send one byte to the UART-FIFO buffer */
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],TX_TIMEOUT);
+      /* receive one byte from UART-FIFO */
+      uart_app_receive_byte(&uart_struct,&rx_buffer[0],RX_TIMEOUT);
+      /* check if received byte is # otherwise jumo the else-statement */
+      if(rx_buffer[0] == RX_START_BYTE)
+      {
+        /* if start byte was correct */
+        idx=1;
+        do{
+          /* receive other bytes until end-byte $ was received */
+          uart_app_receive_byte(&uart_struct,&rx_buffer[idx],RX_TIMEOUT);
+          /* increment index to save new byte */
+          idx++;
+        }while((rx_buffer[idx] != RX_END_BYTE));
+        /* if bytes have been received copy bytes from RX to TX buffer */
+        memcpy(&tx_buffer[0],&rx_buffer[0],strlen((char *)&rx_buffer));
+        /* determine the length of the content of the TX buffer */
+        tx_buffer_size = strlen((char *)&tx_buffer);
+        /* send TX buffer via UART-FIFO back to the PC */
+        uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
+        /* reset the content of both RX and TX buffer */
+        memset(&rx_buffer,0,rx_buffer_size);
+        memset(&tx_buffer,0,tx_buffer_size);
+      }
+      /* if wrong start byte was received print out error message */
+      else{
+        /* loop through the error message buffer and send bytewise */
+        for(idx=0;idx<=strlen((char *)&rx_error);idx++)
+        {
+          /* send one byte to the UART-FIFO buffer */
+          uart_app_send_byte(&uart_struct,&rx_error[idx],TX_TIMEOUT);
+        }
+        /* reset RX buffer to make sure wrong content is deleted */
+        memset(&rx_buffer,0,rx_buffer_size);
+      }
     }
-
-    memcpy(&tx_buffer[0],"Red: ",strlen((char *)"Red: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-	timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.red);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-	timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
+    /* check if the Mutex is acquired - Timer has reached UPDATE_RATE_MS*/
+    if(IfxCpu_getMutexStatus(&tim_ms_mutex))
     {
-      /* send one byte to the UART-FIFO buffer */
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],TX_TIMEOUT);
+      /* free/release Mutex in order to ensure re-acquisition */
+      IfxCpu_releaseMutex(&tim_ms_mutex);
+      LED_toggle_P33(DBG_LED);
     }
-
-    memcpy(&tx_buffer[0],"Green: ",strlen((char *)"Green: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-	timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.green);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
-    {
-      /* send one byte to the UART-FIFO buffer */
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],TX_TIMEOUT);
-    }
-
-    memcpy(&tx_buffer[0],"Blue: ",strlen((char *)"Blue: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.blue);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
-	uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
-    {
-      /* send one byte to the UART-FIFO buffer */
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],TX_TIMEOUT);
-    }
-
-	for (int i = 0; i < 27; i++){
-		readbuffer[i] = 0;
-	}
-
-
-    LED_toggle_P33(DBG_LED);
-    LED_toggle_P10(DBG_LED);
   }
 }
