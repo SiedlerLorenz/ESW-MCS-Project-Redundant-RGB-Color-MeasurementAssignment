@@ -15,7 +15,7 @@
  *        the sender. Hence, every main-loop cycle a mutex semaphore is checked, if
  *        it is acquired (which means the a time of 1ms * UPDATE_RATE_MS has passed).
  *        If the mutex is acquired the mutex is released to be re-acquired and the
- *        µC-Pin P33.2 is toggled.
+ *        ï¿½C-Pin P33.2 is toggled.
  *
  */
 
@@ -187,6 +187,12 @@ int core0_main (void)
 
   /* initialize the Timer interface with settings defined by "timer_struct" */
   timer_init_struct(&timer_struct);
+
+  
+  /* synchronize the cores */
+  IfxCpu_emitEvent(&g_sync_cores_event);
+  IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
+
 
   while (TRUE){
     /* check if UART-FIFO received any symbols */

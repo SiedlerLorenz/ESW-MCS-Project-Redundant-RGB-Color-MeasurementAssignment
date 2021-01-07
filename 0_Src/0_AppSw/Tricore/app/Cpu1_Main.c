@@ -300,6 +300,12 @@ int core1_main (void)
 	  readbuffer[i] = 0;
   }
 
+
+  
+  /* synchronize the cores */
+  IfxCpu_emitEvent(&g_sync_cores_event);
+  IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
+
   while (TRUE){
 	while((readbuffer[19] & 00000001) != 0x01){
 
