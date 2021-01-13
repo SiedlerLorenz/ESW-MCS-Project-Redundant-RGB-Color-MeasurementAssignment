@@ -53,4 +53,7 @@
  0_Src/4_McHal/Tricore/_Reg/IfxI2c_reg.h \
  0_Src/4_McHal/Tricore/_Reg/IfxI2c_regdef.h \
  0_Src/4_McHal/Tricore/_Reg/IfxI2c_bf.h \
- 0_Src/4_McHal/Tricore/_PinMap/IfxI2c_PinMap.h
+ 0_Src/4_McHal/Tricore/_PinMap/IfxI2c_PinMap.h \
+ 0_Src/0_AppSw/Tricore/lib/tcs34725.h \
+ 0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h \
+ 0_Src/0_AppSw/Tricore/lib/apds9960.h

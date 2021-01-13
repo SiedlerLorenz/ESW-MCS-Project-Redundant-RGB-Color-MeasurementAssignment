@@ -84,7 +84,7 @@ void core2_main(void) {
   /* configure pins */
   const IfxI2c_Pins pins = {
     &IfxI2c0_SCL_P02_5_INOUT,
-    &IfxI2c0_SDA_P02_4_INOUT, 
+    &IfxI2c0_SDA_P02_4_INOUT,
     IfxPort_PadDriver_cmosAutomotiveSpeed1
   };
 

@@ -3,7 +3,7 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
-# 17 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
+# 21 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
 # 1 "./0_Src/1_SrvSw/SysSe/Bsp/Bsp.h" 1
 # 33 "./0_Src/1_SrvSw/SysSe/Bsp/Bsp.h"
 # 1 "./0_Src/0_AppSw/Config/Common/Ifx_Cfg.h" 1
@@ -11642,7 +11642,7 @@ static inline __attribute__ ((always_inline)) void wait(Ifx_TickTime timeout)
     while (isDeadLine(deadLine) == 0)
     {}
 }
-# 18 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 22 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
 
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\string.h" 1 3
 # 10 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\string.h" 3
@@ -12053,7 +12053,7 @@ char *strupr (char *);
 # 101 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\string.h" 2 3
 
 
-# 20 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 24 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 1 3
 # 34 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 3
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\lib\\gcc\\tricore\\4.9.4\\include\\stddef.h" 1 3 4
@@ -12532,7 +12532,7 @@ FILE *_fopencookie_r (struct _reent *, void *__cookie, const char *__mode, cooki
                                                          ;
 # 687 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 3
 
-# 21 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 25 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 1 3
 # 10 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 3
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\machine\\ieeefp.h" 1 3
@@ -12729,9 +12729,201 @@ extern long double wcstold (const wchar_t *, wchar_t **);
 
 
 
-# 22 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 26 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\lib\\gcc\\tricore\\4.9.4\\include\\stdbool.h" 1 3 4
-# 23 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 27 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\unistd.h" 1 3
+
+
+
+# 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 1 3
+# 13 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 3
+# 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\lib\\gcc\\tricore\\4.9.4\\include\\stddef.h" 1 3 4
+# 14 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 2 3
+
+extern char **environ;
+
+void _exit (int __status ) __attribute__ ((noreturn));
+
+int access (const char *__path, int __amode );
+unsigned alarm (unsigned __secs );
+int chdir (const char *__path );
+int chmod (const char *__path, mode_t __mode );
+
+int chown (const char *__path, uid_t __owner, gid_t __group );
+
+
+
+
+int close (int __fildes );
+
+
+
+char * ctermid (char *__s );
+char * cuserid (char *__s );
+
+
+
+int dup (int __fildes );
+int dup2 (int __fildes, int __fildes2 );
+
+
+
+
+
+int execl (const char *__path, const char *, ... );
+int execle (const char *__path, const char *, ... );
+int execlp (const char *__file, const char *, ... );
+int execv (const char *__path, char * const __argv[] );
+int execve (const char *__path, char * const __argv[], char * const __envp[] );
+int execvp (const char *__file, char * const __argv[] );
+
+
+
+
+
+
+
+int fchmod (int __fildes, mode_t __mode );
+
+int fchown (int __fildes, uid_t __owner, gid_t __group );
+
+
+
+
+
+pid_t fork (void );
+long fpathconf (int __fd, int __name );
+int fsync (int __fd);
+int fdatasync (int __fd);
+char * getcwd (char *__buf, size_t __size );
+
+
+
+
+gid_t getegid (void );
+uid_t geteuid (void );
+gid_t getgid (void );
+
+int getgroups (int __gidsetsize, gid_t __grouplist[] );
+
+
+
+char * getlogin (void );
+
+
+
+char * getpass (const char *__prompt);
+int getpagesize (void);
+
+
+
+pid_t getpgid (pid_t);
+pid_t getpgrp (void );
+pid_t getpid (void );
+pid_t getppid (void );
+
+
+
+
+uid_t getuid (void );
+
+
+
+
+
+
+int isatty (int __fildes );
+
+int lchown (const char *__path, uid_t __owner, gid_t __group );
+
+int link (const char *__path1, const char *__path2 );
+
+
+
+int nice (int __nice_value );
+
+off_t lseek (int __fildes, off_t __offset, int __whence );
+# 126 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 3
+long pathconf (const char *__path, int __name );
+int pause (void );
+
+
+
+int pipe (int __fildes[2] );
+ssize_t pread (int __fd, void *__buf, size_t __nbytes, off_t __offset);
+ssize_t pwrite (int __fd, const void *__buf, size_t __nbytes, off_t __offset);
+int read (int __fd, void *__buf, size_t __nbyte );
+
+
+
+
+int rmdir (const char *__path );
+
+
+
+void * sbrk (ptrdiff_t __incr);
+
+
+
+
+
+int setgid (gid_t __gid );
+
+
+
+
+int setpgid (pid_t __pid, pid_t __pgid );
+int setpgrp (void );
+
+
+
+
+pid_t setsid (void );
+
+int setuid (uid_t __uid );
+
+
+
+
+unsigned sleep (unsigned int __seconds );
+void swab (const void *, void *, ssize_t);
+long sysconf (int __name );
+pid_t tcgetpgrp (int __fildes );
+int tcsetpgrp (int __fildes, pid_t __pgrp_id );
+char * ttyname (int __fildes );
+
+
+
+int unlink (const char *__path );
+int usleep (useconds_t __useconds);
+int vhangup (void );
+int write (int __fd, const void *__buf, size_t __nbyte );
+
+
+
+
+
+
+extern char *optarg;
+extern int optind, opterr, optopt;
+int getopt(int, char * const [], const char *);
+extern int optreset;
+
+
+
+pid_t vfork (void );
+
+extern char *suboptarg;
+int getsubopt(char **, char * const *, char **);
+# 240 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 3
+ssize_t readlink (const char *__path, char *__buf, size_t __buflen);
+
+
+
+int symlink (const char *__name1, const char *__name2);
+# 5 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\unistd.h" 2 3
+# 28 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
 
 # 1 "./0_Src/0_AppSw/Tricore/lib/main.h" 1
 # 11 "./0_Src/0_AppSw/Tricore/lib/main.h"
@@ -16975,16 +17167,17 @@ extern const char _ctype_[];
 
 # 22 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 
+# 1 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 1
+       
 
-
+# 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
+# 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
+# 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
     IfxI2c_I2c i2c;
     IfxI2c_I2c_Device i2cDev;
-    unsigned char i2cAddr;
-    volatile unsigned char data[64];
-    volatile unsigned char cdata[64];
-} App_I2cBasic;
+} tcs34725_params_t;
 
 typedef struct
 {
@@ -16992,14 +17185,70 @@ typedef struct
     uint16 red;
     uint16 green;
     uint16 blue;
-} RGB_memory;
+} tcs34725_rgbc_data_t;
+# 80 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
+# 93 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
+# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
+# 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
+# 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
+       
+# 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+typedef struct {
+  sint16 c;
+  sint16 r;
+  sint16 g;
+  sint16 b;
+} apds9960_rgbc_data_t;
 
-extern App_I2cBasic g_I2cBasic;
-extern RGB_memory g_Color;
-# 25 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
-# 44 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
-void core1_main(void)
+
+
+
+typedef struct {
+} apds9960_params_t;
+# 284 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+# 297 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
+# 309 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 320 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
+# 25 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
+
+
+
+extern IfxCpu_syncEvent g_sync_cores_event;
+
+
+extern uint32 g_sync_cores_timeout_ms;
+
+
+extern IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
+
+
+extern tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
+
+
+extern IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
+
+
+extern apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
+# 30 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c" 2
+# 45 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
+tcs34725_params_t g_tcs34725_params;
+
+tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
+
+IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
+# 62 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
+int core1_main (void)
 {
+
 
 
 
@@ -17008,9 +17257,59 @@ void core1_main(void)
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
 
 
+  IfxI2c_I2c_Config config;
+
+
+  IfxI2c_I2c_initConfig(&config, &((*(Ifx_I2C *)0xF00C0000u)));
+
+
+  const IfxI2c_Pins pins = {
+      &IfxI2c0_SCL_P02_5_INOUT,
+      &IfxI2c0_SDA_P02_4_INOUT,
+   IfxPort_PadDriver_ttlSpeed1
+  };
+
+  config.pins = &pins;
+
+  config.baudrate = 400000;
+
+
+  IfxI2c_I2c_initModule(&g_tcs34725_params.i2c, &config);
+
+
+  IfxI2c_I2c_deviceConfig i2cDeviceConfig;
+
+
+  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_tcs34725_params.i2c);
+
+
+  i2cDeviceConfig.deviceAddress = (0x29) << 1;
+
+  IfxI2c_I2c_initDevice(&g_tcs34725_params.i2cDev, &i2cDeviceConfig);
+
+
   IfxCpu_enableInterrupts();
 
 
-  while (1){};
+  IfxCpu_emitEvent(&g_sync_cores_event);
+  IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
+
+  tcs34725_rgbc_data_t tcs34725_rgbc_data;
+
+
+  tcs34725_init(&g_tcs34725_params.i2cDev, &g_tcs34725_params);
+
+  while (1){
+
+ tcs34725_read_rgbc(&g_tcs34725_params.i2cDev, &tcs34725_rgbc_data);
+
+ if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
+
+  g_tcs34725_rgbc_shared_data = tcs34725_rgbc_data;
+
+   IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
+ }
+
+  }
 
 }

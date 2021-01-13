@@ -3,7 +3,7 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
-# 21 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
+# 26 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
 # 1 "./0_Src/1_SrvSw/SysSe/Bsp/Bsp.h" 1
 # 33 "./0_Src/1_SrvSw/SysSe/Bsp/Bsp.h"
 # 1 "./0_Src/0_AppSw/Config/Common/Ifx_Cfg.h" 1
@@ -11642,7 +11642,7 @@ static inline __attribute__ ((always_inline)) void wait(Ifx_TickTime timeout)
     while (isDeadLine(deadLine) == 0)
     {}
 }
-# 22 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 27 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "./0_Src/4_McHal/Tricore/_Reg/IfxGtm_reg.h" 1
 # 36 "./0_Src/4_McHal/Tricore/_Reg/IfxGtm_reg.h"
 # 1 "./0_Src/4_McHal/Tricore/_Reg/IfxGtm_regdef.h" 1
@@ -20564,7 +20564,7 @@ typedef volatile struct _Ifx_GTM
     unsigned char reserved_9FF70[144];
 } Ifx_GTM;
 # 37 "./0_Src/4_McHal/Tricore/_Reg/IfxGtm_reg.h" 2
-# 23 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 28 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "./0_Src/4_McHal/Tricore/Gtm/Tom/Timer/IfxGtm_Tom_Timer.h" 1
 # 116 "./0_Src/4_McHal/Tricore/Gtm/Tom/Timer/IfxGtm_Tom_Timer.h"
 # 1 "./0_Src/4_McHal/Tricore/_PinMap/IfxGtm_PinMap.h" 1
@@ -23324,7 +23324,7 @@ extern void IfxGtm_Tom_Timer_stop(IfxGtm_Tom_Timer *driver);
 
 
 extern void IfxGtm_Tom_Timer_updateInputFrequency(IfxGtm_Tom_Timer *driver);
-# 24 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 29 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\string.h" 1 3
 # 10 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\string.h" 3
@@ -23735,7 +23735,7 @@ char *strupr (char *);
 # 101 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\string.h" 2 3
 
 
-# 26 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 31 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 1 3
 # 34 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 3
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\lib\\gcc\\tricore\\4.9.4\\include\\stddef.h" 1 3 4
@@ -24214,7 +24214,7 @@ FILE *_fopencookie_r (struct _reent *, void *__cookie, const char *__mode, cooki
                                                          ;
 # 687 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 3
 
-# 27 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 32 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 1 3
 # 10 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 3
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\machine\\ieeefp.h" 1 3
@@ -24411,201 +24411,9 @@ extern long double wcstold (const wchar_t *, wchar_t **);
 
 
 
-# 28 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 33 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\lib\\gcc\\tricore\\4.9.4\\include\\stdbool.h" 1 3 4
-# 29 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
-# 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\unistd.h" 1 3
-
-
-
-# 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 1 3
-# 13 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 3
-# 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\lib\\gcc\\tricore\\4.9.4\\include\\stddef.h" 1 3 4
-# 14 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 2 3
-
-extern char **environ;
-
-void _exit (int __status ) __attribute__ ((noreturn));
-
-int access (const char *__path, int __amode );
-unsigned alarm (unsigned __secs );
-int chdir (const char *__path );
-int chmod (const char *__path, mode_t __mode );
-
-int chown (const char *__path, uid_t __owner, gid_t __group );
-
-
-
-
-int close (int __fildes );
-
-
-
-char * ctermid (char *__s );
-char * cuserid (char *__s );
-
-
-
-int dup (int __fildes );
-int dup2 (int __fildes, int __fildes2 );
-
-
-
-
-
-int execl (const char *__path, const char *, ... );
-int execle (const char *__path, const char *, ... );
-int execlp (const char *__file, const char *, ... );
-int execv (const char *__path, char * const __argv[] );
-int execve (const char *__path, char * const __argv[], char * const __envp[] );
-int execvp (const char *__file, char * const __argv[] );
-
-
-
-
-
-
-
-int fchmod (int __fildes, mode_t __mode );
-
-int fchown (int __fildes, uid_t __owner, gid_t __group );
-
-
-
-
-
-pid_t fork (void );
-long fpathconf (int __fd, int __name );
-int fsync (int __fd);
-int fdatasync (int __fd);
-char * getcwd (char *__buf, size_t __size );
-
-
-
-
-gid_t getegid (void );
-uid_t geteuid (void );
-gid_t getgid (void );
-
-int getgroups (int __gidsetsize, gid_t __grouplist[] );
-
-
-
-char * getlogin (void );
-
-
-
-char * getpass (const char *__prompt);
-int getpagesize (void);
-
-
-
-pid_t getpgid (pid_t);
-pid_t getpgrp (void );
-pid_t getpid (void );
-pid_t getppid (void );
-
-
-
-
-uid_t getuid (void );
-
-
-
-
-
-
-int isatty (int __fildes );
-
-int lchown (const char *__path, uid_t __owner, gid_t __group );
-
-int link (const char *__path1, const char *__path2 );
-
-
-
-int nice (int __nice_value );
-
-off_t lseek (int __fildes, off_t __offset, int __whence );
-# 126 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 3
-long pathconf (const char *__path, int __name );
-int pause (void );
-
-
-
-int pipe (int __fildes[2] );
-ssize_t pread (int __fd, void *__buf, size_t __nbytes, off_t __offset);
-ssize_t pwrite (int __fd, const void *__buf, size_t __nbytes, off_t __offset);
-int read (int __fd, void *__buf, size_t __nbyte );
-
-
-
-
-int rmdir (const char *__path );
-
-
-
-void * sbrk (ptrdiff_t __incr);
-
-
-
-
-
-int setgid (gid_t __gid );
-
-
-
-
-int setpgid (pid_t __pid, pid_t __pgid );
-int setpgrp (void );
-
-
-
-
-pid_t setsid (void );
-
-int setuid (uid_t __uid );
-
-
-
-
-unsigned sleep (unsigned int __seconds );
-void swab (const void *, void *, ssize_t);
-long sysconf (int __name );
-pid_t tcgetpgrp (int __fildes );
-int tcsetpgrp (int __fildes, pid_t __pgrp_id );
-char * ttyname (int __fildes );
-
-
-
-int unlink (const char *__path );
-int usleep (useconds_t __useconds);
-int vhangup (void );
-int write (int __fd, const void *__buf, size_t __nbyte );
-
-
-
-
-
-
-extern char *optarg;
-extern int optind, opterr, optopt;
-int getopt(int, char * const [], const char *);
-extern int optreset;
-
-
-
-pid_t vfork (void );
-
-extern char *suboptarg;
-int getsubopt(char **, char * const *, char **);
-# 240 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\sys\\unistd.h" 3
-ssize_t readlink (const char *__path, char *__buf, size_t __buflen);
-
-
-
-int symlink (const char *__name1, const char *__name2);
-# 5 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\unistd.h" 2 3
-# 30 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 34 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 
 # 1 "./0_Src/0_AppSw/Tricore/lib/main.h" 1
 # 11 "./0_Src/0_AppSw/Tricore/lib/main.h"
@@ -28849,16 +28657,17 @@ extern const char _ctype_[];
 
 # 22 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 
+# 1 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 1
+       
 
-
+# 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
+# 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
+# 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
     IfxI2c_I2c i2c;
     IfxI2c_I2c_Device i2cDev;
-    unsigned char i2cAddr;
-    volatile unsigned char data[64];
-    volatile unsigned char cdata[64];
-} App_I2cBasic;
+} tcs34725_params_t;
 
 typedef struct
 {
@@ -28866,11 +28675,60 @@ typedef struct
     uint16 red;
     uint16 green;
     uint16 blue;
-} RGB_memory;
+} tcs34725_rgbc_data_t;
+# 80 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
+# 93 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
+# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
+# 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
+# 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
+       
+# 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+typedef struct {
+  sint16 c;
+  sint16 r;
+  sint16 g;
+  sint16 b;
+} apds9960_rgbc_data_t;
 
-extern App_I2cBasic g_I2cBasic;
-extern RGB_memory g_Color;
-# 32 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+
+
+
+typedef struct {
+} apds9960_params_t;
+# 284 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+# 297 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
+# 309 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 320 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
+# 25 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
+
+
+
+extern IfxCpu_syncEvent g_sync_cores_event;
+
+
+extern uint32 g_sync_cores_timeout_ms;
+
+
+extern IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
+
+
+extern tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
+
+
+extern IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
+
+
+extern apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
+# 36 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "./0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_app.h" 1
 # 25 "./0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_app.h"
 # 1 "./0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_lib.h" 1
@@ -32845,8 +32703,11 @@ _aurix_tc27x_app_uart_err_t uart_app_receive_nbyte(_aurix_tc27x_app_uart_t *pUAR
 _aurix_tc27x_app_uart_err_t uart_app_flush_rx(_aurix_tc27x_app_uart_t *pUARTStruct);
 _aurix_tc27x_app_uart_err_t uart_app_flush_tx(_aurix_tc27x_app_uart_t *pUARTStruct);
 sint32 uart_app_getread_count();
-# 33 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
-# 87 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
+# 37 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
+# 64 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
+IfxCpu_syncEvent g_sync_cores_event;
+uint32 g_sync_cores_timeout_ms = 1000;
+
 typedef struct
 {
   struct
@@ -32866,15 +32727,6 @@ typedef struct
 
 App_GtmTomTimer GtmTomTimer;
 IfxCpu_mutexLock tim_ms_mutex;
-
-
-
-App_I2cBasic g_I2cBasic;
-
-RGB_memory g_Color;
-
-long int timer;
-
 
 
 
@@ -32933,11 +32785,8 @@ void ISR_TIM_MS(void)
   IfxGtm_Tom_Timer_acknowledgeTimerIrq(&GtmTomTimer.drivers.timerOneMs);
   GtmTomTimer.isrCounter.slotOneMs++;
 
-  timer++;
-
   if (GtmTomTimer.isrCounter.slotOneMs % 1000 == 0)
   {
-
 
     IfxCpu_acquireMutex(&tim_ms_mutex);
   }
@@ -32954,16 +32803,18 @@ int core0_main (void)
   IfxGtm_Tom_Timer_Config timer_struct;
   uint16 idx = 0;
   uint8 tx_buffer[26] = {0};
-  uint8 Line_Terminator[2] = {"\n\r"};
+  uint8 rx_buffer[26] = {0};
+  uint8 rx_error[26] = {"wrong start byte\n"};
   uint16 tx_buffer_size = 26 -1;
+  uint16 rx_buffer_size = 26 -1;
+  sint32 rx_fifo_bytes_available = 0;
 
 
 
 
 
-
-  IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
-  IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
+ IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
+ IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
 
 
   IfxCpu_enableInterrupts();
@@ -32973,67 +32824,11 @@ int core0_main (void)
   IfxPort_setPinPadDriver(&((*(Ifx_P *)0xF003D300u)), 2u, IfxPort_PadDriver_ttlSpeed1);
   IfxPort_setPinLow(&((*(Ifx_P *)0xF003D300u)), 2u);
 
-  IfxPort_setPinMode (&((*(Ifx_P *)0xF003B000u)), 2u, IfxPort_Mode_outputPushPullGeneral);
-  IfxPort_setPinPadDriver(&((*(Ifx_P *)0xF003B000u)), 2u, IfxPort_PadDriver_ttlSpeed1);
-  IfxPort_setPinLow(&((*(Ifx_P *)0xF003B000u)), 2u);
-
 
   uart_init_struct(&uart_struct);
 
 
   uart_init(&uart_struct);
-
-
-
-
-  boolean interruptState = IfxCpu_disableInterrupts();
-
-  g_I2cBasic.i2cAddr = 0x29 << 1;
-
-
-
-  IfxI2c_I2c_Config config;
-
-
-  IfxI2c_I2c_initConfig(&config, &((*(Ifx_I2C *)0xF00C0000u)));
-
-
-  const IfxI2c_Pins pins = {
-      &IfxI2c0_SCL_P02_5_INOUT,
-      &IfxI2c0_SDA_P02_4_INOUT,
-
-   IfxPort_PadDriver_ttlSpeed1
-  };
-
-  config.pins = &pins;
-
-  config.baudrate = 400000;
-
-
-  IfxI2c_I2c_initModule(&g_I2cBasic.i2c, &config);
-
-
-
-
-
-
-
-  IfxI2c_I2c_deviceConfig i2cDeviceConfig;
-
-
-  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_I2cBasic.i2c);
-
-
-
-
-
-  i2cDeviceConfig.deviceAddress = g_I2cBasic.i2cAddr;
-
-  IfxI2c_I2c_initDevice(&g_I2cBasic.i2cDev, &i2cDeviceConfig);
-
-
-  IfxCpu_restoreInterrupts(interruptState);
-
 
 
   timer_enable_clocks();
@@ -33043,127 +32838,57 @@ int core0_main (void)
 
 
 
-  uint8 readbuffer[28]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-  uint8 i2cTxBuffer_Enable[2] = {0x00,0x03};
-  char number_to_String[4];
+  IfxCpu_emitEvent(&g_sync_cores_event);
+  IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
 
-
-  while(IfxI2c_I2c_write(&g_I2cBasic.i2cDev, &i2cTxBuffer_Enable[0], 2) == IfxI2c_I2c_Status_nak);
-  while(IfxI2c_I2c_read(&g_I2cBasic.i2cDev, &readbuffer[0], 28) == IfxI2c_I2c_Status_nak);
-
-  if(readbuffer[18] == 0x44){
-      IfxPort_togglePin(&((*(Ifx_P *)0xF003D300u)),2);
-      IfxPort_togglePin(&((*(Ifx_P *)0xF003B000u)),2);
-  }
-
-  timer = 0;
-  while (timer != 3){};
-
-  for (int i = 0; i < 27; i++){
-   readbuffer[i] = 0;
-  }
 
   while (1){
- while((readbuffer[19] & 00000001) != 0x01){
 
-  while(IfxI2c_I2c_read(&g_I2cBasic.i2cDev, &readbuffer[0], 28) == IfxI2c_I2c_Status_nak);
- }
+    rx_fifo_bytes_available = uart_app_getread_count();
 
- g_Color.clear = ((uint16)readbuffer[21] << 8) + readbuffer[20];
- g_Color.red = ((uint16)readbuffer[23] << 8) + readbuffer[22];
- g_Color.green = ((uint16)readbuffer[25] << 8) + readbuffer[24];
- g_Color.blue = ((uint16)readbuffer[27] << 8) + readbuffer[26];
-
- timer = 0;
- while (timer != 1000){};
-
-
-    memset(&tx_buffer,0,tx_buffer_size);
-    memcpy(&tx_buffer[0],"Sensor values: \n\r",strlen((char *)"Sensor values: \n\r"));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
- timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    memcpy(&tx_buffer[0],"Clear: ",strlen((char *)"Clear: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
- timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.clear);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
- timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
+    if(rx_fifo_bytes_available != 0)
     {
 
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],10000);
+      uart_app_receive_byte(&uart_struct,&rx_buffer[0],10000);
+
+      if(rx_buffer[0] == 0x23)
+      {
+
+        idx=1;
+        do{
+
+          uart_app_receive_byte(&uart_struct,&rx_buffer[idx],10000);
+
+          idx++;
+        }while((rx_buffer[idx] != 0x24));
+
+        memcpy(&tx_buffer[0],&rx_buffer[0],strlen((char *)&rx_buffer));
+
+        tx_buffer_size = strlen((char *)&tx_buffer);
+
+        uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
+
+        memset(&rx_buffer,0,rx_buffer_size);
+        memset(&tx_buffer,0,tx_buffer_size);
+      }
+
+      else{
+
+        for(idx=0;idx<=strlen((char *)&rx_error);idx++)
+        {
+
+          uart_app_send_byte(&uart_struct,&rx_error[idx],10000);
+        }
+
+        memset(&rx_buffer,0,rx_buffer_size);
+      }
     }
 
-    memcpy(&tx_buffer[0],"Red: ",strlen((char *)"Red: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
- timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.red);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
- timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
+    if(IfxCpu_getMutexStatus(&tim_ms_mutex))
     {
 
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],10000);
+      IfxCpu_releaseMutex(&tim_ms_mutex);
+      IfxPort_togglePin(&((*(Ifx_P *)0xF003D300u)),2);
     }
-
-    memcpy(&tx_buffer[0],"Green: ",strlen((char *)"Green: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
- timer = 0; while (timer != 1){};
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.green);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
-    {
-
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],10000);
-    }
-
-    memcpy(&tx_buffer[0],"Blue: ",strlen((char *)"Blue: "));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
-    memset(&tx_buffer,0,tx_buffer_size);
-
-    sprintf(number_to_String, "%d",(int) g_Color.blue);
-    memcpy(&tx_buffer[0],&number_to_String[0],strlen((char *)&number_to_String));
-    tx_buffer_size = strlen((char *)&tx_buffer);
- uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
-    memset(&tx_buffer,0,tx_buffer_size);
-    memset(&number_to_String,0,4);
-    for(idx=0;idx<2;idx++)
-    {
-
-      uart_app_send_byte(&uart_struct,&Line_Terminator[idx],10000);
-    }
-
- for (int i = 0; i < 27; i++){
-  readbuffer[i] = 0;
- }
-
-
-    IfxPort_togglePin(&((*(Ifx_P *)0xF003D300u)),2);
-    IfxPort_togglePin(&((*(Ifx_P *)0xF003B000u)),2);
   }
 }

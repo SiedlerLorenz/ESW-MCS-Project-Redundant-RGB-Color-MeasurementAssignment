@@ -23,6 +23,16 @@
 ###############################################################################
 
 
+OBJ_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/apds9960.o
+DEP_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/apds9960.d
+
+2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/apds9960.o: 0_Src/0_AppSw/Tricore/lib/apds9960.c 1_ToolEnv/0_Build/1_Config/CfgCompiler_Gnuc.mk
+	@mkdir -p $(@D)
+	@rm -f $(ELF_BIN_MAIN) $(ADDITIONAL_EXE_MAIN) $(MAP_FILE_MAIN) $(LIB_OBJ_MAIN)
+	@echo 'Compiling 0_Src/0_AppSw/Tricore/lib/apds9960.c'
+	$(CC) $(CC_OPTS) @1_ToolEnv/0_Build/9_Make/cIncludePathList.opt -c $< -o $@ -save-temps=obj -MMD
+	@echo ' '
+
 OBJ_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/aurix_tc27x_adc_app.o
 DEP_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/aurix_tc27x_adc_app.d
 
@@ -60,6 +70,16 @@ DEP_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_lib.d
 	@mkdir -p $(@D)
 	@rm -f $(ELF_BIN_MAIN) $(ADDITIONAL_EXE_MAIN) $(MAP_FILE_MAIN) $(LIB_OBJ_MAIN)
 	@echo 'Compiling 0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_lib.c'
+	$(CC) $(CC_OPTS) @1_ToolEnv/0_Build/9_Make/cIncludePathList.opt -c $< -o $@ -save-temps=obj -MMD
+	@echo ' '
+
+OBJ_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/tcs34725.o
+DEP_FILES_MAIN+= 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/tcs34725.d
+
+2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/tcs34725.o: 0_Src/0_AppSw/Tricore/lib/tcs34725.c 1_ToolEnv/0_Build/1_Config/CfgCompiler_Gnuc.mk
+	@mkdir -p $(@D)
+	@rm -f $(ELF_BIN_MAIN) $(ADDITIONAL_EXE_MAIN) $(MAP_FILE_MAIN) $(LIB_OBJ_MAIN)
+	@echo 'Compiling 0_Src/0_AppSw/Tricore/lib/tcs34725.c'
 	$(CC) $(CC_OPTS) @1_ToolEnv/0_Build/9_Make/cIncludePathList.opt -c $< -o $@ -save-temps=obj -MMD
 	@echo ' '
 

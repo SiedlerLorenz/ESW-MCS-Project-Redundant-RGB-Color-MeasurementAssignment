@@ -3,7 +3,7 @@
 #include <string.h>
 
 /// @brief buffer for i2c transactions
-uint8 g_i2c_data[64];
+uint8 i2c_data[64];
 
 sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
   sint8 ret_val = -1;

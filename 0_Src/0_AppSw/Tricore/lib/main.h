@@ -20,35 +20,21 @@
 #include <stdint.h>
 #include <ctype.h>
 
+#include <tcs34725.h>
 #include <apds9960.h>
 
-#define DATA_SIZE 64
-
-typedef struct
-{
-    IfxI2c_I2c             i2c;
-    IfxI2c_I2c_Device      i2cDev;
-    unsigned char          i2cAddr;
-    volatile unsigned char data[DATA_SIZE];
-    volatile unsigned char cdata[DATA_SIZE];
-} App_I2cBasic;
-
-typedef struct
-{
-    uint16          clear;
-    uint16			red;
-    uint16      	green;
-    uint16          blue;
-} RGB_memory;
-
-IFX_EXTERN App_I2cBasic g_I2cBasic;
-IFX_EXTERN RGB_memory g_Color;
 
 /// @brief Event for initial core synchronization on startup
 extern IfxCpu_syncEvent g_sync_cores_event;
 
 /// @brief Timeout for initial core synchronization on startup in milliseconds
 extern uint32 g_sync_cores_timeout_ms;
+
+/// @brief Semaphore to protect access to the shared rgbc color data buffer
+extern IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
+
+/// @brief Shared memory to exchange rgbc color data between core0 and core1
+extern tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
 
 /// @brief Semaphore to protect access to the shared rgbc color data buffer
 extern IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
