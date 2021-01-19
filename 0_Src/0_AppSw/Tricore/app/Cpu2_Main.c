@@ -20,17 +20,14 @@
 #include <IfxGtm_Tom_Timer.h>
 #include <IfxGtm_reg.h>
 #include <Qspi/SpiSlave/IfxQspi_SpiSlave.h>
-
+#include <apds9960.h>
 #include <main.h>
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "SysSe/Bsp/Bsp.h"
-
-#include <apds9960.h>
 
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
@@ -75,24 +72,20 @@ void core2_main(void) {
   IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
 
-  /* create config structure */
-  IfxI2c_I2c_Config config;
+  // /* create config structure */
+  // IfxI2c_I2c_Config config;
 
-  /* fill structure with default values and Module address */
-  IfxI2c_I2c_initConfig(&config, &MODULE_I2C0);
+  // /* fill structure with default values and Module address */
+  // IfxI2c_I2c_initConfig(&config, &MODULE_I2C0);
 
-  /* configure pins */
-  const IfxI2c_Pins pins = {
-    &IfxI2c0_SCL_P02_5_INOUT,
-    &IfxI2c0_SDA_P02_4_INOUT,
-    IfxPort_PadDriver_cmosAutomotiveSpeed1
-  };
+  // /* configure pins */
+  // const IfxI2c_Pins pins = {&IfxI2c0_SCL_P02_5_INOUT, &IfxI2c0_SDA_P02_4_INOUT, IfxPort_PadDriver_cmosAutomotiveSpeed1};
 
-  config.pins = &pins;
-  config.baudrate = 100000;  // 100 kHz
+  // config.pins = &pins;
+  // config.baudrate = 100000;  // 100 kHz
 
-  /* initialize module */
-  IfxI2c_I2c_initModule(&g_i2c_handle, &config);
+  // /* initialize module */
+  // IfxI2c_I2c_initModule(&g_i2c_handle, &config);
 
   /* create device config */
   IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
@@ -118,7 +111,7 @@ void core2_main(void) {
 
   /* initialize the apds9960 sensor */
   apds9960_init(&g_apds9960_i2cDev, &apds9960_params);
-  
+
   /* Background loop */
   while (TRUE) {
     /* read rgbc data from sensor */

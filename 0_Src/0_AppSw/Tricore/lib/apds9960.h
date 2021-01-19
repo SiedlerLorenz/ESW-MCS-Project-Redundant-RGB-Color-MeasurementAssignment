@@ -1,6 +1,6 @@
 #pragma once
-#include <I2c/I2c/IfxI2c_I2c.h>
 #include <Cpu/Std/Platform_Types.h>
+#include <I2c/I2c/IfxI2c_I2c.h>
 
 #define APDS9960_DEVICE_I2C_ADDRESS (0x39)
 #define APDS9960_DEVICE_ID (0xAB)

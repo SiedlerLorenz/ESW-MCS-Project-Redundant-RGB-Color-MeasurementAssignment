@@ -5,6 +5,8 @@
 /// @brief buffer for i2c transactions
 uint8 i2c_data[64];
 
+extern IfxCpu_mutexLock g_i2c_bus_access_mtx;
+
 sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
   sint8 ret_val = -1;
 
@@ -45,8 +47,17 @@ sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
 
   // setup internal address to be read from
   i2c_data[0] = reg_addr;
-  while(IfxI2c_I2c_write(dev, i2c_data, 1) == IfxI2c_I2c_Status_nak);
-  while(IfxI2c_I2c_read(dev, i2c_data, num_regs) == IfxI2c_I2c_Status_nak);
+
+  // wait till i2c module is not in use any more
+  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx))
+    ;
+  while (IfxI2c_I2c_write(dev, i2c_data, 1) == IfxI2c_I2c_Status_nak)
+    ;
+  while (IfxI2c_I2c_read(dev, i2c_data, num_regs) == IfxI2c_I2c_Status_nak)
+    ;
+  // release i2c module again
+  IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
+
   memcpy(reg_vals, &i2c_data, num_regs);
 
   ret_val = 0;
@@ -59,7 +70,14 @@ sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
   // setup internal address to be read from
   i2c_data[0] = reg_addr;
   i2c_data[1] = reg_val;
-  while(IfxI2c_I2c_write(dev, i2c_data, 2) == IfxI2c_I2c_Status_nak);
+
+  // wait till i2c module is not in use any more
+  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx))
+    ;
+  while (IfxI2c_I2c_write(dev, i2c_data, 2) == IfxI2c_I2c_Status_nak)
+    ;
+  // release i2c module again
+  IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
 
   ret_val = 0;
   return ret_val;
