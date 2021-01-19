@@ -40,6 +40,8 @@
 /******************************************************************************/
 
 
+/// @brief for i2c
+static IfxI2c_I2c g_i2c_handle;              // i2c handle
 
 /* I2C */
 tcs34725_params_t g_tcs34725_params;
@@ -88,13 +90,13 @@ int core1_main (void)
   config.baudrate = 400000;   // 400 kHz - same as required for TCS34725
 
   /* initialize module */
-  IfxI2c_I2c_initModule(&g_tcs34725_params.i2c, &config);
+  IfxI2c_I2c_initModule(&g_i2c_handle, &config);
 
   /* create device config */
   IfxI2c_I2c_deviceConfig i2cDeviceConfig;
 
   /* fill structure with default values and i2c Handler */
-  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_tcs34725_params.i2c); /* Device config for Bus of i2c handle */
+  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_i2c_handle); /* Device config for Bus of i2c handle */
 
   /* initialize the i2c device handle */
   i2cDeviceConfig.deviceAddress = TCS34725_DEVICE_I2C_ADDRESS << 1; // 0x29=30; standard Device specific address TCS34725

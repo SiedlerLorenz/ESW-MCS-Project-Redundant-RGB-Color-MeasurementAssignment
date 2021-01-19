@@ -47,7 +47,9 @@
 /******************************************************************************/
 
 /// @brief for i2c
-static IfxI2c_I2c g_i2c_handle;              // i2c handle
+extern IfxI2c_I2c g_i2c_handle;              // i2c handle
+
+/// @brief 
 static IfxI2c_I2c_Device g_apds9960_i2cDev;  // slave device handle
 
 IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;

@@ -59,6 +59,7 @@
 /******************************************************************************/
 /*------------------------------Global variables------------------------------*/
 /******************************************************************************/
+
 /* Event and timeout for initial core synchronization */
 /* Synchonization of the Cores */
 IfxCpu_syncEvent g_sync_cores_event;
