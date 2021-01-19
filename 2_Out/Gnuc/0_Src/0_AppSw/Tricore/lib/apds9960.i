@@ -5,6 +5,26 @@
 # 1 "0_Src/0_AppSw/Tricore/lib/apds9960.c"
 # 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
        
+# 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
+# 88 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h"
+typedef signed char sint8;
+typedef unsigned char uint8;
+typedef signed short sint16;
+typedef unsigned short uint16;
+typedef signed long sint32;
+typedef unsigned long uint32;
+typedef float float32;
+typedef double float64;
+
+typedef unsigned long uint8_least;
+typedef unsigned long uint16_least;
+typedef unsigned long uint32_least;
+typedef signed long sint8_least;
+typedef signed long sint16_least;
+typedef signed long sint32_least;
+
+typedef unsigned char boolean;
+# 3 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
 # 1 "./0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h" 1
 # 288 "./0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h"
 # 1 "./0_Src/4_McHal/Tricore/I2c/Std/IfxI2c.h" 1
@@ -38,24 +58,6 @@ typedef struct {
 void Ifx_C_Init(void);
 # 30 "./0_Src/4_McHal/Tricore/Cpu/Std/Ifx_Types.h" 2
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
-# 88 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h"
-typedef signed char sint8;
-typedef unsigned char uint8;
-typedef signed short sint16;
-typedef unsigned short uint16;
-typedef signed long sint32;
-typedef unsigned long uint32;
-typedef float float32;
-typedef double float64;
-
-typedef unsigned long uint8_least;
-typedef unsigned long uint16_least;
-typedef unsigned long uint32_least;
-typedef signed long sint8_least;
-typedef signed long sint16_least;
-typedef signed long sint32_least;
-
-typedef unsigned char boolean;
 # 31 "./0_Src/4_McHal/Tricore/Cpu/Std/Ifx_Types.h" 2
 
 
@@ -12751,8 +12753,6 @@ extern IfxI2c_I2c_Status IfxI2c_I2c_read(IfxI2c_I2c_Device *i2cDevice, volatile 
 
 
 extern IfxI2c_I2c_Status IfxI2c_I2c_write(IfxI2c_I2c_Device *i2cDevice, volatile uint8 *data, Ifx_SizeT size);
-# 3 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
-# 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
 # 4 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
 # 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
 typedef struct {
@@ -13383,6 +13383,8 @@ char *strupr (char *);
 
 uint8 i2c_data[64];
 
+extern IfxCpu_mutexLock g_i2c_bus_access_mtx;
+
 sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
   sint8 ret_val = -1;
 
@@ -13423,8 +13425,17 @@ sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
 
 
   i2c_data[0] = reg_addr;
-  while(IfxI2c_I2c_write(dev, i2c_data, 1) == IfxI2c_I2c_Status_nak);
-  while(IfxI2c_I2c_read(dev, i2c_data, num_regs) == IfxI2c_I2c_Status_nak);
+
+
+  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx))
+    ;
+  while (IfxI2c_I2c_write(dev, i2c_data, 1) == IfxI2c_I2c_Status_nak)
+    ;
+  while (IfxI2c_I2c_read(dev, i2c_data, num_regs) == IfxI2c_I2c_Status_nak)
+    ;
+
+  IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
+
   memcpy(reg_vals, &i2c_data, num_regs);
 
   ret_val = 0;
@@ -13437,7 +13448,14 @@ sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
 
   i2c_data[0] = reg_addr;
   i2c_data[1] = reg_val;
-  while(IfxI2c_I2c_write(dev, i2c_data, 2) == IfxI2c_I2c_Status_nak);
+
+
+  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx))
+    ;
+  while (IfxI2c_I2c_write(dev, i2c_data, 2) == IfxI2c_I2c_Status_nak)
+    ;
+
+  IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
 
   ret_val = 0;
   return ret_val;

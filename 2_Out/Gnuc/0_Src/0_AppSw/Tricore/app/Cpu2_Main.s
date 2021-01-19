@@ -33,19 +33,39 @@ g_apds9960_rgbc_shared_data:
 core2_main:
 .LFB488:
 	.file 1 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
-	.loc 1 69 0
+	.loc 1 66 0
 	mov.aa	%a14, %SP
 .LCFI0:
-	.loc 1 75 0
+	sub.a	%SP, 16
+	.loc 1 72 0
 	call	IfxScuWdt_getCpuWatchdogPassword
 	mov	%d15, %d2
 	mov	%d4, %d15
 	call	IfxScuWdt_disableCpuWatchdog
-	.loc 1 76 0
+	.loc 1 73 0
 	call	IfxScuWdt_getSafetyWatchdogPassword
 	mov	%d15, %d2
 	mov	%d4, %d15
 	call	IfxScuWdt_disableSafetyWatchdog
+	.loc 1 94 0
+	mov.d	%d15, %a14
+	add	%d15, -8
+	mov.a	%a4, %d15
+	movh	%d15, hi:g_i2c_handle
+	mov.a	%a2, %d15
+	lea	%a5, [%a2] lo:g_i2c_handle
+	call	IfxI2c_I2c_initDeviceConfig
+	.loc 1 97 0
+	mov	%d15, 114
+	st.b	[%a14] -4, %d15
+	.loc 1 100 0
+	mov.d	%d15, %a14
+	add	%d15, -8
+	movh	%d2, hi:g_apds9960_i2cDev
+	mov.a	%a3, %d2
+	lea	%a4, [%a3] lo:g_apds9960_i2cDev
+	mov.a	%a5, %d15
+	call	IfxI2c_I2c_initDevice
 .LBB4:
 .LBB5:
 	.file 2 "./0_Src/4_McHal/Tricore/Cpu/Std/IfxCpu.h"
@@ -57,24 +77,67 @@ core2_main:
 #NO_APP
 .LBE5:
 .LBE4:
-	.loc 1 113 0
+	.loc 1 106 0
 	movh	%d15, hi:g_sync_cores_event
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:g_sync_cores_event
 	call	IfxCpu_emitEvent
-	.loc 1 114 0
+	.loc 1 107 0
 	movh	%d15, hi:g_sync_cores_timeout_ms
 	addi	%d15, %d15, lo:g_sync_cores_timeout_ms
-	mov.a	%a15, %d15
-	ld.w	%d15, [%a15]0
+	mov.a	%a2, %d15
+	ld.w	%d15, [%a2]0
 	movh	%d2, hi:g_sync_cores_event
-	mov.a	%a15, %d2
-	lea	%a4, [%a15] lo:g_sync_cores_event
+	mov.a	%a3, %d2
+	lea	%a4, [%a3] lo:g_sync_cores_event
 	mov	%d4, %d15
 	call	IfxCpu_waitEvent
+	.loc 1 113 0
+	mov.d	%d15, %a14
+	add	%d15, -8
+	movh	%d2, hi:g_apds9960_i2cDev
+	mov.a	%a15, %d2
+	lea	%a4, [%a15] lo:g_apds9960_i2cDev
+	mov.a	%a5, %d15
+	call	apds9960_init
+.L3:
+	.loc 1 118 0
+	mov.d	%d2, %a14
+	addi	%d15, %d2, -16
+	movh	%d2, hi:g_apds9960_i2cDev
+	mov.a	%a2, %d2
+	lea	%a4, [%a2] lo:g_apds9960_i2cDev
+	mov.a	%a5, %d15
+	call	apds9960_read_rgbc
+	.loc 1 120 0
+	movh	%d15, hi:g_apds9960_rgbc_shared_data_mtx
+	mov.a	%a3, %d15
+	lea	%a4, [%a3] lo:g_apds9960_rgbc_shared_data_mtx
+	call	IfxCpu_acquireMutex
+	mov	%d15, %d2
+	jz	%d15, .L2
+	.loc 1 122 0
+	movh	%d15, hi:g_apds9960_rgbc_shared_data
+	addi	%d15, %d15, lo:g_apds9960_rgbc_shared_data
+	mov	%d2, %d15
+	mov.d	%d3, %a14
+	addi	%d15, %d3, -16
+	mov.a	%a2, %d2
+	mov.a	%a3, %d15
+		# #chunks=4, chunksize=2, remains=0
+	lea	%a15, 4-1
+	0:
+	ld.h	%d3, [%a3+]2
+	st.h	[%a2+]2, %d3
+	loop	%a15, 0b
+	.loc 1 124 0
+	movh	%d15, hi:g_apds9960_rgbc_shared_data_mtx
+	mov.a	%a2, %d15
+	lea	%a4, [%a2] lo:g_apds9960_rgbc_shared_data_mtx
+	call	IfxCpu_releaseMutex
 .L2:
-	.loc 1 133 0 discriminator 1
-	j	.L2
+	.loc 1 126 0
+	j	.L3
 .LFE488:
 	.size	core2_main, .-core2_main
 .section .debug_frame,"",@progbits
@@ -116,7 +179,7 @@ core2_main:
 	.file 10 "./0_Src/0_AppSw/Tricore/lib/main.h"
 .section .debug_info,"",@progbits
 .Ldebug_info0:
-	.uaword	0x26b2
+	.uaword	0x2766
 	.uahalf	0x3
 	.uaword	.Ldebug_abbrev0
 	.byte	0x4
@@ -3692,15 +3755,15 @@ core2_main:
 	.byte	0x8
 	.byte	0x8
 	.uahalf	0x14f
-	.uaword	0x24f5
+	.uaword	0x24eb
 	.uleb128 0x12
 	.string	"i2c"
 	.byte	0x8
 	.uahalf	0x151
-	.uaword	0x24f5
+	.uaword	0x24eb
 	.byte	0
-	.uleb128 0x12
-	.string	"deviceAddress"
+	.uleb128 0x13
+	.uaword	.LASF23
 	.byte	0x8
 	.uahalf	0x152
 	.uaword	0x1cb
@@ -3716,9 +3779,32 @@ core2_main:
 	.uaword	0x24c7
 	.uleb128 0x1d
 	.byte	0x8
+	.byte	0x8
+	.uahalf	0x157
+	.uaword	0x252f
+	.uleb128 0x12
+	.string	"i2c"
+	.byte	0x8
+	.uahalf	0x159
+	.uaword	0x24eb
+	.byte	0
+	.uleb128 0x13
+	.uaword	.LASF23
+	.byte	0x8
+	.uahalf	0x15a
+	.uaword	0x1cb
+	.byte	0x4
+	.byte	0
+	.uleb128 0xc
+	.string	"IfxI2c_I2c_deviceConfig"
+	.byte	0x8
+	.uahalf	0x15b
+	.uaword	0x250b
+	.uleb128 0x1d
+	.byte	0x8
 	.byte	0x9
 	.uahalf	0x106
-	.uaword	0x254b
+	.uaword	0x2585
 	.uleb128 0x12
 	.string	"c"
 	.byte	0x9
@@ -3748,36 +3834,69 @@ core2_main:
 	.string	"apds9960_rgbc_data_t"
 	.byte	0x9
 	.uahalf	0x10b
-	.uaword	0x2515
+	.uaword	0x254f
 	.uleb128 0x1e
+	.byte	0
+	.byte	0x9
+	.uahalf	0x110
+	.uleb128 0xc
+	.string	"apds9960_params_t"
+	.byte	0x9
+	.uahalf	0x111
+	.uaword	0x25a2
+	.uleb128 0x1f
 	.string	"IfxCpu_enableInterrupts"
 	.byte	0x2
 	.uahalf	0x28d
 	.byte	0x1
 	.byte	0x3
-	.uleb128 0x1f
+	.uleb128 0x20
 	.byte	0x1
 	.string	"core2_main"
 	.byte	0x1
-	.byte	0x45
+	.byte	0x42
 	.byte	0x1
 	.uaword	.LFB488
 	.uaword	.LFE488
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x25b5
-	.uleb128 0x20
-	.uaword	0x2568
+	.uaword	0x2669
+	.uleb128 0x21
+	.string	"apds9960_i2c_deviceConfig"
+	.byte	0x1
+	.byte	0x5b
+	.uaword	0x252f
+	.byte	0x2
+	.byte	0x8e
+	.sleb128 -8
+	.uleb128 0x21
+	.string	"apds9960_params"
+	.byte	0x1
+	.byte	0x6d
+	.uaword	0x25a7
+	.byte	0x2
+	.byte	0x8e
+	.sleb128 -8
+	.uleb128 0x21
+	.string	"apds9960_rgbc_data"
+	.byte	0x1
+	.byte	0x6e
+	.uaword	0x2585
+	.byte	0x2
+	.byte	0x8e
+	.sleb128 -16
+	.uleb128 0x22
+	.uaword	0x25c1
 	.uaword	.LBB4
 	.uaword	.LBE4
 	.byte	0x1
-	.byte	0x6e
+	.byte	0x67
 	.byte	0
 	.uleb128 0x21
 	.string	"g_i2c_handle"
 	.byte	0x1
-	.byte	0x35
+	.byte	0x32
 	.uaword	0x24b4
 	.byte	0x5
 	.byte	0x3
@@ -3785,55 +3904,55 @@ core2_main:
 	.uleb128 0x21
 	.string	"g_apds9960_i2cDev"
 	.byte	0x1
-	.byte	0x36
-	.uaword	0x24fb
+	.byte	0x33
+	.uaword	0x24f1
 	.byte	0x5
 	.byte	0x3
 	.uaword	g_apds9960_i2cDev
 	.uleb128 0x16
 	.uaword	0x2a7
-	.uaword	0x25fe
+	.uaword	0x26b2
 	.uleb128 0x17
 	.uaword	0x224b
 	.byte	0x2
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.string	"IfxCpu_cfg_indexMap"
 	.byte	0x6
 	.byte	0x96
-	.uaword	0x261b
+	.uaword	0x26cf
 	.byte	0x1
 	.byte	0x1
+	.uleb128 0x24
+	.uaword	0x26a2
 	.uleb128 0x23
-	.uaword	0x25ee
-	.uleb128 0x22
 	.string	"g_sync_cores_event"
 	.byte	0xa
 	.byte	0x1c
 	.uaword	0x2316
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x22
+	.uleb128 0x23
 	.string	"g_sync_cores_timeout_ms"
 	.byte	0xa
 	.byte	0x1f
 	.uaword	0x228
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x24
+	.uleb128 0x25
 	.string	"g_apds9960_rgbc_shared_data_mtx"
 	.byte	0x1
-	.byte	0x38
+	.byte	0x35
 	.uaword	0x22fe
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.uaword	g_apds9960_rgbc_shared_data_mtx
-	.uleb128 0x24
+	.uleb128 0x25
 	.string	"g_apds9960_rgbc_shared_data"
 	.byte	0x1
-	.byte	0x39
-	.uaword	0x254b
+	.byte	0x36
+	.uaword	0x2585
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
@@ -4237,6 +4356,17 @@ core2_main:
 	.byte	0
 	.byte	0
 	.uleb128 0x1e
+	.uleb128 0x13
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0xb
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0x5
+	.byte	0
+	.byte	0
+	.uleb128 0x1f
 	.uleb128 0x2e
 	.byte	0
 	.uleb128 0x3
@@ -4251,7 +4381,7 @@ core2_main:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x1f
+	.uleb128 0x20
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -4276,21 +4406,6 @@ core2_main:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x20
-	.uleb128 0x1d
-	.byte	0
-	.uleb128 0x31
-	.uleb128 0x13
-	.uleb128 0x11
-	.uleb128 0x1
-	.uleb128 0x12
-	.uleb128 0x1
-	.uleb128 0x58
-	.uleb128 0xb
-	.uleb128 0x59
-	.uleb128 0xb
-	.byte	0
-	.byte	0
 	.uleb128 0x21
 	.uleb128 0x34
 	.byte	0
@@ -4307,6 +4422,21 @@ core2_main:
 	.byte	0
 	.byte	0
 	.uleb128 0x22
+	.uleb128 0x1d
+	.byte	0
+	.uleb128 0x31
+	.uleb128 0x13
+	.uleb128 0x11
+	.uleb128 0x1
+	.uleb128 0x12
+	.uleb128 0x1
+	.uleb128 0x58
+	.uleb128 0xb
+	.uleb128 0x59
+	.uleb128 0xb
+	.byte	0
+	.byte	0
+	.uleb128 0x23
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -4323,14 +4453,14 @@ core2_main:
 	.uleb128 0xc
 	.byte	0
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.uleb128 0x26
 	.byte	0
 	.uleb128 0x49
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -4367,6 +4497,8 @@ core2_main:
 	.string	"SREQ_INT"
 .LASF5:
 	.string	"RXF_UFL"
+.LASF23:
+	.string	"deviceAddress"
 .LASF16:
 	.string	"BREQ_INT"
 .LASF18:
@@ -4409,10 +4541,16 @@ core2_main:
 	.string	"reserved_14"
 .LASF21:
 	.string	"TX_END"
+	.extern	IfxCpu_releaseMutex,STT_FUNC,0
+	.extern	IfxCpu_acquireMutex,STT_FUNC,0
+	.extern	apds9960_read_rgbc,STT_FUNC,0
+	.extern	apds9960_init,STT_FUNC,0
 	.extern	IfxCpu_waitEvent,STT_FUNC,0
 	.extern	g_sync_cores_timeout_ms,STT_OBJECT,4
 	.extern	IfxCpu_emitEvent,STT_FUNC,0
 	.extern	g_sync_cores_event,STT_OBJECT,4
+	.extern	IfxI2c_I2c_initDevice,STT_FUNC,0
+	.extern	IfxI2c_I2c_initDeviceConfig,STT_FUNC,0
 	.extern	IfxScuWdt_disableSafetyWatchdog,STT_FUNC,0
 	.extern	IfxScuWdt_getSafetyWatchdogPassword,STT_FUNC,0
 	.extern	IfxScuWdt_disableCpuWatchdog,STT_FUNC,0

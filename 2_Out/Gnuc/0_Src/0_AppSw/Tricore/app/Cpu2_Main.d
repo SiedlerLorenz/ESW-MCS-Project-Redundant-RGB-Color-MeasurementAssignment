@@ -70,11 +70,11 @@
  0_Src/4_McHal/Tricore/_Reg/IfxQspi_reg.h \
  0_Src/4_McHal/Tricore/_Reg/IfxQspi_regdef.h 0_Src/1_SrvSw/If/SpiIf.h \
  0_Src/4_McHal/Tricore/_PinMap/IfxQspi_PinMap.h \
+ 0_Src/0_AppSw/Tricore/lib/apds9960.h \
+ 0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h \
  0_Src/0_AppSw/Tricore/lib/main.h \
  0_Src/4_McHal/Tricore/Cpu/Std/Ifx_Types.h \
  0_Src/0_AppSw/Config/Common/ConfigurationIsr.h \
- 0_Src/0_AppSw/Tricore/lib/tcs34725.h \
- 0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h \
- 0_Src/0_AppSw/Tricore/lib/apds9960.h 0_Src/1_SrvSw/SysSe/Bsp/Bsp.h \
+ 0_Src/0_AppSw/Tricore/lib/tcs34725.h 0_Src/1_SrvSw/SysSe/Bsp/Bsp.h \
  0_Src/4_McHal/Tricore/Stm/Std/IfxStm.h \
  0_Src/4_McHal/Tricore/_Impl/IfxStm_cfg.h

@@ -1,6 +1,7 @@
 2_Out/Gnuc/0_Src/0_AppSw/Tricore/lib/apds9960.o: \
  0_Src/0_AppSw/Tricore/lib/apds9960.c \
  0_Src/0_AppSw/Tricore/lib/apds9960.h \
+ 0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h \
  0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h \
  0_Src/4_McHal/Tricore/I2c/Std/IfxI2c.h \
  0_Src/4_McHal/Tricore/_Impl/IfxI2c_cfg.h \
@@ -43,5 +44,4 @@
  0_Src/4_McHal/Tricore/_Reg/IfxI2c_bf.h \
  0_Src/4_McHal/Tricore/_PinMap/IfxI2c_PinMap.h \
  0_Src/4_McHal/Tricore/Src/Std/IfxSrc.h \
- 0_Src/4_McHal/Tricore/_Impl/IfxSrc_cfg.h \
- 0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h
+ 0_Src/4_McHal/Tricore/_Impl/IfxSrc_cfg.h

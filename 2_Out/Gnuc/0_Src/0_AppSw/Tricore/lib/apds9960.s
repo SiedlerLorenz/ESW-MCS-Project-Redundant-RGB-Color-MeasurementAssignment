@@ -14,19 +14,19 @@ i2c_data:
 apds9960_init:
 .LFB273:
 	.file 1 "0_Src/0_AppSw/Tricore/lib/apds9960.c"
-	.loc 1 8 0
+	.loc 1 10 0
 	mov.aa	%a14, %SP
 .LCFI0:
 	sub.a	%SP, 16
 	st.a	[%a14] -12, %a4
 	st.a	[%a14] -16, %a5
-	.loc 1 9 0
+	.loc 1 11 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 11 0
+	.loc 1 13 0
 	mov	%d15, 0
 	st.b	[%a14] -2, %d15
-	.loc 1 12 0
+	.loc 1 14 0
 	mov.d	%d15, %a14
 	add	%d15, -2
 	ld.a	%a4, [%a14] -12
@@ -34,16 +34,16 @@ apds9960_init:
 	mov	%d5, 1
 	mov.a	%a5, %d15
 	call	apds9960_read_registers
-	.loc 1 13 0
+	.loc 1 15 0
 	ld.bu	%d15, [%a14] -2
 	ne	%d15, %d15, 171
 	jnz	%d15, .L2
-	.loc 1 14 0
+	.loc 1 16 0
 	ld.a	%a4, [%a14] -12
 	mov	%d4, 128
 	mov	%d5, 3
 	call	apds9960_write_register
-	.loc 1 15 0
+	.loc 1 17 0
 	mov.d	%d15, %a14
 	add	%d15, -2
 	ld.a	%a4, [%a14] -12
@@ -51,21 +51,21 @@ apds9960_init:
 	mov	%d5, 1
 	mov.a	%a5, %d15
 	call	apds9960_read_registers
-	.loc 1 16 0
+	.loc 1 18 0
 	ld.bu	%d15, [%a14] -2
 	jeq	%d15, 3, .L3
-	.loc 1 17 0
+	.loc 1 19 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
 	j	.L2
 .L3:
-	.loc 1 19 0
+	.loc 1 21 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
 .L2:
-	.loc 1 22 0
+	.loc 1 24 0
 	ld.b	%d15, [%a14] -1
-	.loc 1 23 0
+	.loc 1 25 0
 	mov	%d2, %d15
 	ret
 .LFE273:
@@ -75,16 +75,16 @@ apds9960_init:
 	.type	apds9960_read_rgbc, @function
 apds9960_read_rgbc:
 .LFB274:
-	.loc 1 25 0
+	.loc 1 27 0
 	mov.aa	%a14, %SP
 .LCFI1:
 	sub.a	%SP, 24
 	st.a	[%a14] -20, %a4
 	st.a	[%a14] -24, %a5
-	.loc 1 26 0
+	.loc 1 28 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 27 0
+	.loc 1 29 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -9
 	mov.a	%a2, %d15
@@ -93,10 +93,10 @@ apds9960_read_rgbc:
 	0:
 	st.b	[%a2+]1, %d2
 	loop	%a15, 0b
-	.loc 1 28 0
+	.loc 1 30 0
 	mov	%d15, 0
 	st.b	[%a14] -10, %d15
-	.loc 1 30 0
+	.loc 1 32 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -10
 	ld.a	%a4, [%a14] -20
@@ -104,7 +104,7 @@ apds9960_read_rgbc:
 	mov	%d5, 1
 	mov.a	%a5, %d15
 	call	apds9960_read_registers
-	.loc 1 32 0
+	.loc 1 34 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -9
 	ld.a	%a4, [%a14] -20
@@ -112,7 +112,7 @@ apds9960_read_rgbc:
 	mov	%d5, 8
 	mov.a	%a5, %d15
 	call	apds9960_read_registers
-	.loc 1 34 0
+	.loc 1 36 0
 	ld.bu	%d15, [%a14] -8
 	sh	%d15, %d15, 8
 	extr	%d2, %d15, 0, 16
@@ -123,7 +123,7 @@ apds9960_read_rgbc:
 	ld.w	%d2, [%a14] -24
 	mov.a	%a2, %d2
 	st.h	[%a2]0, %d15
-	.loc 1 35 0
+	.loc 1 37 0
 	ld.bu	%d15, [%a14] -6
 	sh	%d15, %d15, 8
 	extr	%d2, %d15, 0, 16
@@ -134,7 +134,7 @@ apds9960_read_rgbc:
 	ld.w	%d2, [%a14] -24
 	mov.a	%a15, %d2
 	st.h	[%a15] 2, %d15
-	.loc 1 36 0
+	.loc 1 38 0
 	ld.bu	%d15, [%a14] -4
 	sh	%d15, %d15, 8
 	extr	%d2, %d15, 0, 16
@@ -145,7 +145,7 @@ apds9960_read_rgbc:
 	ld.w	%d2, [%a14] -24
 	mov.a	%a2, %d2
 	st.h	[%a2] 4, %d15
-	.loc 1 37 0
+	.loc 1 39 0
 	ld.bu	%d15, [%a14] -2
 	sh	%d15, %d15, 8
 	extr	%d2, %d15, 0, 16
@@ -156,12 +156,12 @@ apds9960_read_rgbc:
 	ld.w	%d2, [%a14] -24
 	mov.a	%a15, %d2
 	st.h	[%a15] 6, %d15
-	.loc 1 38 0
+	.loc 1 40 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
-	.loc 1 40 0
+	.loc 1 42 0
 	ld.b	%d15, [%a14] -1
-	.loc 1 41 0
+	.loc 1 43 0
 	mov	%d2, %d15
 	ret
 .LFE274:
@@ -171,7 +171,7 @@ apds9960_read_rgbc:
 	.type	apds9960_read_registers, @function
 apds9960_read_registers:
 .LFB275:
-	.loc 1 43 0
+	.loc 1 45 0
 	mov.aa	%a14, %SP
 .LCFI2:
 	sub.a	%SP, 24
@@ -181,19 +181,29 @@ apds9960_read_registers:
 	st.a	[%a14] -20, %a5
 	st.b	[%a14] -13, %d2
 	st.b	[%a14] -14, %d15
-	.loc 1 44 0
+	.loc 1 46 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 47 0
+	.loc 1 49 0
 	movh	%d15, hi:i2c_data
 	addi	%d2, %d15, lo:i2c_data
 	ld.b	%d15, [%a14] -13
 	mov.a	%a15, %d2
 	st.b	[%a15]0, %d15
-	.loc 1 48 0
+	.loc 1 52 0
 	nop
 .L8:
-	.loc 1 48 0 is_stmt 0 discriminator 1
+	.loc 1 52 0 is_stmt 0 discriminator 1
+	movh	%d15, hi:g_i2c_bus_access_mtx
+	mov.a	%a15, %d15
+	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
+	call	IfxCpu_acquireMutex
+	mov	%d15, %d2
+	jz	%d15, .L8
+	.loc 1 54 0 is_stmt 1
+	nop
+.L9:
+	.loc 1 54 0 is_stmt 0 discriminator 1
 	ld.a	%a4, [%a14] -12
 	movh	%d15, hi:i2c_data
 	mov.a	%a15, %d15
@@ -201,11 +211,11 @@ apds9960_read_registers:
 	mov	%d4, 1
 	call	IfxI2c_I2c_write
 	mov	%d15, %d2
-	jeq	%d15, 1, .L8
-	.loc 1 49 0 is_stmt 1
+	jeq	%d15, 1, .L9
+	.loc 1 56 0 is_stmt 1
 	nop
-.L9:
-	.loc 1 49 0 is_stmt 0 discriminator 1
+.L10:
+	.loc 1 56 0 is_stmt 0 discriminator 1
 	ld.bu	%d15, [%a14] -14
 	extr	%d15, %d15, 0, 16
 	ld.a	%a4, [%a14] -12
@@ -215,8 +225,13 @@ apds9960_read_registers:
 	mov	%d4, %d15
 	call	IfxI2c_I2c_read
 	mov	%d15, %d2
-	jeq	%d15, 1, .L9
-	.loc 1 50 0 is_stmt 1
+	jeq	%d15, 1, .L10
+	.loc 1 59 0 is_stmt 1
+	movh	%d15, hi:g_i2c_bus_access_mtx
+	mov.a	%a15, %d15
+	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
+	call	IfxCpu_releaseMutex
+	.loc 1 61 0
 	ld.bu	%d15, [%a14] -14
 	ld.a	%a4, [%a14] -20
 	movh	%d2, hi:i2c_data
@@ -224,12 +239,12 @@ apds9960_read_registers:
 	lea	%a5, [%a15] lo:i2c_data
 	mov	%d4, %d15
 	call	memcpy
-	.loc 1 52 0
+	.loc 1 63 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
-	.loc 1 53 0
+	.loc 1 64 0
 	ld.b	%d15, [%a14] -1
-	.loc 1 54 0
+	.loc 1 65 0
 	mov	%d2, %d15
 	ret
 .LFE275:
@@ -239,7 +254,7 @@ apds9960_read_registers:
 	.type	apds9960_write_register, @function
 apds9960_write_register:
 .LFB276:
-	.loc 1 56 0
+	.loc 1 67 0
 	mov.aa	%a14, %SP
 .LCFI3:
 	sub.a	%SP, 16
@@ -248,25 +263,35 @@ apds9960_write_register:
 	mov	%d15, %d5
 	st.b	[%a14] -13, %d2
 	st.b	[%a14] -14, %d15
-	.loc 1 57 0
+	.loc 1 68 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 60 0
+	.loc 1 71 0
 	movh	%d15, hi:i2c_data
 	addi	%d2, %d15, lo:i2c_data
 	ld.b	%d15, [%a14] -13
 	mov.a	%a15, %d2
 	st.b	[%a15]0, %d15
-	.loc 1 61 0
+	.loc 1 72 0
 	movh	%d15, hi:i2c_data
 	addi	%d2, %d15, lo:i2c_data
 	ld.b	%d15, [%a14] -14
 	mov.a	%a15, %d2
 	st.b	[%a15] 1, %d15
-	.loc 1 62 0
+	.loc 1 75 0
 	nop
-.L12:
-	.loc 1 62 0 is_stmt 0 discriminator 1
+.L13:
+	.loc 1 75 0 is_stmt 0 discriminator 1
+	movh	%d15, hi:g_i2c_bus_access_mtx
+	mov.a	%a15, %d15
+	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
+	call	IfxCpu_acquireMutex
+	mov	%d15, %d2
+	jz	%d15, .L13
+	.loc 1 77 0 is_stmt 1
+	nop
+.L14:
+	.loc 1 77 0 is_stmt 0 discriminator 1
 	ld.a	%a4, [%a14] -12
 	movh	%d15, hi:i2c_data
 	mov.a	%a15, %d15
@@ -274,13 +299,18 @@ apds9960_write_register:
 	mov	%d4, 2
 	call	IfxI2c_I2c_write
 	mov	%d15, %d2
-	jeq	%d15, 1, .L12
-	.loc 1 64 0 is_stmt 1
+	jeq	%d15, 1, .L14
+	.loc 1 80 0 is_stmt 1
+	movh	%d15, hi:g_i2c_bus_access_mtx
+	mov.a	%a15, %d15
+	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
+	call	IfxCpu_releaseMutex
+	.loc 1 82 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
-	.loc 1 65 0
+	.loc 1 83 0
 	ld.b	%d15, [%a14] -1
-	.loc 1 66 0
+	.loc 1 84 0
 	mov	%d2, %d15
 	ret
 .LFE276:
@@ -353,13 +383,14 @@ apds9960_write_register:
 	.file 2 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h"
 	.file 3 "./0_Src/4_McHal/Tricore/Cpu/Std/Ifx_Types.h"
 	.file 4 "./0_Src/4_McHal/Tricore/_Reg/IfxI2c_regdef.h"
-	.file 5 "./0_Src/4_McHal/Tricore/_Impl/IfxCpu_cfg.h"
-	.file 6 "./0_Src/4_McHal/Tricore/I2c/Std/IfxI2c.h"
-	.file 7 "./0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h"
-	.file 8 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+	.file 5 "./0_Src/4_McHal/Tricore/Cpu/Std/IfxCpu.h"
+	.file 6 "./0_Src/4_McHal/Tricore/_Impl/IfxCpu_cfg.h"
+	.file 7 "./0_Src/4_McHal/Tricore/I2c/Std/IfxI2c.h"
+	.file 8 "./0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h"
+	.file 9 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
 .section .debug_info,"",@progbits
 .Ldebug_info0:
-	.uaword	0x27b8
+	.uaword	0x27ee
 	.uahalf	0x3
 	.uaword	.Ldebug_abbrev0
 	.byte	0x4
@@ -373,79 +404,79 @@ apds9960_write_register:
 	.uaword	.Letext0
 	.uaword	.Ldebug_line0
 	.uleb128 0x2
+	.string	"sint8"
+	.byte	0x2
+	.byte	0x58
+	.uaword	0x180
+	.uleb128 0x3
+	.byte	0x1
+	.byte	0x6
+	.string	"signed char"
+	.uleb128 0x2
+	.string	"uint8"
+	.byte	0x2
+	.byte	0x59
+	.uaword	0x19c
+	.uleb128 0x3
+	.byte	0x1
+	.byte	0x8
+	.string	"unsigned char"
+	.uleb128 0x2
+	.string	"sint16"
+	.byte	0x2
+	.byte	0x5a
+	.uaword	0x1bb
+	.uleb128 0x3
+	.byte	0x2
+	.byte	0x5
+	.string	"short int"
+	.uleb128 0x3
+	.byte	0x2
+	.byte	0x7
+	.string	"short unsigned int"
+	.uleb128 0x2
+	.string	"sint32"
+	.byte	0x2
+	.byte	0x5c
+	.uaword	0x1ec
+	.uleb128 0x3
 	.byte	0x4
 	.byte	0x5
 	.string	"long int"
-	.uleb128 0x2
+	.uleb128 0x3
 	.byte	0x4
 	.byte	0x7
 	.string	"long unsigned int"
 	.uleb128 0x2
+	.string	"float32"
+	.byte	0x2
+	.byte	0x5e
+	.uaword	0x21c
+	.uleb128 0x3
+	.byte	0x4
+	.byte	0x4
+	.string	"float"
+	.uleb128 0x3
+	.byte	0x8
+	.byte	0x4
+	.string	"double"
+	.uleb128 0x3
 	.byte	0x4
 	.byte	0x5
 	.string	"int"
-	.uleb128 0x2
+	.uleb128 0x3
 	.byte	0x8
 	.byte	0x5
 	.string	"long long int"
-	.uleb128 0x2
+	.uleb128 0x3
 	.byte	0x8
 	.byte	0x4
 	.string	"long double"
 	.uleb128 0x3
-	.string	"sint8"
-	.byte	0x2
-	.byte	0x58
-	.uaword	0x1c8
-	.uleb128 0x2
-	.byte	0x1
-	.byte	0x6
-	.string	"signed char"
-	.uleb128 0x3
-	.string	"uint8"
-	.byte	0x2
-	.byte	0x59
-	.uaword	0x1e4
-	.uleb128 0x2
-	.byte	0x1
-	.byte	0x8
-	.string	"unsigned char"
-	.uleb128 0x3
-	.string	"sint16"
-	.byte	0x2
-	.byte	0x5a
-	.uaword	0x203
-	.uleb128 0x2
-	.byte	0x2
-	.byte	0x5
-	.string	"short int"
-	.uleb128 0x2
-	.byte	0x2
-	.byte	0x7
-	.string	"short unsigned int"
-	.uleb128 0x3
-	.string	"sint32"
-	.byte	0x2
-	.byte	0x5c
-	.uaword	0x173
-	.uleb128 0x3
-	.string	"float32"
-	.byte	0x2
-	.byte	0x5e
-	.uaword	0x243
-	.uleb128 0x2
-	.byte	0x4
-	.byte	0x4
-	.string	"float"
-	.uleb128 0x2
-	.byte	0x8
-	.byte	0x4
-	.string	"double"
-	.uleb128 0x2
 	.byte	0x8
 	.byte	0x7
 	.string	"long long unsigned int"
-	.uleb128 0x2
+	.uleb128 0x3
 	.byte	0x1
 	.byte	0x6
 	.string	"char"
@@ -468,10 +499,10 @@ apds9960_write_register:
 	.string	"index"
 	.byte	0x3
 	.byte	0x80
-	.uaword	0x226
+	.uaword	0x1de
 	.byte	0x4
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"IfxModule_IndexMap"
 	.byte	0x3
 	.byte	0x81
@@ -771,11 +802,11 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x2
+	.uleb128 0x3
 	.byte	0x4
 	.byte	0x7
 	.string	"unsigned int"
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ACCEN0_Bits"
 	.byte	0x4
 	.byte	0x4f
@@ -796,7 +827,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ACCEN1_Bits"
 	.byte	0x4
 	.byte	0x55
@@ -889,7 +920,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ADDRCFG_Bits"
 	.byte	0x4
 	.byte	0x63
@@ -928,7 +959,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_BUSSTAT_Bits"
 	.byte	0x4
 	.byte	0x6b
@@ -1021,7 +1052,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_CLC1_Bits"
 	.byte	0x4
 	.byte	0x79
@@ -1060,7 +1091,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_CLC_Bits"
 	.byte	0x4
 	.byte	0x81
@@ -1099,7 +1130,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ENDDCTRL_Bits"
 	.byte	0x4
 	.byte	0x89
@@ -1156,7 +1187,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ERRIRQSC_Bits"
 	.byte	0x4
 	.byte	0x93
@@ -1213,7 +1244,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ERRIRQSM_Bits"
 	.byte	0x4
 	.byte	0x9d
@@ -1270,7 +1301,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ERRIRQSS_Bits"
 	.byte	0x4
 	.byte	0xa7
@@ -1318,7 +1349,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_FDIVCFG_Bits"
 	.byte	0x4
 	.byte	0xb0
@@ -1366,7 +1397,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_FDIVHIGHCFG_Bits"
 	.byte	0x4
 	.byte	0xb9
@@ -1396,7 +1427,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_FFSSTAT_Bits"
 	.byte	0x4
 	.byte	0xc0
@@ -1507,7 +1538,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_FIFOCFG_Bits"
 	.byte	0x4
 	.byte	0xd0
@@ -1537,7 +1568,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_GPCTL_Bits"
 	.byte	0x4
 	.byte	0xd7
@@ -1594,7 +1625,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ICR_Bits"
 	.byte	0x4
 	.byte	0xe1
@@ -1633,7 +1664,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_ID_Bits"
 	.byte	0x4
 	.byte	0xe9
@@ -1708,7 +1739,7 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"Ifx_I2C_IMSC_Bits"
 	.byte	0x4
 	.byte	0xf5
@@ -2597,7 +2628,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1a1
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2623,7 +2654,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1ac
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2649,7 +2680,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1b7
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2675,7 +2706,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1c2
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2701,7 +2732,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1cd
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2727,7 +2758,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1d8
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2753,7 +2784,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1e3
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2779,7 +2810,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1ee
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2805,7 +2836,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x1f9
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2831,7 +2862,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x204
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2857,7 +2888,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x20f
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2883,7 +2914,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x21a
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2909,7 +2940,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x225
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2935,7 +2966,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x230
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2961,7 +2992,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x23b
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -2987,7 +3018,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x246
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3013,7 +3044,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x251
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3039,7 +3070,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x25c
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3065,7 +3096,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x267
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3091,7 +3122,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x272
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3117,7 +3148,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x27d
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3143,7 +3174,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x288
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3169,7 +3200,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x293
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3195,7 +3226,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x29e
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3221,7 +3252,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2a9
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3247,7 +3278,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2b4
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3273,7 +3304,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2bf
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3299,7 +3330,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2ca
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3325,7 +3356,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2d5
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3351,7 +3382,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2e0
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3377,7 +3408,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2eb
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3403,7 +3434,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x2f6
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3429,7 +3460,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x301
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3455,7 +3486,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x30c
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3481,7 +3512,7 @@ apds9960_write_register:
 	.string	"I"
 	.byte	0x4
 	.uahalf	0x317
-	.uaword	0x194
+	.uaword	0x22f
 	.uleb128 0x10
 	.string	"B"
 	.byte	0x4
@@ -3771,39 +3802,39 @@ apds9960_write_register:
 	.uleb128 0x10020
 	.byte	0
 	.uleb128 0x16
-	.uaword	0x1e4
+	.uaword	0x19c
 	.uaword	0x2249
 	.uleb128 0x17
 	.uaword	0x2249
 	.byte	0x3
 	.byte	0
-	.uleb128 0x2
+	.uleb128 0x3
 	.byte	0x4
 	.byte	0x7
 	.string	"sizetype"
 	.uleb128 0x16
-	.uaword	0x1e4
+	.uaword	0x19c
 	.uaword	0x2265
 	.uleb128 0x17
 	.uaword	0x2249
 	.byte	0x1b
 	.byte	0
 	.uleb128 0x16
-	.uaword	0x1e4
+	.uaword	0x19c
 	.uaword	0x2276
 	.uleb128 0x18
 	.uaword	0x2249
 	.uahalf	0x7f6b
 	.byte	0
 	.uleb128 0x16
-	.uaword	0x1e4
+	.uaword	0x19c
 	.uaword	0x2287
 	.uleb128 0x18
 	.uaword	0x2249
 	.uahalf	0x3ffb
 	.byte	0
 	.uleb128 0x16
-	.uaword	0x1e4
+	.uaword	0x19c
 	.uaword	0x2297
 	.uleb128 0x17
 	.uaword	0x2249
@@ -3818,7 +3849,7 @@ apds9960_write_register:
 	.uaword	0x1f16
 	.uleb128 0x1a
 	.byte	0x4
-	.byte	0x5
+	.byte	0x6
 	.byte	0x76
 	.uaword	0x22fc
 	.uleb128 0x1b
@@ -3834,14 +3865,19 @@ apds9960_write_register:
 	.string	"IfxCpu_Index_none"
 	.sleb128 3
 	.byte	0
+	.uleb128 0x2
+	.string	"IfxCpu_mutexLock"
+	.byte	0x5
+	.byte	0x62
+	.uaword	0x4d3
 	.uleb128 0x4
 	.byte	0x4
 	.uaword	0x2297
 	.uleb128 0x1a
 	.byte	0x4
-	.byte	0x6
+	.byte	0x7
 	.byte	0x35
-	.uaword	0x237b
+	.uaword	0x2393
 	.uleb128 0x1b
 	.string	"IfxI2c_BusStatus_idle"
 	.sleb128 0
@@ -3855,16 +3891,16 @@ apds9960_write_register:
 	.string	"IfxI2c_BusStatus_remoteSlave"
 	.sleb128 3
 	.byte	0
-	.uleb128 0x3
+	.uleb128 0x2
 	.string	"IfxI2c_BusStatus"
-	.byte	0x6
+	.byte	0x7
 	.byte	0x3a
-	.uaword	0x2302
+	.uaword	0x231a
 	.uleb128 0x1c
 	.byte	0x4
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x12a
-	.uaword	0x241c
+	.uaword	0x2434
 	.uleb128 0x1b
 	.string	"IfxI2c_I2c_Status_ok"
 	.sleb128 0
@@ -3883,230 +3919,230 @@ apds9960_write_register:
 	.byte	0
 	.uleb128 0xc
 	.string	"IfxI2c_I2c_Status"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x130
-	.uaword	0x2393
+	.uaword	0x23ab
 	.uleb128 0x1d
 	.byte	0x10
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x13c
-	.uaword	0x2482
+	.uaword	0x249a
 	.uleb128 0x12
 	.string	"i2c"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x13e
-	.uaword	0x22fc
+	.uaword	0x2314
 	.byte	0
 	.uleb128 0x12
 	.string	"busStatus"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x13f
-	.uaword	0x237b
+	.uaword	0x2393
 	.byte	0x4
 	.uleb128 0x12
 	.string	"status"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x140
-	.uaword	0x241c
+	.uaword	0x2434
 	.byte	0x8
 	.uleb128 0x12
 	.string	"baudrate"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x141
-	.uaword	0x234
+	.uaword	0x20d
 	.byte	0xc
 	.byte	0
 	.uleb128 0xc
 	.string	"IfxI2c_I2c"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x142
-	.uaword	0x2436
+	.uaword	0x244e
 	.uleb128 0x1d
 	.byte	0x8
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x14f
-	.uaword	0x24c3
+	.uaword	0x24db
 	.uleb128 0x12
 	.string	"i2c"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x151
-	.uaword	0x24c3
+	.uaword	0x24db
 	.byte	0
 	.uleb128 0x12
 	.string	"deviceAddress"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x152
-	.uaword	0x1d7
+	.uaword	0x18f
 	.byte	0x4
 	.byte	0
 	.uleb128 0x4
 	.byte	0x4
-	.uaword	0x2482
+	.uaword	0x249a
 	.uleb128 0xc
 	.string	"IfxI2c_I2c_Device"
-	.byte	0x7
+	.byte	0x8
 	.uahalf	0x153
-	.uaword	0x2495
+	.uaword	0x24ad
 	.uleb128 0x1d
 	.byte	0x8
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x106
-	.uaword	0x2519
+	.uaword	0x2531
 	.uleb128 0x12
 	.string	"c"
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x107
-	.uaword	0x1f5
+	.uaword	0x1ad
 	.byte	0
 	.uleb128 0x12
 	.string	"r"
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x108
-	.uaword	0x1f5
+	.uaword	0x1ad
 	.byte	0x2
 	.uleb128 0x12
 	.string	"g"
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x109
-	.uaword	0x1f5
+	.uaword	0x1ad
 	.byte	0x4
 	.uleb128 0x12
 	.string	"b"
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x10a
-	.uaword	0x1f5
+	.uaword	0x1ad
 	.byte	0x6
 	.byte	0
 	.uleb128 0xc
 	.string	"apds9960_rgbc_data_t"
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x10b
-	.uaword	0x24e3
+	.uaword	0x24fb
 	.uleb128 0x1e
 	.byte	0
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x110
 	.uleb128 0xc
 	.string	"apds9960_params_t"
-	.byte	0x8
+	.byte	0x9
 	.uahalf	0x111
-	.uaword	0x2536
+	.uaword	0x254e
 	.uleb128 0x1f
 	.byte	0x1
 	.string	"apds9960_init"
 	.byte	0x1
-	.byte	0x8
+	.byte	0xa
 	.byte	0x1
-	.uaword	0x1bb
+	.uaword	0x173
 	.uaword	.LFB273
 	.uaword	.LFE273
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x25bd
+	.uaword	0x25d5
 	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
-	.byte	0x8
-	.uaword	0x25bd
+	.byte	0xa
+	.uaword	0x25d5
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
 	.uleb128 0x20
 	.string	"params"
 	.byte	0x1
-	.byte	0x8
-	.uaword	0x25c8
+	.byte	0xa
+	.uaword	0x25e0
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -16
 	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
-	.byte	0x9
-	.uaword	0x1bb
+	.byte	0xb
+	.uaword	0x173
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -1
 	.uleb128 0x22
 	.string	"device_id"
 	.byte	0x1
-	.byte	0xb
-	.uaword	0x1d7
+	.byte	0xd
+	.uaword	0x18f
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -2
 	.byte	0
 	.uleb128 0x4
 	.byte	0x4
-	.uaword	0x25c3
+	.uaword	0x25db
 	.uleb128 0x23
-	.uaword	0x24c9
+	.uaword	0x24e1
 	.uleb128 0x4
 	.byte	0x4
-	.uaword	0x25ce
+	.uaword	0x25e6
 	.uleb128 0x23
-	.uaword	0x253b
+	.uaword	0x2553
 	.uleb128 0x1f
 	.byte	0x1
 	.string	"apds9960_read_rgbc"
 	.byte	0x1
-	.byte	0x19
+	.byte	0x1b
 	.byte	0x1
-	.uaword	0x1bb
+	.uaword	0x173
 	.uaword	.LFB274
 	.uaword	.LFE274
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x2658
+	.uaword	0x2670
 	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
-	.byte	0x19
-	.uaword	0x25bd
+	.byte	0x1b
+	.uaword	0x25d5
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -20
 	.uleb128 0x20
 	.string	"rgbc_data"
 	.byte	0x1
-	.byte	0x19
-	.uaword	0x2658
+	.byte	0x1b
+	.uaword	0x2670
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -24
 	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
-	.byte	0x1a
-	.uaword	0x1bb
+	.byte	0x1c
+	.uaword	0x173
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -1
 	.uleb128 0x22
 	.string	"rgbc_reg_buf"
 	.byte	0x1
-	.byte	0x1b
-	.uaword	0x265e
+	.byte	0x1d
+	.uaword	0x2676
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -9
 	.uleb128 0x22
 	.string	"reg_val"
 	.byte	0x1
-	.byte	0x1c
-	.uaword	0x1d7
+	.byte	0x1e
+	.uaword	0x18f
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -10
 	.byte	0
 	.uleb128 0x4
 	.byte	0x4
-	.uaword	0x2519
+	.uaword	0x2531
 	.uleb128 0x16
-	.uaword	0x1d7
-	.uaword	0x266e
+	.uaword	0x18f
+	.uaword	0x2686
 	.uleb128 0x17
 	.uaword	0x2249
 	.byte	0x7
@@ -4115,124 +4151,124 @@ apds9960_write_register:
 	.byte	0x1
 	.string	"apds9960_read_registers"
 	.byte	0x1
-	.byte	0x2b
+	.byte	0x2d
 	.byte	0x1
-	.uaword	0x1bb
+	.uaword	0x173
 	.uaword	.LFB275
 	.uaword	.LFE275
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x26ef
+	.uaword	0x2707
 	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
-	.byte	0x2b
-	.uaword	0x25bd
+	.byte	0x2d
+	.uaword	0x25d5
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
 	.uleb128 0x24
 	.uaword	.LASF24
 	.byte	0x1
-	.byte	0x2b
-	.uaword	0x1d7
+	.byte	0x2d
+	.uaword	0x18f
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -13
 	.uleb128 0x20
 	.string	"num_regs"
 	.byte	0x1
-	.byte	0x2b
-	.uaword	0x1d7
+	.byte	0x2d
+	.uaword	0x18f
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -14
 	.uleb128 0x20
 	.string	"reg_vals"
 	.byte	0x1
-	.byte	0x2b
-	.uaword	0x26ef
+	.byte	0x2d
+	.uaword	0x2707
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -20
 	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
-	.byte	0x2c
-	.uaword	0x1bb
+	.byte	0x2e
+	.uaword	0x173
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -1
 	.byte	0
 	.uleb128 0x4
 	.byte	0x4
-	.uaword	0x1d7
+	.uaword	0x18f
 	.uleb128 0x1f
 	.byte	0x1
 	.string	"apds9960_write_register"
 	.byte	0x1
-	.byte	0x38
+	.byte	0x43
 	.byte	0x1
-	.uaword	0x1bb
+	.uaword	0x173
 	.uaword	.LFB276
 	.uaword	.LFE276
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x2762
+	.uaword	0x277a
 	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
-	.byte	0x38
-	.uaword	0x25bd
+	.byte	0x43
+	.uaword	0x25d5
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
 	.uleb128 0x24
 	.uaword	.LASF24
 	.byte	0x1
-	.byte	0x38
-	.uaword	0x1d7
+	.byte	0x43
+	.uaword	0x18f
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -13
 	.uleb128 0x20
 	.string	"reg_val"
 	.byte	0x1
-	.byte	0x38
-	.uaword	0x1d7
+	.byte	0x43
+	.uaword	0x18f
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -14
 	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
-	.byte	0x39
-	.uaword	0x1bb
+	.byte	0x44
+	.uaword	0x173
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -1
 	.byte	0
 	.uleb128 0x16
 	.uaword	0x2a5
-	.uaword	0x2772
+	.uaword	0x278a
 	.uleb128 0x17
 	.uaword	0x2249
 	.byte	0x2
 	.byte	0
 	.uleb128 0x25
 	.string	"IfxCpu_cfg_indexMap"
-	.byte	0x5
+	.byte	0x6
 	.byte	0x96
-	.uaword	0x278f
+	.uaword	0x27a7
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x23
-	.uaword	0x2762
+	.uaword	0x277a
 	.uleb128 0x16
-	.uaword	0x1d7
-	.uaword	0x27a4
+	.uaword	0x18f
+	.uaword	0x27bc
 	.uleb128 0x17
 	.uaword	0x2249
 	.byte	0x3f
@@ -4241,11 +4277,18 @@ apds9960_write_register:
 	.string	"i2c_data"
 	.byte	0x1
 	.byte	0x6
-	.uaword	0x2794
+	.uaword	0x27ac
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.uaword	i2c_data
+	.uleb128 0x25
+	.string	"g_i2c_bus_access_mtx"
+	.byte	0x1
+	.byte	0x8
+	.uaword	0x22fc
+	.byte	0x1
+	.byte	0x1
 	.byte	0
 .section .debug_abbrev,"",@progbits
 .Ldebug_abbrev0:
@@ -4269,17 +4312,6 @@ apds9960_write_register:
 	.byte	0
 	.byte	0
 	.uleb128 0x2
-	.uleb128 0x24
-	.byte	0
-	.uleb128 0xb
-	.uleb128 0xb
-	.uleb128 0x3e
-	.uleb128 0xb
-	.uleb128 0x3
-	.uleb128 0x8
-	.byte	0
-	.byte	0
-	.uleb128 0x3
 	.uleb128 0x16
 	.byte	0
 	.uleb128 0x3
@@ -4290,6 +4322,17 @@ apds9960_write_register:
 	.uleb128 0xb
 	.uleb128 0x49
 	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0x24
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0xb
+	.uleb128 0x3e
+	.uleb128 0xb
+	.uleb128 0x3
+	.uleb128 0x8
 	.byte	0
 	.byte	0
 	.uleb128 0x4
@@ -4850,6 +4893,9 @@ apds9960_write_register:
 .LASF21:
 	.string	"TX_END"
 	.extern	memcpy,STT_FUNC,0
+	.extern	IfxCpu_releaseMutex,STT_FUNC,0
 	.extern	IfxI2c_I2c_read,STT_FUNC,0
 	.extern	IfxI2c_I2c_write,STT_FUNC,0
+	.extern	IfxCpu_acquireMutex,STT_FUNC,0
+	.extern	g_i2c_bus_access_mtx,STT_OBJECT,4
 	.ident	"GCC: (HighTec Release HDP-v4.9.1.0-infineon-2.0-df254e8) 4.9.4 build on 2018-04-18"

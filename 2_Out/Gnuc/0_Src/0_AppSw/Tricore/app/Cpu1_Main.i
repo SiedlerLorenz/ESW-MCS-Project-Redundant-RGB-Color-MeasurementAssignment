@@ -17244,8 +17244,9 @@ tcs34725_params_t g_tcs34725_params;
 
 tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
 
+IfxCpu_mutexLock g_i2c_bus_access_mtx;
 IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
-# 62 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
+# 63 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
 int core1_main (void)
 {
 

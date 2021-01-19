@@ -29079,7 +29079,32 @@ static inline __attribute__ ((always_inline)) void IfxQspi_SpiSlave_writeTransmi
     IfxQspi_writeTransmitFifo(handle->qspi, data);
 }
 # 23 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
+# 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
+       
+# 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
+# 3 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
+# 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+typedef struct {
+  sint16 c;
+  sint16 r;
+  sint16 g;
+  sint16 b;
+} apds9960_rgbc_data_t;
 
+
+
+
+typedef struct {
+} apds9960_params_t;
+# 284 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+# 297 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
+# 309 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 320 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
+# 24 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
 # 1 "./0_Src/0_AppSw/Tricore/lib/main.h" 1
 # 11 "./0_Src/0_AppSw/Tricore/lib/main.h"
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Ifx_Types.h" 1
@@ -29607,9 +29632,6 @@ extern const char _ctype_[];
 
 # 1 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 1
        
-
-# 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
-# 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
 # 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
@@ -29633,30 +29655,7 @@ sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_
 # 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
 # 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
-# 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
-       
-# 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-typedef struct {
-  sint16 c;
-  sint16 r;
-  sint16 g;
-  sint16 b;
-} apds9960_rgbc_data_t;
 
-
-
-
-typedef struct {
-} apds9960_params_t;
-# 284 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
-# 297 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 309 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 320 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
-# 25 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 
 
 
@@ -29677,7 +29676,6 @@ extern IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
 
 extern apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
 # 25 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
-
 
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 1 3
 # 34 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 3
@@ -30157,7 +30155,7 @@ FILE *_fopencookie_r (struct _reent *, void *__cookie, const char *__mode, cooki
                                                          ;
 # 687 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdio.h" 3
 
-# 28 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
+# 27 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 1 3
 # 10 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 3
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\machine\\ieeefp.h" 1 3
@@ -30354,7 +30352,7 @@ extern long double wcstold (const wchar_t *, wchar_t **);
 
 
 
-# 29 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
+# 28 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
 
 
 # 1 "./0_Src/1_SrvSw/SysSe/Bsp/Bsp.h" 1
@@ -31011,14 +31009,14 @@ static inline __attribute__ ((always_inline)) void wait(Ifx_TickTime timeout)
     while (isDeadLine(deadLine) == 0)
     {}
 }
-# 32 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
-# 53 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+# 31 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
+# 50 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
 static IfxI2c_I2c g_i2c_handle;
 static IfxI2c_I2c_Device g_apds9960_i2cDev;
 
 IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
 apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
-# 69 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+# 66 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
 void core2_main(void) {
 
 
@@ -31027,14 +31025,41 @@ void core2_main(void) {
 
   IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
-# 110 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+# 91 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+  IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
+
+
+  IfxI2c_I2c_initDeviceConfig(&apds9960_i2c_deviceConfig, &g_i2c_handle);
+
+
+  apds9960_i2c_deviceConfig.deviceAddress = (0x39) << 1;
+
+
+  IfxI2c_I2c_initDevice(&g_apds9960_i2cDev, &apds9960_i2c_deviceConfig);
+
+
   IfxCpu_enableInterrupts();
 
 
   IfxCpu_emitEvent(&g_sync_cores_event);
   IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
-# 123 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+
+  apds9960_params_t apds9960_params;
+  apds9960_rgbc_data_t apds9960_rgbc_data;
+
+
+  apds9960_init(&g_apds9960_i2cDev, &apds9960_params);
+
+
   while (1) {
-# 133 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+
+    apds9960_read_rgbc(&g_apds9960_i2cDev, &apds9960_rgbc_data);
+
+    if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
+
+      g_apds9960_rgbc_shared_data = apds9960_rgbc_data;
+
+      IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+    }
   }
 }
