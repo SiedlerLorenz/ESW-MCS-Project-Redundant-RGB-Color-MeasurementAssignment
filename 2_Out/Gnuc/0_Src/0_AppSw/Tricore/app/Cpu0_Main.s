@@ -34,39 +34,39 @@ tim_ms_mutex:
 uart_init_struct:
 .LFB585:
 	.file 1 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
-	.loc 1 92 0
+	.loc 1 93 0
 	mov.aa	%a14, %SP
 .LCFI0:
 	sub.a	%SP, 16
 	st.a	[%a14] -12, %a4
-	.loc 1 93 0
+	.loc 1 94 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 1
 	mov.a	%a15, %d15
 	st.h	[%a15] 1212, %d2
-	.loc 1 94 0
+	.loc 1 95 0
 	ld.w	%d15, [%a14] -12
 	movh	%d2, 18401
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 1208, %d3
-	.loc 1 95 0
+	.loc 1 96 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 15
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 1216, %d3
-	.loc 1 96 0
+	.loc 1 97 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 4
 	mov.a	%a15, %d15
 	st.h	[%a15] 1220, %d2
-	.loc 1 97 0
+	.loc 1 98 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 8
 	mov.a	%a15, %d15
 	st.h	[%a15] 1222, %d2
-	.loc 1 98 0
+	.loc 1 99 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 12
 	mov.a	%a15, %d15
@@ -92,39 +92,39 @@ uart_init_struct:
 	mov	%d2, %d15
 .LBE20:
 .LBE19:
-	.loc 1 99 0
+	.loc 1 100 0
 	ld.w	%d15, [%a14] -12
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 1228, %d3
-	.loc 1 100 0
+	.loc 1 101 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 3
 	mov.a	%a15, %d15
 	st.b	[%a15]0, %d2
-	.loc 1 101 0
+	.loc 1 102 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 3
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 16, %d3
-	.loc 1 102 0
+	.loc 1 103 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 16
 	mov.a	%a15, %d15
 	st.b	[%a15] 36, %d2
-	.loc 1 103 0
+	.loc 1 104 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, 5
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 32, %d3
-	.loc 1 104 0
+	.loc 1 105 0
 	ld.w	%d15, [%a14] -12
 	mov	%d2, -128
 	mov.a	%a15, %d15
 	st.b	[%a15] 37, %d2
-	.loc 1 105 0
+	.loc 1 106 0
 	ret
 .LFE585:
 	.size	uart_init_struct, .-uart_init_struct
@@ -132,14 +132,14 @@ uart_init_struct:
 	.type	timer_enable_clocks, @function
 timer_enable_clocks:
 .LFB586:
-	.loc 1 108 0
+	.loc 1 109 0
 	mov.aa	%a14, %SP
 .LCFI1:
 	sub.a	%SP, 8
-	.loc 1 110 0
+	.loc 1 111 0
 	movh	%d15, 61456
 	st.w	[%a14] -4, %d15
-	.loc 1 111 0
+	.loc 1 112 0
 	ld.a	%a4, [%a14] -4
 	call	IfxGtm_Cmu_getModuleFrequency
 	mov	%d15, %d2
@@ -147,10 +147,10 @@ timer_enable_clocks:
 	addi	%d2, %d2, lo:GtmTomTimer
 	mov.a	%a15, %d2
 	st.w	[%a15]0, %d15
-	.loc 1 112 0
+	.loc 1 113 0
 	ld.a	%a4, [%a14] -4
 	call	IfxGtm_enable
-	.loc 1 115 0
+	.loc 1 116 0
 	movh	%d15, hi:GtmTomTimer
 	addi	%d15, %d15, lo:GtmTomTimer
 	mov.a	%a15, %d15
@@ -158,7 +158,7 @@ timer_enable_clocks:
 	ld.a	%a4, [%a14] -4
 	mov	%d4, %d15
 	call	IfxGtm_Cmu_setGclkFrequency
-	.loc 1 116 0
+	.loc 1 117 0
 	ld.a	%a4, [%a14] -4
 	call	IfxGtm_Cmu_getGclkFrequency
 	mov	%d15, %d2
@@ -167,12 +167,12 @@ timer_enable_clocks:
 	mov	%d3, %d15
 	mov.a	%a15, %d2
 	st.w	[%a15] 4, %d3
-	.loc 1 118 0
+	.loc 1 119 0
 	ld.a	%a4, [%a14] -4
 	movh	%d4, 128
 	add	%d4, 2
 	call	IfxGtm_Cmu_enableClocks
-	.loc 1 119 0
+	.loc 1 120 0
 	ret
 .LFE586:
 	.size	timer_enable_clocks, .-timer_enable_clocks
@@ -180,32 +180,32 @@ timer_enable_clocks:
 	.type	timer_init_struct, @function
 timer_init_struct:
 .LFB587:
-	.loc 1 122 0
+	.loc 1 123 0
 	mov.aa	%a14, %SP
 .LCFI2:
 	sub.a	%SP, 8
 	st.a	[%a14] -4, %a4
-	.loc 1 123 0
+	.loc 1 124 0
 	ld.a	%a4, [%a14] -4
 	movh.a	%a5, 61456
 	call	IfxGtm_Tom_Timer_initConfig
-	.loc 1 124 0
+	.loc 1 125 0
 	ld.w	%d15, [%a14] -4
 	movh	%d2, 17530
 	mov.a	%a15, %d15
 	st.w	[%a15]0, %d2
-	.loc 1 125 0
+	.loc 1 126 0
 	ld.w	%d15, [%a14] -4
 	mov	%d2, 3
 	mov.a	%a15, %d15
 	st.h	[%a15] 4, %d2
-	.loc 1 126 0
+	.loc 1 127 0
 	ld.w	%d15, [%a14] -4
 	mov	%d2, 2
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 8, %d3
-	.loc 1 127 0
+	.loc 1 128 0
 	ld.w	%d15, [%a14] -4
 	mov.a	%a15, %d15
 	ld.w	%d15, [%a15]0
@@ -217,41 +217,41 @@ timer_init_struct:
 	mov	%d3, %d15
 	mov.a	%a15, %d2
 	st.w	[%a15] 12, %d3
-	.loc 1 128 0
+	.loc 1 129 0
 	ld.w	%d15, [%a14] -4
 	mov	%d2, 0
 	mov.a	%a15, %d15
 	st.b	[%a15] 16, %d2
-	.loc 1 129 0
+	.loc 1 130 0
 	ld.w	%d15, [%a14] -4
 	mov	%d2, 1
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 56, %d3
-	.loc 1 130 0
+	.loc 1 131 0
 	ld.w	%d15, [%a14] -4
 	mov	%d2, 0
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 60, %d3
-	.loc 1 131 0
+	.loc 1 132 0
 	ld.w	%d15, [%a14] -4
 	mov	%d2, 1
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 68, %d3
-	.loc 1 132 0
+	.loc 1 133 0
 	movh	%d15, hi:GtmTomTimer+8
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:GtmTomTimer+8
 	ld.a	%a5, [%a14] -4
 	call	IfxGtm_Tom_Timer_init
-	.loc 1 134 0
+	.loc 1 135 0
 	movh	%d15, hi:GtmTomTimer+8
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:GtmTomTimer+8
 	call	IfxGtm_Tom_Timer_run
-	.loc 1 135 0
+	.loc 1 136 0
 	ret
 .LFE587:
 	.size	timer_init_struct, .-timer_init_struct
@@ -283,15 +283,15 @@ timer_init_struct:
 	.type	ISR_TIM_MS, @function
 ISR_TIM_MS:
 .LFB588:
-	.loc 1 140 0
+	.loc 1 141 0
 	mov.aa	%a14, %SP
 .LCFI3:
-	.loc 1 141 0
+	.loc 1 142 0
 	movh	%d15, hi:GtmTomTimer+8
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:GtmTomTimer+8
 	call	IfxGtm_Tom_Timer_acknowledgeTimerIrq
-	.loc 1 142 0
+	.loc 1 143 0
 	movh	%d15, hi:GtmTomTimer
 	addi	%d15, %d15, lo:GtmTomTimer
 	mov.a	%a15, %d15
@@ -302,7 +302,7 @@ ISR_TIM_MS:
 	mov	%d3, %d2
 	mov.a	%a15, %d15
 	st.w	[%a15] 76, %d3
-	.loc 1 144 0
+	.loc 1 145 0
 	movh	%d15, hi:GtmTomTimer
 	addi	%d15, %d15, lo:GtmTomTimer
 	mov.a	%a15, %d15
@@ -315,13 +315,13 @@ ISR_TIM_MS:
 	mul	%d15, %d2
 	sub	%d15, %d4, %d15
 	jnz	%d15, .L5
-	.loc 1 147 0
+	.loc 1 148 0
 	movh	%d15, hi:tim_ms_mutex
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:tim_ms_mutex
 	call	IfxCpu_acquireMutex
 .L5:
-	.loc 1 149 0
+	.loc 1 150 0
 	rslcx
 	rfe
 .LFE588:
@@ -336,14 +336,14 @@ ISR_TIM_MS:
 	.type	core0_main, @function
 core0_main:
 .LFB589:
-	.loc 1 157 0
+	.loc 1 158 0
 	mov.aa	%a14, %SP
 .LCFI4:
 	lea	%SP, [%SP] -1440
-	.loc 1 160 0
+	.loc 1 161 0
 	mov	%d15, 0
 	st.h	[%a14] -2, %d15
-	.loc 1 161 0
+	.loc 1 162 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -1386
 	mov.a	%a2, %d15
@@ -352,7 +352,7 @@ core0_main:
 	0:
 	st.h	[%a2+]2, %d3
 	loop	%a3, 0b
-	.loc 1 162 0
+	.loc 1 163 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -1412
 	mov.a	%a2, %d15
@@ -361,7 +361,7 @@ core0_main:
 	st.d	[%a2+]8, %e2
 	st.d	[%a2+]8, %e2
 	st.h	[%a2+]2, %d2
-	.loc 1 163 0
+	.loc 1 164 0
 	mov.d	%d2, %a14
 	addi	%d3, %d2, -1438
 	movh	%d15, hi:.LC0
@@ -382,21 +382,21 @@ core0_main:
 	0:
 	st.h	[%a2+]2, %d2
 	loop	%a3, 0b
-	.loc 1 164 0
-	mov	%d15, 25
-	st.h	[%a14] -1440, %d15
 	.loc 1 165 0
 	mov	%d15, 25
-	st.h	[%a14] -4, %d15
+	st.h	[%a14] -1440, %d15
 	.loc 1 166 0
+	mov	%d15, 25
+	st.h	[%a14] -4, %d15
+	.loc 1 167 0
 	mov	%d15, 0
 	st.w	[%a14] -8, %d15
-	.loc 1 172 0
+	.loc 1 173 0
 	call	IfxScuWdt_getCpuWatchdogPassword
 	mov	%d15, %d2
 	mov	%d4, %d15
 	call	IfxScuWdt_disableCpuWatchdog
-	.loc 1 173 0
+	.loc 1 174 0
 	call	IfxScuWdt_getSafetyWatchdogPassword
 	mov	%d15, %d2
 	mov	%d4, %d15
@@ -411,13 +411,13 @@ core0_main:
 #NO_APP
 .LBE23:
 .LBE22:
-	.loc 1 179 0
+	.loc 1 180 0
 	movh.a	%a4, 61444
 	lea	%a4, [%a4] -11520
 	mov	%d4, 2
 	mov	%d5, 128
 	call	IfxPort_setPinMode
-	.loc 1 180 0
+	.loc 1 181 0
 	movh.a	%a4, 61444
 	lea	%a4, [%a4] -11520
 	mov	%d4, 2
@@ -451,29 +451,29 @@ core0_main:
 .LBE26:
 .LBE25:
 .LBE24:
-	.loc 1 184 0
+	.loc 1 185 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -1280
 	mov.a	%a4, %d15
 	call	uart_init_struct
-	.loc 1 187 0
+	.loc 1 188 0
 	mov.d	%d3, %a14
 	addi	%d15, %d3, -1280
 	mov.a	%a4, %d15
 	call	uart_init
-	.loc 1 190 0
+	.loc 1 191 0
 	call	timer_enable_clocks
-	.loc 1 193 0
+	.loc 1 194 0
 	mov.d	%d4, %a14
 	addi	%d15, %d4, -1360
 	mov.a	%a4, %d15
 	call	timer_init_struct
-	.loc 1 197 0
+	.loc 1 198 0
 	movh	%d15, hi:g_sync_cores_event
 	mov.a	%a2, %d15
 	lea	%a4, [%a2] lo:g_sync_cores_event
 	call	IfxCpu_emitEvent
-	.loc 1 198 0
+	.loc 1 199 0
 	movh	%d15, hi:g_sync_cores_timeout_ms
 	addi	%d15, %d15, lo:g_sync_cores_timeout_ms
 	mov.a	%a3, %d15
@@ -484,13 +484,13 @@ core0_main:
 	mov	%d4, %d15
 	call	IfxCpu_waitEvent
 .L14:
-	.loc 1 203 0
+	.loc 1 204 0
 	call	uart_app_getread_count
 	st.w	[%a14] -8, %d2
-	.loc 1 205 0
+	.loc 1 206 0
 	ld.w	%d15, [%a14] -8
 	jz	%d15, .L8
-	.loc 1 208 0
+	.loc 1 209 0
 	mov.d	%d3, %a14
 	addi	%d2, %d3, -1280
 	mov.d	%d4, %a14
@@ -499,18 +499,18 @@ core0_main:
 	mov.a	%a5, %d15
 	mov	%e4, 10000
 	call	uart_app_receive_byte
-	.loc 1 210 0
+	.loc 1 211 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -1412
 	mov.a	%a2, %d15
 	ld.bu	%d15, [%a2]0
 	ne	%d15, %d15, 35
 	jnz	%d15, .L9
-	.loc 1 213 0
+	.loc 1 214 0
 	mov	%d15, 1
 	st.h	[%a14] -2, %d15
 .L10:
-	.loc 1 216 0 discriminator 1
+	.loc 1 217 0 discriminator 1
 	ld.hu	%d15, [%a14] -2
 	mov.d	%d3, %a14
 	addi	%d2, %d3, -1412
@@ -521,11 +521,11 @@ core0_main:
 	mov.a	%a5, %d2
 	mov	%e4, 10000
 	call	uart_app_receive_byte
-	.loc 1 218 0 discriminator 1
+	.loc 1 219 0 discriminator 1
 	ld.hu	%d15, [%a14] -2
 	add	%d15, 1
 	st.h	[%a14] -2, %d15
-	.loc 1 219 0 discriminator 1
+	.loc 1 220 0 discriminator 1
 	ld.hu	%d15, [%a14] -2
 	mov.d	%d3, %a14
 	addi	%d2, %d3, -1412
@@ -534,7 +534,7 @@ core0_main:
 	ld.bu	%d15, [%a2]0
 	ne	%d15, %d15, 36
 	jnz	%d15, .L10
-	.loc 1 221 0
+	.loc 1 222 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -1412
 	mov.a	%a4, %d15
@@ -548,7 +548,7 @@ core0_main:
 	mov.a	%a5, %d15
 	mov	%d4, %d3
 	call	memcpy
-	.loc 1 223 0
+	.loc 1 224 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -1386
 	mov.a	%a4, %d15
@@ -556,7 +556,7 @@ core0_main:
 	mov	%d15, %d2
 	extr.u	%d15, %d15, 0, 16
 	st.h	[%a14] -1440, %d15
-	.loc 1 225 0
+	.loc 1 226 0
 	mov.d	%d4, %a14
 	addi	%d3, %d4, -1280
 	mov.d	%d15, %a14
@@ -568,7 +568,7 @@ core0_main:
 	mov.a	%a6, %d15
 	mov	%e4, 10000
 	call	uart_app_send_nbyte
-	.loc 1 227 0
+	.loc 1 228 0
 	ld.hu	%d15, [%a14] -4
 	mov.d	%d3, %a14
 	addi	%d2, %d3, -1412
@@ -576,7 +576,7 @@ core0_main:
 	mov	%d4, 0
 	mov	%d5, %d15
 	call	memset
-	.loc 1 228 0
+	.loc 1 229 0
 	ld.hu	%d15, [%a14] -1440
 	mov	%d2, %d15
 	mov.d	%d4, %a14
@@ -587,12 +587,12 @@ core0_main:
 	call	memset
 	j	.L8
 .L9:
-	.loc 1 233 0
+	.loc 1 234 0
 	mov	%d15, 0
 	st.h	[%a14] -2, %d15
 	j	.L11
 .L12:
-	.loc 1 236 0 discriminator 3
+	.loc 1 237 0 discriminator 3
 	ld.hu	%d15, [%a14] -2
 	mov.d	%d3, %a14
 	addi	%d2, %d3, -1438
@@ -603,19 +603,19 @@ core0_main:
 	mov.a	%a5, %d2
 	mov	%e4, 10000
 	call	uart_app_send_byte
-	.loc 1 233 0 discriminator 3
+	.loc 1 234 0 discriminator 3
 	ld.hu	%d15, [%a14] -2
 	add	%d15, 1
 	st.h	[%a14] -2, %d15
 .L11:
-	.loc 1 233 0 is_stmt 0 discriminator 1
+	.loc 1 234 0 is_stmt 0 discriminator 1
 	ld.hu	%d15, [%a14] -2
 	mov.d	%d3, %a14
 	addi	%d2, %d3, -1438
 	mov.a	%a4, %d2
 	call	strlen
 	jge.u	%d2, %d15, .L12
-	.loc 1 239 0 is_stmt 1
+	.loc 1 240 0 is_stmt 1
 	ld.hu	%d15, [%a14] -4
 	mov.d	%d4, %a14
 	addi	%d2, %d4, -1412
@@ -624,14 +624,14 @@ core0_main:
 	mov	%d5, %d15
 	call	memset
 .L8:
-	.loc 1 243 0
+	.loc 1 244 0
 	movh	%d15, hi:tim_ms_mutex
 	mov.a	%a2, %d15
 	lea	%a4, [%a2] lo:tim_ms_mutex
 	call	IfxCpu_getMutexStatus
 	mov	%d15, %d2
 	jz	%d15, .L13
-	.loc 1 246 0
+	.loc 1 247 0
 	movh	%d15, hi:tim_ms_mutex
 	mov.a	%a3, %d15
 	lea	%a4, [%a3] lo:tim_ms_mutex
@@ -665,7 +665,7 @@ core0_main:
 .LBE30:
 .LBE29:
 .LBE28:
-	.loc 1 249 0
+	.loc 1 250 0
 	j	.L14
 .LFE589:
 	.size	core0_main, .-core0_main
@@ -47443,73 +47443,73 @@ core0_main:
 	.uleb128 0x6
 	.byte	0x8
 	.byte	0x1
-	.byte	0x45
+	.byte	0x46
 	.uaword	0x1ed68
 	.uleb128 0x7
 	.string	"gtmFreq"
 	.byte	0x1
-	.byte	0x47
+	.byte	0x48
 	.uaword	0x244
 	.byte	0
 	.uleb128 0x7
 	.string	"gtmGclkFreq"
 	.byte	0x1
-	.byte	0x48
+	.byte	0x49
 	.uaword	0x244
 	.byte	0x4
 	.byte	0
 	.uleb128 0x6
 	.byte	0x44
 	.byte	0x1
-	.byte	0x4a
+	.byte	0x4b
 	.uaword	0x1ed84
 	.uleb128 0x7
 	.string	"timerOneMs"
 	.byte	0x1
-	.byte	0x4c
+	.byte	0x4d
 	.uaword	0x1e27a
 	.byte	0
 	.byte	0
 	.uleb128 0x6
 	.byte	0x4
 	.byte	0x1
-	.byte	0x4e
+	.byte	0x4f
 	.uaword	0x1ed9f
 	.uleb128 0x7
 	.string	"slotOneMs"
 	.byte	0x1
-	.byte	0x50
+	.byte	0x51
 	.uaword	0x236
 	.byte	0
 	.byte	0
 	.uleb128 0x6
 	.byte	0x50
 	.byte	0x1
-	.byte	0x43
+	.byte	0x44
 	.uaword	0x1edd8
 	.uleb128 0x7
 	.string	"info"
 	.byte	0x1
-	.byte	0x49
+	.byte	0x4a
 	.uaword	0x1ed3b
 	.byte	0
 	.uleb128 0x7
 	.string	"drivers"
 	.byte	0x1
-	.byte	0x4d
+	.byte	0x4e
 	.uaword	0x1ed68
 	.byte	0x8
 	.uleb128 0x7
 	.string	"isrCounter"
 	.byte	0x1
-	.byte	0x51
+	.byte	0x52
 	.uaword	0x1ed84
 	.byte	0x4c
 	.byte	0
 	.uleb128 0x3
 	.string	"App_GtmTomTimer"
 	.byte	0x1
-	.byte	0x52
+	.byte	0x53
 	.uaword	0x1ed9f
 	.uleb128 0x27
 	.string	"IfxPort_setPinState"
@@ -47600,7 +47600,7 @@ core0_main:
 	.uleb128 0x2e
 	.string	"uart_init_struct"
 	.byte	0x1
-	.byte	0x5b
+	.byte	0x5c
 	.byte	0x1
 	.uaword	.LFB585
 	.uaword	.LFE585
@@ -47611,7 +47611,7 @@ core0_main:
 	.uleb128 0x2f
 	.uaword	.LASF210
 	.byte	0x1
-	.byte	0x5b
+	.byte	0x5c
 	.uaword	0x1ef66
 	.byte	0x2
 	.byte	0x8e
@@ -47621,7 +47621,7 @@ core0_main:
 	.uaword	.LBB19
 	.uaword	.LBE19
 	.byte	0x1
-	.byte	0x63
+	.byte	0x64
 	.uleb128 0x31
 	.uaword	.LBB20
 	.uaword	.LBE20
@@ -47648,7 +47648,7 @@ core0_main:
 	.uleb128 0x33
 	.string	"timer_enable_clocks"
 	.byte	0x1
-	.byte	0x6b
+	.byte	0x6c
 	.byte	0x1
 	.uaword	.LFB586
 	.uaword	.LFE586
@@ -47659,7 +47659,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"gtm"
 	.byte	0x1
-	.byte	0x6e
+	.byte	0x6f
 	.uaword	0x1df06
 	.byte	0x2
 	.byte	0x8e
@@ -47668,7 +47668,7 @@ core0_main:
 	.uleb128 0x33
 	.string	"timer_init_struct"
 	.byte	0x1
-	.byte	0x79
+	.byte	0x7a
 	.byte	0x1
 	.uaword	.LFB587
 	.uaword	.LFE587
@@ -47679,7 +47679,7 @@ core0_main:
 	.uleb128 0x2f
 	.uaword	.LASF211
 	.byte	0x1
-	.byte	0x79
+	.byte	0x7a
 	.uaword	0x1efd6
 	.byte	0x2
 	.byte	0x8e
@@ -47692,7 +47692,7 @@ core0_main:
 	.byte	0x1
 	.string	"ISR_TIM_MS"
 	.byte	0x1
-	.byte	0x8b
+	.byte	0x8c
 	.byte	0x1
 	.uaword	.LFB588
 	.uaword	.LFE588
@@ -47703,7 +47703,7 @@ core0_main:
 	.byte	0x1
 	.string	"core0_main"
 	.byte	0x1
-	.byte	0x9c
+	.byte	0x9d
 	.byte	0x1
 	.uaword	0x195
 	.uaword	.LFB589
@@ -47715,7 +47715,7 @@ core0_main:
 	.uleb128 0x37
 	.uaword	.LASF210
 	.byte	0x1
-	.byte	0x9e
+	.byte	0x9f
 	.uaword	0x1ed1c
 	.byte	0x3
 	.byte	0x8e
@@ -47723,7 +47723,7 @@ core0_main:
 	.uleb128 0x37
 	.uaword	.LASF211
 	.byte	0x1
-	.byte	0x9f
+	.byte	0xa0
 	.uaword	0x1e319
 	.byte	0x3
 	.byte	0x8e
@@ -47731,7 +47731,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"idx"
 	.byte	0x1
-	.byte	0xa0
+	.byte	0xa1
 	.uaword	0x204
 	.byte	0x2
 	.byte	0x8e
@@ -47739,7 +47739,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"tx_buffer"
 	.byte	0x1
-	.byte	0xa1
+	.byte	0xa2
 	.uaword	0x1f17f
 	.byte	0x3
 	.byte	0x8e
@@ -47747,7 +47747,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"rx_buffer"
 	.byte	0x1
-	.byte	0xa2
+	.byte	0xa3
 	.uaword	0x1f17f
 	.byte	0x3
 	.byte	0x8e
@@ -47755,7 +47755,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"rx_error"
 	.byte	0x1
-	.byte	0xa3
+	.byte	0xa4
 	.uaword	0x1f17f
 	.byte	0x3
 	.byte	0x8e
@@ -47763,7 +47763,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"tx_buffer_size"
 	.byte	0x1
-	.byte	0xa4
+	.byte	0xa5
 	.uaword	0x204
 	.byte	0x3
 	.byte	0x8e
@@ -47771,7 +47771,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"rx_buffer_size"
 	.byte	0x1
-	.byte	0xa5
+	.byte	0xa6
 	.uaword	0x204
 	.byte	0x2
 	.byte	0x8e
@@ -47779,7 +47779,7 @@ core0_main:
 	.uleb128 0x34
 	.string	"rx_fifo_bytes_available"
 	.byte	0x1
-	.byte	0xa6
+	.byte	0xa7
 	.uaword	0x228
 	.byte	0x2
 	.byte	0x8e
@@ -47789,13 +47789,13 @@ core0_main:
 	.uaword	.LBB22
 	.uaword	.LBE22
 	.byte	0x1
-	.byte	0xb0
+	.byte	0xb1
 	.uleb128 0x39
 	.uaword	0x1ee93
 	.uaword	.LBB24
 	.uaword	.LBE24
 	.byte	0x1
-	.byte	0xb5
+	.byte	0xb6
 	.uaword	0x1f135
 	.uleb128 0x3a
 	.uaword	0x1eebc
@@ -47835,7 +47835,7 @@ core0_main:
 	.uaword	.LBB28
 	.uaword	.LBE28
 	.byte	0x1
-	.byte	0xf7
+	.byte	0xf8
 	.uleb128 0x3a
 	.uaword	0x1eef2
 	.byte	0x2
@@ -47896,7 +47896,7 @@ core0_main:
 	.uleb128 0x3d
 	.string	"g_sync_cores_event"
 	.byte	0x1
-	.byte	0x40
+	.byte	0x41
 	.uaword	0x2f5b
 	.byte	0x1
 	.byte	0x5
@@ -47905,7 +47905,7 @@ core0_main:
 	.uleb128 0x3d
 	.string	"g_sync_cores_timeout_ms"
 	.byte	0x1
-	.byte	0x41
+	.byte	0x42
 	.uaword	0x236
 	.byte	0x1
 	.byte	0x5
@@ -47914,7 +47914,7 @@ core0_main:
 	.uleb128 0x3d
 	.string	"GtmTomTimer"
 	.byte	0x1
-	.byte	0x54
+	.byte	0x55
 	.uaword	0x1edd8
 	.byte	0x1
 	.byte	0x5
@@ -47923,7 +47923,7 @@ core0_main:
 	.uleb128 0x3d
 	.string	"tim_ms_mutex"
 	.byte	0x1
-	.byte	0x55
+	.byte	0x56
 	.uaword	0x2f43
 	.byte	0x1
 	.byte	0x5

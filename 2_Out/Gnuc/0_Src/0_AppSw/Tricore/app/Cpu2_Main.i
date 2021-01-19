@@ -31011,12 +31011,14 @@ static inline __attribute__ ((always_inline)) void wait(Ifx_TickTime timeout)
 }
 # 31 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c" 2
 # 50 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
-static IfxI2c_I2c g_i2c_handle;
+extern IfxI2c_I2c g_i2c_handle;
+
+
 static IfxI2c_I2c_Device g_apds9960_i2cDev;
 
 IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
 apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
-# 66 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+# 68 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
 void core2_main(void) {
 
 
@@ -31025,7 +31027,7 @@ void core2_main(void) {
 
   IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
-# 91 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
+# 93 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
   IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
 
 

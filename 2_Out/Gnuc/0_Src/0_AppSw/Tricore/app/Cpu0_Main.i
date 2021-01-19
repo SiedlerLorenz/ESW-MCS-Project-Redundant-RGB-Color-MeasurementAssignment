@@ -32704,7 +32704,7 @@ _aurix_tc27x_app_uart_err_t uart_app_flush_rx(_aurix_tc27x_app_uart_t *pUARTStru
 _aurix_tc27x_app_uart_err_t uart_app_flush_tx(_aurix_tc27x_app_uart_t *pUARTStruct);
 sint32 uart_app_getread_count();
 # 37 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
-# 64 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
+# 65 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
 IfxCpu_syncEvent g_sync_cores_event;
 uint32 g_sync_cores_timeout_ms = 1000;
 

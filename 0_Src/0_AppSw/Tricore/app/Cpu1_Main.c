@@ -41,7 +41,7 @@
 
 
 /// @brief for i2c
-static IfxI2c_I2c g_i2c_handle;              // i2c handle
+IfxI2c_I2c g_i2c_handle;              // i2c handle
 
 /* I2C */
 tcs34725_params_t g_tcs34725_params;
