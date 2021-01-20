@@ -1,17 +1,10 @@
 /*
  * @file Cpu1_Main.c
- * @date 26.11.2020
+ * @date 02.01.2021
  * @version v0.1
  * @author Siedler Lorenz
  *
- * @brief This application configures the UART Interface Module #3 to 115200,8N1.
- *        Within the main-loop the UART RX-FIFO is checked if any bytes are
- *        received. If a determined start-byte '#' is received the trailing bytes
- *        are received until a dedicated end-byte '$' is received. If there is a
- *        mismatch with the start-byte an error-message is sent via the UART TX-
- *        FIFO. If the correct command is recognized Core 1 get signaled. As soon
- *        as the Core gets back the timer_value, it get transformed to a string
- *        and get transmit to the PC via UART.
+ * @brief ToDO
  */
 
 /******************************************************************************/
@@ -40,11 +33,11 @@
 /******************************************************************************/
 
 
-/// @brief for i2c
-IfxI2c_I2c g_i2c_handle;              // i2c handle
+/// @brief for i2c handle
+IfxI2c_I2c g_i2c_handle;
 
-/// @brief for i2c
-static IfxI2c_I2c_Device g_tcs34725_i2cDev;  // slave device handle
+/// @brief for i2c device handle
+static IfxI2c_I2c_Device g_tcs34725_i2cDev;
 
 /* I2C */
 tcs34725_params_t g_tcs34725_params;
@@ -89,7 +82,6 @@ int core1_main (void)
   };
 
   config.pins = &pins;
-  //config.baudrate = 100000;       /*Standard 400 kHz=400000 ,Changed to 100kHz*/
   config.baudrate = 400000;   // 400 kHz - same as required for TCS34725
 
   /* initialize module */
