@@ -112,18 +112,18 @@ void core2_main(void) {
   apds9960_rgbc_data_t apds9960_rgbc_data;
 
   /* initialize the apds9960 sensor */
-  //apds9960_init(&g_apds9960_i2cDev, &apds9960_params);
+  apds9960_init(&g_apds9960_i2cDev, &apds9960_params);
 
   /* Background loop */
   while (TRUE) {
     /* read rgbc data from sensor */
-    //apds9960_read_rgbc(&g_apds9960_i2cDev, &apds9960_rgbc_data);
+    apds9960_read_rgbc(&g_apds9960_i2cDev, &apds9960_rgbc_data);
     /* acquire lock to write safely to the shared memory */
-    //if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
+    if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
       /* write the read data to the shared memory */
-      //g_apds9960_rgbc_shared_data = apds9960_rgbc_data;
+      g_apds9960_rgbc_shared_data = apds9960_rgbc_data;
       /* release lock for core0 to read the shared memory again */
-      //IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
-    //}
+      IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+    }
   }
 }
