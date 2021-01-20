@@ -43,6 +43,9 @@
 /// @brief for i2c
 IfxI2c_I2c g_i2c_handle;              // i2c handle
 
+/// @brief for i2c
+static IfxI2c_I2c_Device g_tcs34725_i2cDev;  // slave device handle
+
 /* I2C */
 tcs34725_params_t g_tcs34725_params;
 
@@ -93,15 +96,15 @@ int core1_main (void)
   IfxI2c_I2c_initModule(&g_i2c_handle, &config);
 
   /* create device config */
-  IfxI2c_I2c_deviceConfig i2cDeviceConfig;
+  IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
 
   /* fill structure with default values and i2c Handler */
-  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_i2c_handle); /* Device config for Bus of i2c handle */
+  IfxI2c_I2c_initDeviceConfig(&apds9960_i2c_deviceConfig, &g_i2c_handle); /* Device config for Bus of i2c handle */
 
   /* initialize the i2c device handle */
-  i2cDeviceConfig.deviceAddress = TCS34725_DEVICE_I2C_ADDRESS << 1; // 0x29=30; standard Device specific address TCS34725
+  apds9960_i2c_deviceConfig.deviceAddress = TCS34725_DEVICE_I2C_ADDRESS << 1; // 0x29=30; standard Device specific address TCS34725
 
-  IfxI2c_I2c_initDevice(&g_tcs34725_params.i2cDev, &i2cDeviceConfig);	// initialize registers/address
+  IfxI2c_I2c_initDevice(&g_tcs34725_i2cDev, &apds9960_i2c_deviceConfig);	// initialize registers/address
 
   /* Enable the global interrupts of this CPU */
   IfxCpu_enableInterrupts();
@@ -113,11 +116,11 @@ int core1_main (void)
   tcs34725_rgbc_data_t tcs34725_rgbc_data;
   
   /* initialize the apds9960 sensor */
-  tcs34725_init(&g_tcs34725_params.i2cDev, &g_tcs34725_params);
+  tcs34725_init(&g_tcs34725_i2cDev, &g_tcs34725_params);
 
   while (TRUE){
 	/* read rgbc data from sensor */
-	tcs34725_read_rgbc(&g_tcs34725_params.i2cDev, &tcs34725_rgbc_data);
+	tcs34725_read_rgbc(&g_tcs34725_i2cDev, &tcs34725_rgbc_data);
 	/* acquire lock to write safely to the shared memory */
 	if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
 	  /* write the read data to the shared memory */

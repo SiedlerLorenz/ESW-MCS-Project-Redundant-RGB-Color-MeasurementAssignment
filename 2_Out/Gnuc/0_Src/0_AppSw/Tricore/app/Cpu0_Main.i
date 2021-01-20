@@ -28662,11 +28662,9 @@ extern const char _ctype_[];
 
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
 # 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
-# 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 47 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
-    IfxI2c_I2c i2c;
-    IfxI2c_I2c_Device i2cDev;
 } tcs34725_params_t;
 
 typedef struct
@@ -28676,13 +28674,13 @@ typedef struct
     uint16 green;
     uint16 blue;
 } tcs34725_rgbc_data_t;
-# 80 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 69 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
-# 93 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 82 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 94 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
 # 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 # 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1

@@ -8,12 +8,16 @@
 	.size	g_i2c_handle, 16
 g_i2c_handle:
 	.zero	16
-	.global	g_tcs34725_params
+	.local	g_tcs34725_i2cDev
 	.align 2
+	.type		 g_tcs34725_i2cDev,@object
+	.size		 g_tcs34725_i2cDev,8
+g_tcs34725_i2cDev:
+	.space	8
+	.global	g_tcs34725_params
 	.type	g_tcs34725_params, @object
-	.size	g_tcs34725_params, 24
+	.size	g_tcs34725_params, 0
 g_tcs34725_params:
-	.zero	24
 	.global	g_tcs34725_rgbc_shared_data
 	.align 1
 	.type	g_tcs34725_rgbc_shared_data, @object
@@ -45,27 +49,27 @@ g_tcs34725_rgbc_shared_data_mtx:
 core1_main:
 .LFB383:
 	.file 1 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
-	.loc 1 66 0
+	.loc 1 69 0
 	mov.aa	%a14, %SP
 .LCFI0:
 	sub.a	%SP, 40
-	.loc 1 72 0
+	.loc 1 75 0
 	call	IfxScuWdt_getCpuWatchdogPassword
 	mov	%d15, %d2
 	mov	%d4, %d15
 	call	IfxScuWdt_disableCpuWatchdog
-	.loc 1 73 0
+	.loc 1 76 0
 	call	IfxScuWdt_getSafetyWatchdogPassword
 	mov	%d15, %d2
 	mov	%d4, %d15
 	call	IfxScuWdt_disableSafetyWatchdog
-	.loc 1 79 0
+	.loc 1 82 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -12
 	mov.a	%a4, %d15
 	movh.a	%a5, 61452
 	call	IfxI2c_I2c_initConfig
-	.loc 1 82 0
+	.loc 1 85 0
 	movh	%d15, hi:.LC0
 	addi	%d2, %d15, lo:.LC0
 	mov.d	%d3, %a14
@@ -77,15 +81,15 @@ core1_main:
 	st.d	[%a2+]8, %e4
 	ld.w	%d4, [%a3+]4
 	st.w	[%a2+]4, %d4
-	.loc 1 88 0
+	.loc 1 91 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -24
 	st.w	[%a14] -4, %d15
-	.loc 1 90 0
+	.loc 1 93 0
 	movh	%d15, 18627
 	addi	%d15, %d15, 20480
 	st.w	[%a14] -8, %d15
-	.loc 1 93 0
+	.loc 1 96 0
 	mov.d	%d3, %a14
 	addi	%d15, %d3, -12
 	movh	%d2, hi:g_i2c_handle
@@ -93,7 +97,7 @@ core1_main:
 	lea	%a4, [%a2] lo:g_i2c_handle
 	mov.a	%a5, %d15
 	call	IfxI2c_I2c_initModule
-	.loc 1 99 0
+	.loc 1 102 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -32
 	mov.a	%a4, %d15
@@ -101,15 +105,15 @@ core1_main:
 	mov.a	%a2, %d15
 	lea	%a5, [%a2] lo:g_i2c_handle
 	call	IfxI2c_I2c_initDeviceConfig
-	.loc 1 102 0
+	.loc 1 105 0
 	mov	%d15, 82
 	st.b	[%a14] -28, %d15
-	.loc 1 104 0
+	.loc 1 107 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -32
-	movh	%d2, hi:g_tcs34725_params+16
+	movh	%d2, hi:g_tcs34725_i2cDev
 	mov.a	%a2, %d2
-	lea	%a4, [%a2] lo:g_tcs34725_params+16
+	lea	%a4, [%a2] lo:g_tcs34725_i2cDev
 	mov.a	%a5, %d15
 	call	IfxI2c_I2c_initDevice
 .LBB4:
@@ -123,12 +127,12 @@ core1_main:
 #NO_APP
 .LBE5:
 .LBE4:
-	.loc 1 110 0
+	.loc 1 113 0
 	movh	%d15, hi:g_sync_cores_event
 	mov.a	%a3, %d15
 	lea	%a4, [%a3] lo:g_sync_cores_event
 	call	IfxCpu_emitEvent
-	.loc 1 111 0
+	.loc 1 114 0
 	movh	%d15, hi:g_sync_cores_timeout_ms
 	addi	%d15, %d15, lo:g_sync_cores_timeout_ms
 	mov.a	%a15, %d15
@@ -138,31 +142,31 @@ core1_main:
 	lea	%a4, [%a2] lo:g_sync_cores_event
 	mov	%d4, %d15
 	call	IfxCpu_waitEvent
-	.loc 1 116 0
-	movh	%d15, hi:g_tcs34725_params+16
+	.loc 1 119 0
+	movh	%d15, hi:g_tcs34725_i2cDev
 	mov.a	%a3, %d15
-	lea	%a4, [%a3] lo:g_tcs34725_params+16
+	lea	%a4, [%a3] lo:g_tcs34725_i2cDev
 	movh	%d15, hi:g_tcs34725_params
 	mov.a	%a15, %d15
 	lea	%a5, [%a15] lo:g_tcs34725_params
 	call	tcs34725_init
 .L3:
-	.loc 1 120 0
+	.loc 1 123 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -40
-	movh	%d2, hi:g_tcs34725_params+16
+	movh	%d2, hi:g_tcs34725_i2cDev
 	mov.a	%a2, %d2
-	lea	%a4, [%a2] lo:g_tcs34725_params+16
+	lea	%a4, [%a2] lo:g_tcs34725_i2cDev
 	mov.a	%a5, %d15
 	call	tcs34725_read_rgbc
-	.loc 1 122 0
+	.loc 1 125 0
 	movh	%d15, hi:g_tcs34725_rgbc_shared_data_mtx
 	mov.a	%a3, %d15
 	lea	%a4, [%a3] lo:g_tcs34725_rgbc_shared_data_mtx
 	call	IfxCpu_acquireMutex
 	mov	%d15, %d2
 	jz	%d15, .L2
-	.loc 1 124 0
+	.loc 1 127 0
 	movh	%d15, hi:g_tcs34725_rgbc_shared_data
 	addi	%d15, %d15, lo:g_tcs34725_rgbc_shared_data
 	mov	%d2, %d15
@@ -176,13 +180,13 @@ core1_main:
 	ld.h	%d4, [%a3+]2
 	st.h	[%a2+]2, %d4
 	loop	%a15, 0b
-	.loc 1 126 0
+	.loc 1 129 0
 	movh	%d15, hi:g_tcs34725_rgbc_shared_data_mtx
 	mov.a	%a2, %d15
 	lea	%a4, [%a2] lo:g_tcs34725_rgbc_shared_data_mtx
 	call	IfxCpu_releaseMutex
 .L2:
-	.loc 1 129 0
+	.loc 1 132 0
 	j	.L3
 .LFE383:
 	.size	core1_main, .-core1_main
@@ -228,7 +232,7 @@ core1_main:
 	.file 13 "./0_Src/0_AppSw/Tricore/lib/main.h"
 .section .debug_info,"",@progbits
 .Ldebug_info0:
-	.uaword	0x4f56
+	.uaword	0x4f5f
 	.uahalf	0x3
 	.uaword	.Ldebug_abbrev0
 	.byte	0x4
@@ -8282,75 +8286,61 @@ core1_main:
 	.byte	0xb
 	.uahalf	0x15b
 	.uaword	0x4c6f
-	.uleb128 0x8
-	.byte	0x18
-	.byte	0xc
-	.byte	0x38
-	.uaword	0x4cd7
-	.uleb128 0xa
-	.string	"i2c"
-	.byte	0xc
-	.byte	0x3a
-	.uaword	0x4bc1
+	.uleb128 0x21
 	.byte	0
-	.uleb128 0xa
-	.string	"i2cDev"
 	.byte	0xc
-	.byte	0x3b
-	.uaword	0x4c55
-	.byte	0x10
-	.byte	0
+	.byte	0x2f
 	.uleb128 0x3
 	.string	"tcs34725_params_t"
 	.byte	0xc
-	.byte	0x3c
+	.byte	0x31
 	.uaword	0x4cb3
 	.uleb128 0x8
 	.byte	0x8
 	.byte	0xc
-	.byte	0x3e
-	.uaword	0x4d2e
+	.byte	0x33
+	.uaword	0x4d0e
 	.uleb128 0xa
 	.string	"clear"
 	.byte	0xc
-	.byte	0x40
+	.byte	0x35
 	.uaword	0x1f6
 	.byte	0
 	.uleb128 0xa
 	.string	"red"
 	.byte	0xc
-	.byte	0x41
+	.byte	0x36
 	.uaword	0x1f6
 	.byte	0x2
 	.uleb128 0xa
 	.string	"green"
 	.byte	0xc
-	.byte	0x42
+	.byte	0x37
 	.uaword	0x1f6
 	.byte	0x4
 	.uleb128 0xa
 	.string	"blue"
 	.byte	0xc
-	.byte	0x43
+	.byte	0x38
 	.uaword	0x1f6
 	.byte	0x6
 	.byte	0
 	.uleb128 0x3
 	.string	"tcs34725_rgbc_data_t"
 	.byte	0xc
-	.byte	0x44
-	.uaword	0x4cf0
-	.uleb128 0x21
+	.byte	0x39
+	.uaword	0x4cd0
+	.uleb128 0x22
 	.string	"IfxCpu_enableInterrupts"
 	.byte	0x2
 	.uahalf	0x28d
 	.byte	0x1
 	.byte	0x3
-	.uleb128 0x22
+	.uleb128 0x23
 	.byte	0x1
 	.string	"core1_main"
 	.byte	0x1
-	.byte	0x41
+	.byte	0x44
 	.byte	0x1
 	.uaword	0x195
 	.uaword	.LFB383
@@ -8358,109 +8348,117 @@ core1_main:
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x4df2
-	.uleb128 0x23
+	.uaword	0x4ddc
+	.uleb128 0x24
 	.string	"config"
 	.byte	0x1
-	.byte	0x4c
+	.byte	0x4f
 	.uaword	0x4c11
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
-	.uleb128 0x23
+	.uleb128 0x24
 	.string	"pins"
 	.byte	0x1
-	.byte	0x52
+	.byte	0x55
 	.uaword	0x4c0c
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -24
-	.uleb128 0x23
-	.string	"i2cDeviceConfig"
+	.uleb128 0x24
+	.string	"apds9960_i2c_deviceConfig"
 	.byte	0x1
-	.byte	0x60
+	.byte	0x63
 	.uaword	0x4c93
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -32
-	.uleb128 0x23
+	.uleb128 0x24
 	.string	"tcs34725_rgbc_data"
 	.byte	0x1
-	.byte	0x71
-	.uaword	0x4d2e
+	.byte	0x74
+	.uaword	0x4d0e
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -40
-	.uleb128 0x24
-	.uaword	0x4d4a
+	.uleb128 0x25
+	.uaword	0x4d2a
 	.uaword	.LBB4
 	.uaword	.LBE4
 	.byte	0x1
-	.byte	0x6b
+	.byte	0x6e
 	.byte	0
+	.uleb128 0x24
+	.string	"g_tcs34725_i2cDev"
+	.byte	0x1
+	.byte	0x2f
+	.uaword	0x4c55
+	.byte	0x5
+	.byte	0x3
+	.uaword	g_tcs34725_i2cDev
 	.uleb128 0xb
 	.uaword	0x32e
-	.uaword	0x4e02
+	.uaword	0x4e0b
 	.uleb128 0xc
 	.uaword	0x358
 	.byte	0x2
 	.byte	0
-	.uleb128 0x25
+	.uleb128 0x26
 	.string	"IfxCpu_cfg_indexMap"
 	.byte	0x5
 	.byte	0x96
-	.uaword	0x4e1f
+	.uaword	0x4e28
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
-	.uaword	0x4df2
-	.uleb128 0x25
+	.uaword	0x4dfb
+	.uleb128 0x26
 	.string	"IfxI2c0_SCL_P02_5_INOUT"
 	.byte	0x9
 	.byte	0x38
 	.uaword	0x4981
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x25
+	.uleb128 0x26
 	.string	"IfxI2c0_SDA_P02_4_INOUT"
 	.byte	0x9
 	.byte	0x3b
 	.uaword	0x49d7
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x25
+	.uleb128 0x26
 	.string	"g_sync_cores_event"
 	.byte	0xd
 	.byte	0x1c
 	.uaword	0x299f
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x25
+	.uleb128 0x26
 	.string	"g_sync_cores_timeout_ms"
 	.byte	0xd
 	.byte	0x1f
 	.uaword	0x228
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x26
+	.uleb128 0x27
 	.string	"g_tcs34725_rgbc_shared_data_mtx"
 	.byte	0x1
-	.byte	0x34
+	.byte	0x37
 	.uaword	0x2987
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.uaword	g_tcs34725_rgbc_shared_data_mtx
-	.uleb128 0x26
+	.uleb128 0x27
 	.string	"g_tcs34725_rgbc_shared_data"
 	.byte	0x1
-	.byte	0x31
-	.uaword	0x4d2e
+	.byte	0x34
+	.uaword	0x4d0e
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.uaword	g_tcs34725_rgbc_shared_data
-	.uleb128 0x26
+	.uleb128 0x27
 	.string	"g_i2c_handle"
 	.byte	0x1
 	.byte	0x2c
@@ -8469,19 +8467,19 @@ core1_main:
 	.byte	0x5
 	.byte	0x3
 	.uaword	g_i2c_handle
-	.uleb128 0x26
+	.uleb128 0x27
 	.string	"g_tcs34725_params"
 	.byte	0x1
-	.byte	0x2f
-	.uaword	0x4cd7
+	.byte	0x32
+	.uaword	0x4cb7
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.uaword	g_tcs34725_params
-	.uleb128 0x26
+	.uleb128 0x27
 	.string	"g_i2c_bus_access_mtx"
 	.byte	0x1
-	.byte	0x33
+	.byte	0x36
 	.uaword	0x2987
 	.byte	0x1
 	.byte	0x5
@@ -8923,6 +8921,17 @@ core1_main:
 	.byte	0
 	.byte	0
 	.uleb128 0x21
+	.uleb128 0x13
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0xb
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.byte	0
+	.byte	0
+	.uleb128 0x22
 	.uleb128 0x2e
 	.byte	0
 	.uleb128 0x3
@@ -8937,7 +8946,7 @@ core1_main:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -8964,7 +8973,7 @@ core1_main:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -8979,7 +8988,7 @@ core1_main:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.uleb128 0x1d
 	.byte	0
 	.uleb128 0x31
@@ -8994,7 +9003,7 @@ core1_main:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x25
+	.uleb128 0x26
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -9011,7 +9020,7 @@ core1_main:
 	.uleb128 0xc
 	.byte	0
 	.byte	0
-	.uleb128 0x26
+	.uleb128 0x27
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3

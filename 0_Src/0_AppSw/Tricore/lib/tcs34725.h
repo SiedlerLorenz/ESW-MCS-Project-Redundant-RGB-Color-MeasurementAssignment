@@ -33,18 +33,9 @@
  */
 
 /**
- * @name ENABLE_REG bitfield macros
- *
- * // Reserved 7 Reserved. Write as 0.
- * // Reserved 6 Reserved. Write as 0.
- * // Reserved 5 Reserved. Write as 0.
- * // Reserved 2 Reserved. Write as 0.
+ * @brief Command Bit. Must be 1 to read/write from/to a specific register
  */
-
-#define TCS34725_ENABLE_REG_AIEN_MASK (1 << 4)
-#define TCS34725_ENABLE_REG_WEN_MASK (1 << 3)
-#define TCS34725_ENABLE_REG_AEN_MASK (1 << 1)
-#define TCS34725_ENABLE_REG_PON_MASK (1 << 0)
+#define TCS34725_COMMAND_BIT_MASK (1 << 7)
 
 /**
  * @brief ALS Valid. Indicates that an ALS cycle has completed since AEN was asserted or since a read from any of the
@@ -55,8 +46,6 @@
 
 typedef struct
 {
-    IfxI2c_I2c             i2c;
-    IfxI2c_I2c_Device      i2cDev;
 } tcs34725_params_t;
 
 typedef struct

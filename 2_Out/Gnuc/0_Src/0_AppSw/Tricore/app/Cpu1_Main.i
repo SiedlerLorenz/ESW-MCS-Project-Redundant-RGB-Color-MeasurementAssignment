@@ -17172,11 +17172,9 @@ extern const char _ctype_[];
 
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
 # 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
-# 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 47 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
-    IfxI2c_I2c i2c;
-    IfxI2c_I2c_Device i2cDev;
 } tcs34725_params_t;
 
 typedef struct
@@ -17186,13 +17184,13 @@ typedef struct
     uint16 green;
     uint16 blue;
 } tcs34725_rgbc_data_t;
-# 80 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 69 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
-# 93 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 82 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 94 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
 # 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 # 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
@@ -17243,13 +17241,16 @@ extern apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
 IfxI2c_I2c g_i2c_handle;
 
 
+static IfxI2c_I2c_Device g_tcs34725_i2cDev;
+
+
 tcs34725_params_t g_tcs34725_params;
 
 tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
 
 IfxCpu_mutexLock g_i2c_bus_access_mtx;
 IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
-# 65 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
+# 68 "0_Src/0_AppSw/Tricore/app/Cpu1_Main.c"
 int core1_main (void)
 {
 
@@ -17281,15 +17282,15 @@ int core1_main (void)
   IfxI2c_I2c_initModule(&g_i2c_handle, &config);
 
 
-  IfxI2c_I2c_deviceConfig i2cDeviceConfig;
+  IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
 
 
-  IfxI2c_I2c_initDeviceConfig(&i2cDeviceConfig, &g_i2c_handle);
+  IfxI2c_I2c_initDeviceConfig(&apds9960_i2c_deviceConfig, &g_i2c_handle);
 
 
-  i2cDeviceConfig.deviceAddress = (0x29) << 1;
+  apds9960_i2c_deviceConfig.deviceAddress = (0x29) << 1;
 
-  IfxI2c_I2c_initDevice(&g_tcs34725_params.i2cDev, &i2cDeviceConfig);
+  IfxI2c_I2c_initDevice(&g_tcs34725_i2cDev, &apds9960_i2c_deviceConfig);
 
 
   IfxCpu_enableInterrupts();
@@ -17301,11 +17302,11 @@ int core1_main (void)
   tcs34725_rgbc_data_t tcs34725_rgbc_data;
 
 
-  tcs34725_init(&g_tcs34725_params.i2cDev, &g_tcs34725_params);
+  tcs34725_init(&g_tcs34725_i2cDev, &g_tcs34725_params);
 
   while (1){
 
- tcs34725_read_rgbc(&g_tcs34725_params.i2cDev, &tcs34725_rgbc_data);
+ tcs34725_read_rgbc(&g_tcs34725_i2cDev, &tcs34725_rgbc_data);
 
  if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
 

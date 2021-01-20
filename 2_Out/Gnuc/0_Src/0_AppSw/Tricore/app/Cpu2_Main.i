@@ -29632,11 +29632,9 @@ extern const char _ctype_[];
 
 # 1 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 1
        
-# 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 47 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
-    IfxI2c_I2c i2c;
-    IfxI2c_I2c_Device i2cDev;
 } tcs34725_params_t;
 
 typedef struct
@@ -29646,13 +29644,13 @@ typedef struct
     uint16 green;
     uint16 blue;
 } tcs34725_rgbc_data_t;
-# 80 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 69 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
-# 93 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 82 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 94 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
 # 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 
@@ -31050,18 +31048,10 @@ void core2_main(void) {
   apds9960_rgbc_data_t apds9960_rgbc_data;
 
 
-  apds9960_init(&g_apds9960_i2cDev, &apds9960_params);
+
 
 
   while (1) {
-
-    apds9960_read_rgbc(&g_apds9960_i2cDev, &apds9960_rgbc_data);
-
-    if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
-
-      g_apds9960_rgbc_shared_data = apds9960_rgbc_data;
-
-      IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
-    }
+# 128 "0_Src/0_AppSw/Tricore/app/Cpu2_Main.c"
   }
 }

@@ -46,8 +46,8 @@ core2_main:
 	add	%d15, -8
 	mov.a	%a4, %d15
 	movh	%d15, hi:g_i2c_handle
-	mov.a	%a2, %d15
-	lea	%a5, [%a2] lo:g_i2c_handle
+	mov.a	%a15, %d15
+	lea	%a5, [%a15] lo:g_i2c_handle
 	call	IfxI2c_I2c_initDeviceConfig
 	.loc 1 99 0
 	mov	%d15, 114
@@ -56,8 +56,8 @@ core2_main:
 	mov.d	%d15, %a14
 	add	%d15, -8
 	movh	%d2, hi:g_apds9960_i2cDev
-	mov.a	%a3, %d2
-	lea	%a4, [%a3] lo:g_apds9960_i2cDev
+	mov.a	%a15, %d2
+	lea	%a4, [%a15] lo:g_apds9960_i2cDev
 	mov.a	%a5, %d15
 	call	IfxI2c_I2c_initDevice
 .LBB4:
@@ -79,59 +79,16 @@ core2_main:
 	.loc 1 109 0
 	movh	%d15, hi:g_sync_cores_timeout_ms
 	addi	%d15, %d15, lo:g_sync_cores_timeout_ms
-	mov.a	%a2, %d15
-	ld.w	%d15, [%a2]0
+	mov.a	%a15, %d15
+	ld.w	%d15, [%a15]0
 	movh	%d2, hi:g_sync_cores_event
-	mov.a	%a3, %d2
-	lea	%a4, [%a3] lo:g_sync_cores_event
+	mov.a	%a15, %d2
+	lea	%a4, [%a15] lo:g_sync_cores_event
 	mov	%d4, %d15
 	call	IfxCpu_waitEvent
-	.loc 1 115 0
-	mov.d	%d15, %a14
-	add	%d15, -8
-	movh	%d2, hi:g_apds9960_i2cDev
-	mov.a	%a15, %d2
-	lea	%a4, [%a15] lo:g_apds9960_i2cDev
-	mov.a	%a5, %d15
-	call	apds9960_init
-.L3:
-	.loc 1 120 0
-	mov.d	%d2, %a14
-	addi	%d15, %d2, -16
-	movh	%d2, hi:g_apds9960_i2cDev
-	mov.a	%a2, %d2
-	lea	%a4, [%a2] lo:g_apds9960_i2cDev
-	mov.a	%a5, %d15
-	call	apds9960_read_rgbc
-	.loc 1 122 0
-	movh	%d15, hi:g_apds9960_rgbc_shared_data_mtx
-	mov.a	%a3, %d15
-	lea	%a4, [%a3] lo:g_apds9960_rgbc_shared_data_mtx
-	call	IfxCpu_acquireMutex
-	mov	%d15, %d2
-	jz	%d15, .L2
-	.loc 1 124 0
-	movh	%d15, hi:g_apds9960_rgbc_shared_data
-	addi	%d15, %d15, lo:g_apds9960_rgbc_shared_data
-	mov	%d2, %d15
-	mov.d	%d3, %a14
-	addi	%d15, %d3, -16
-	mov.a	%a2, %d2
-	mov.a	%a3, %d15
-		# #chunks=4, chunksize=2, remains=0
-	lea	%a15, 4-1
-	0:
-	ld.h	%d3, [%a3+]2
-	st.h	[%a2+]2, %d3
-	loop	%a15, 0b
-	.loc 1 126 0
-	movh	%d15, hi:g_apds9960_rgbc_shared_data_mtx
-	mov.a	%a2, %d15
-	lea	%a4, [%a2] lo:g_apds9960_rgbc_shared_data_mtx
-	call	IfxCpu_releaseMutex
 .L2:
-	.loc 1 128 0
-	j	.L3
+	.loc 1 128 0 discriminator 1
+	j	.L2
 .LFE488:
 	.size	core2_main, .-core2_main
 .section .debug_frame,"",@progbits
@@ -4534,10 +4491,6 @@ core2_main:
 	.string	"reserved_14"
 .LASF21:
 	.string	"TX_END"
-	.extern	IfxCpu_releaseMutex,STT_FUNC,0
-	.extern	IfxCpu_acquireMutex,STT_FUNC,0
-	.extern	apds9960_read_rgbc,STT_FUNC,0
-	.extern	apds9960_init,STT_FUNC,0
 	.extern	IfxCpu_waitEvent,STT_FUNC,0
 	.extern	g_sync_cores_timeout_ms,STT_OBJECT,4
 	.extern	IfxCpu_emitEvent,STT_FUNC,0

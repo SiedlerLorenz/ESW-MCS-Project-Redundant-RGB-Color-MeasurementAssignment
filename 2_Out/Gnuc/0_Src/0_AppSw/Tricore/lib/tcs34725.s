@@ -4,9 +4,9 @@
 	.global	tcs34725_i2c_data
 .section .bss,"aw",@nobits
 	.type	tcs34725_i2c_data, @object
-	.size	tcs34725_i2c_data, 28
+	.size	tcs34725_i2c_data, 8
 tcs34725_i2c_data:
-	.zero	28
+	.zero	8
 .section .text,"ax",@progbits
 	.align 1
 	.global	tcs34725_init
@@ -23,10 +23,13 @@ tcs34725_init:
 	.loc 1 11 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 13 0
+	.loc 1 12 0
 	mov	%d15, 0
 	st.b	[%a14] -2, %d15
-	.loc 1 14 0
+	.loc 1 13 0
+	mov	%d15, 0
+	st.b	[%a14] -3, %d15
+	.loc 1 15 0
 	mov.d	%d15, %a14
 	add	%d15, -2
 	ld.a	%a4, [%a14] -12
@@ -34,45 +37,45 @@ tcs34725_init:
 	mov	%d5, 1
 	mov.a	%a5, %d15
 	call	tcs34725_read_registers
-	.loc 1 15 0
+	.loc 1 16 0
 	ld.bu	%d15, [%a14] -2
 	ne	%d15, %d15, 68
 	jnz	%d15, .L2
-	.loc 1 16 0
+	.loc 1 17 0
 	ld.a	%a4, [%a14] -12
 	mov	%d4, 0
 	mov	%d5, 3
 	call	tcs34725_write_register
-	.loc 1 17 0
+	.loc 1 18 0
 	mov.d	%d15, %a14
-	add	%d15, -2
+	add	%d15, -3
 	ld.a	%a4, [%a14] -12
 	mov	%d4, 0
 	mov	%d5, 1
 	mov.a	%a5, %d15
 	call	tcs34725_read_registers
-	.loc 1 18 0
-	ld.bu	%d15, [%a14] -2
-	jeq	%d15, 3, .L3
 	.loc 1 19 0
+	ld.bu	%d15, [%a14] -3
+	jeq	%d15, 3, .L3
+	.loc 1 20 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
 	j	.L2
 .L3:
-	.loc 1 21 0
+	.loc 1 22 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
 .L2:
-	.loc 1 24 0
+	.loc 1 25 0
 	movh	%d15, hi:tcs34725_i2c_data
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:tcs34725_i2c_data
 	mov	%d4, 0
 	mov	%d5, 112
 	call	memset
-	.loc 1 25 0
-	ld.b	%d15, [%a14] -1
 	.loc 1 26 0
+	ld.b	%d15, [%a14] -1
+	.loc 1 27 0
 	mov	%d2, %d15
 	ret
 .LFE273:
@@ -82,28 +85,28 @@ tcs34725_init:
 	.type	tcs34725_read_rgbc, @function
 tcs34725_read_rgbc:
 .LFB274:
-	.loc 1 28 0
+	.loc 1 29 0
 	mov.aa	%a14, %SP
 .LCFI1:
 	sub.a	%SP, 24
 	st.a	[%a14] -20, %a4
 	st.a	[%a14] -24, %a5
-	.loc 1 29 0
+	.loc 1 30 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 30 0
+	.loc 1 31 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -9
 	mov.a	%a2, %d15
-	mov	%d3, 0
-	lea	%a3, 8-1
+	mov	%d2, 0
+	lea	%a15, 8-1
 	0:
-	st.b	[%a2+]1, %d3
-	loop	%a3, 0b
-	.loc 1 31 0
+	st.b	[%a2+]1, %d2
+	loop	%a15, 0b
+	.loc 1 32 0
 	mov	%d15, 0
 	st.b	[%a14] -10, %d15
-	.loc 1 33 0
+	.loc 1 34 0
 	mov.d	%d2, %a14
 	addi	%d15, %d2, -10
 	ld.a	%a4, [%a14] -20
@@ -112,19 +115,13 @@ tcs34725_read_rgbc:
 	mov.a	%a5, %d15
 	call	tcs34725_read_registers
 	.loc 1 36 0
-	movh	%d15, hi:tcs34725_i2c_data
-	addi	%d2, %d15, lo:tcs34725_i2c_data
-	mov.d	%d3, %a14
-	addi	%d15, %d3, -9
-	addi	%d2, %d2, 20
-	mov.a	%a2, %d15
-	mov.a	%a3, %d2
-		# #chunks=8, chunksize=1, remains=0
-	lea	%a15, 8-1
-	0:
-	ld.bu	%d3, [%a3+]1
-	st.b	[%a2+]1, %d3
-	loop	%a15, 0b
+	mov.d	%d2, %a14
+	addi	%d15, %d2, -9
+	ld.a	%a4, [%a14] -20
+	mov	%d4, 20
+	mov	%d5, 8
+	mov.a	%a5, %d15
+	call	tcs34725_read_registers
 	.loc 1 38 0
 	ld.bu	%d15, [%a14] -8
 	sh	%d15, %d15, 8
@@ -147,8 +144,8 @@ tcs34725_read_rgbc:
 	extr	%d15, %d15, 0, 16
 	extr.u	%d15, %d15, 0, 16
 	ld.w	%d2, [%a14] -24
-	mov.a	%a3, %d2
-	st.h	[%a3] 2, %d15
+	mov.a	%a15, %d2
+	st.h	[%a15] 2, %d15
 	.loc 1 40 0
 	ld.bu	%d15, [%a14] -4
 	sh	%d15, %d15, 8
@@ -159,8 +156,8 @@ tcs34725_read_rgbc:
 	extr	%d15, %d15, 0, 16
 	extr.u	%d15, %d15, 0, 16
 	ld.w	%d2, [%a14] -24
-	mov.a	%a15, %d2
-	st.h	[%a15] 4, %d15
+	mov.a	%a2, %d2
+	st.h	[%a2] 4, %d15
 	.loc 1 41 0
 	ld.bu	%d15, [%a14] -2
 	sh	%d15, %d15, 8
@@ -171,8 +168,8 @@ tcs34725_read_rgbc:
 	extr	%d15, %d15, 0, 16
 	extr.u	%d15, %d15, 0, 16
 	ld.w	%d2, [%a14] -24
-	mov.a	%a2, %d2
-	st.h	[%a2] 6, %d15
+	mov.a	%a15, %d2
+	st.h	[%a15] 6, %d15
 	.loc 1 42 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
@@ -201,10 +198,18 @@ tcs34725_read_registers:
 	.loc 1 48 0
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
-	.loc 1 51 0
+	.loc 1 49 0
+	ld.b	%d15, [%a14] -13
+	orn	%d15, %d15, ~(-128)
+	and	%d15, 255
+	movh	%d2, hi:tcs34725_i2c_data
+	addi	%d2, %d2, lo:tcs34725_i2c_data
+	mov.a	%a15, %d2
+	st.b	[%a15]0, %d15
+	.loc 1 52 0
 	nop
 .L8:
-	.loc 1 51 0 is_stmt 0 discriminator 1
+	.loc 1 52 0 is_stmt 0 discriminator 1
 	movh	%d15, hi:g_i2c_bus_access_mtx
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
@@ -219,23 +224,35 @@ tcs34725_read_registers:
 	movh	%d15, hi:tcs34725_i2c_data
 	mov.a	%a15, %d15
 	lea	%a5, [%a15] lo:tcs34725_i2c_data
-	mov	%d4, 28
-	call	IfxI2c_I2c_read
+	mov	%d4, 1
+	call	IfxI2c_I2c_write
 	mov	%d15, %d2
 	jeq	%d15, 1, .L9
+	.loc 1 55 0 is_stmt 1
+	nop
+.L10:
+	.loc 1 55 0 is_stmt 0 discriminator 1
+	ld.bu	%d15, [%a14] -14
+	extr	%d15, %d15, 0, 16
+	ld.a	%a4, [%a14] -12
+	movh	%d2, hi:tcs34725_i2c_data
+	mov.a	%a15, %d2
+	lea	%a5, [%a15] lo:tcs34725_i2c_data
+	mov	%d4, %d15
+	call	IfxI2c_I2c_read
+	mov	%d15, %d2
+	jeq	%d15, 1, .L10
 	.loc 1 57 0 is_stmt 1
 	movh	%d15, hi:g_i2c_bus_access_mtx
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
 	call	IfxCpu_releaseMutex
 	.loc 1 59 0
-	ld.bu	%d15, [%a14] -13
-	movh	%d2, hi:tcs34725_i2c_data
-	addi	%d2, %d2, lo:tcs34725_i2c_data
-	add	%d2, %d15
 	ld.bu	%d15, [%a14] -14
 	ld.a	%a4, [%a14] -20
-	mov.a	%a5, %d2
+	movh	%d2, hi:tcs34725_i2c_data
+	mov.a	%a15, %d2
+	lea	%a5, [%a15] lo:tcs34725_i2c_data
 	mov	%d4, %d15
 	call	memcpy
 	.loc 1 61 0
@@ -266,9 +283,11 @@ tcs34725_write_register:
 	mov	%d15, -1
 	st.b	[%a14] -1, %d15
 	.loc 1 69 0
-	movh	%d15, hi:tcs34725_i2c_data
-	addi	%d2, %d15, lo:tcs34725_i2c_data
 	ld.b	%d15, [%a14] -13
+	orn	%d15, %d15, ~(-128)
+	and	%d15, 255
+	movh	%d2, hi:tcs34725_i2c_data
+	addi	%d2, %d2, lo:tcs34725_i2c_data
 	mov.a	%a15, %d2
 	st.b	[%a15]0, %d15
 	.loc 1 70 0
@@ -279,18 +298,18 @@ tcs34725_write_register:
 	st.b	[%a15] 1, %d15
 	.loc 1 73 0
 	nop
-.L12:
+.L13:
 	.loc 1 73 0 is_stmt 0 discriminator 1
 	movh	%d15, hi:g_i2c_bus_access_mtx
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
 	call	IfxCpu_acquireMutex
 	mov	%d15, %d2
-	jz	%d15, .L12
-	.loc 1 76 0 is_stmt 1
+	jz	%d15, .L13
+	.loc 1 74 0 is_stmt 1
 	nop
-.L13:
-	.loc 1 76 0 is_stmt 0 discriminator 1
+.L14:
+	.loc 1 74 0 is_stmt 0 discriminator 1
 	ld.a	%a4, [%a14] -12
 	movh	%d15, hi:tcs34725_i2c_data
 	mov.a	%a15, %d15
@@ -298,18 +317,18 @@ tcs34725_write_register:
 	mov	%d4, 2
 	call	IfxI2c_I2c_write
 	mov	%d15, %d2
-	jeq	%d15, 1, .L13
-	.loc 1 80 0 is_stmt 1
+	jeq	%d15, 1, .L14
+	.loc 1 76 0 is_stmt 1
 	movh	%d15, hi:g_i2c_bus_access_mtx
 	mov.a	%a15, %d15
 	lea	%a4, [%a15] lo:g_i2c_bus_access_mtx
 	call	IfxCpu_releaseMutex
-	.loc 1 82 0
+	.loc 1 78 0
 	mov	%d15, 0
 	st.b	[%a14] -1, %d15
-	.loc 1 83 0
+	.loc 1 79 0
 	ld.b	%d15, [%a14] -1
-	.loc 1 84 0
+	.loc 1 80 0
 	mov	%d2, %d15
 	ret
 .LFE276:
@@ -389,7 +408,7 @@ tcs34725_write_register:
 	.file 9 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 .section .debug_info,"",@progbits
 .Ldebug_info0:
-	.uaword	0x2817
+	.uaword	0x27fc
 	.uahalf	0x3
 	.uaword	.Ldebug_abbrev0
 	.byte	0x4
@@ -3982,65 +4001,51 @@ tcs34725_write_register:
 	.byte	0x8
 	.uahalf	0x153
 	.uaword	0x24ad
-	.uleb128 0x8
-	.byte	0x18
-	.byte	0x9
-	.byte	0x38
-	.uaword	0x251f
-	.uleb128 0x9
-	.string	"i2c"
-	.byte	0x9
-	.byte	0x3a
-	.uaword	0x249a
+	.uleb128 0x1e
 	.byte	0
-	.uleb128 0x9
-	.string	"i2cDev"
 	.byte	0x9
-	.byte	0x3b
-	.uaword	0x24e1
-	.byte	0x10
-	.byte	0
+	.byte	0x2f
 	.uleb128 0x5
 	.string	"tcs34725_params_t"
 	.byte	0x9
-	.byte	0x3c
+	.byte	0x31
 	.uaword	0x24fb
 	.uleb128 0x8
 	.byte	0x8
 	.byte	0x9
-	.byte	0x3e
-	.uaword	0x2576
+	.byte	0x33
+	.uaword	0x2556
 	.uleb128 0x9
 	.string	"clear"
 	.byte	0x9
-	.byte	0x40
+	.byte	0x35
 	.uaword	0x266
 	.byte	0
 	.uleb128 0x9
 	.string	"red"
 	.byte	0x9
-	.byte	0x41
+	.byte	0x36
 	.uaword	0x266
 	.byte	0x2
 	.uleb128 0x9
 	.string	"green"
 	.byte	0x9
-	.byte	0x42
+	.byte	0x37
 	.uaword	0x266
 	.byte	0x4
 	.uleb128 0x9
 	.string	"blue"
 	.byte	0x9
-	.byte	0x43
+	.byte	0x38
 	.uaword	0x266
 	.byte	0x6
 	.byte	0
 	.uleb128 0x5
 	.string	"tcs34725_rgbc_data_t"
 	.byte	0x9
-	.byte	0x44
-	.uaword	0x2538
-	.uleb128 0x1e
+	.byte	0x39
+	.uaword	0x2518
+	.uleb128 0x1f
 	.byte	0x1
 	.string	"tcs34725_init"
 	.byte	0x1
@@ -4052,24 +4057,24 @@ tcs34725_write_register:
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x25fa
-	.uleb128 0x1f
+	.uaword	0x25ef
+	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
 	.byte	0xa
-	.uaword	0x25fa
+	.uaword	0x25ef
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
-	.uleb128 0x1f
+	.uleb128 0x20
 	.string	"params"
 	.byte	0x1
 	.byte	0xa
-	.uaword	0x2600
+	.uaword	0x25f5
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -16
-	.uleb128 0x20
+	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
 	.byte	0xb
@@ -4077,28 +4082,36 @@ tcs34725_write_register:
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -1
-	.uleb128 0x21
+	.uleb128 0x22
 	.string	"device_id"
+	.byte	0x1
+	.byte	0xc
+	.uaword	0x259
+	.byte	0x2
+	.byte	0x8e
+	.sleb128 -2
+	.uleb128 0x22
+	.string	"reg_enable"
 	.byte	0x1
 	.byte	0xd
 	.uaword	0x259
 	.byte	0x2
 	.byte	0x8e
-	.sleb128 -2
+	.sleb128 -3
 	.byte	0
 	.uleb128 0x6
 	.byte	0x4
 	.uaword	0x24e1
 	.uleb128 0x6
 	.byte	0x4
-	.uaword	0x2606
-	.uleb128 0x22
-	.uaword	0x251f
-	.uleb128 0x1e
+	.uaword	0x25fb
+	.uleb128 0x23
+	.uaword	0x24ff
+	.uleb128 0x1f
 	.byte	0x1
 	.string	"tcs34725_read_rgbc"
 	.byte	0x1
-	.byte	0x1c
+	.byte	0x1d
 	.byte	0x1
 	.uaword	0x24c
 	.uaword	.LFB274
@@ -4106,43 +4119,43 @@ tcs34725_write_register:
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x2690
-	.uleb128 0x1f
+	.uaword	0x2685
+	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
-	.byte	0x1c
-	.uaword	0x25fa
+	.byte	0x1d
+	.uaword	0x25ef
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -20
-	.uleb128 0x1f
+	.uleb128 0x20
 	.string	"rgbc_data"
 	.byte	0x1
-	.byte	0x1c
-	.uaword	0x2690
+	.byte	0x1d
+	.uaword	0x2685
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -24
-	.uleb128 0x20
+	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
-	.byte	0x1d
+	.byte	0x1e
 	.uaword	0x24c
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -1
-	.uleb128 0x21
+	.uleb128 0x22
 	.string	"rgbc_reg_buf"
 	.byte	0x1
-	.byte	0x1e
-	.uaword	0x2696
+	.byte	0x1f
+	.uaword	0x268b
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -9
-	.uleb128 0x21
+	.uleb128 0x22
 	.string	"reg_val"
 	.byte	0x1
-	.byte	0x1f
+	.byte	0x20
 	.uaword	0x259
 	.byte	0x2
 	.byte	0x8e
@@ -4150,15 +4163,15 @@ tcs34725_write_register:
 	.byte	0
 	.uleb128 0x6
 	.byte	0x4
-	.uaword	0x2576
+	.uaword	0x2556
 	.uleb128 0x3
 	.uaword	0x259
-	.uaword	0x26a6
+	.uaword	0x269b
 	.uleb128 0x4
 	.uaword	0x229
 	.byte	0x7
 	.byte	0
-	.uleb128 0x1e
+	.uleb128 0x1f
 	.byte	0x1
 	.string	"tcs34725_read_registers"
 	.byte	0x1
@@ -4170,16 +4183,16 @@ tcs34725_write_register:
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x2727
-	.uleb128 0x1f
+	.uaword	0x271c
+	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
 	.byte	0x2f
-	.uaword	0x25fa
+	.uaword	0x25ef
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
-	.uleb128 0x23
+	.uleb128 0x24
 	.uaword	.LASF24
 	.byte	0x1
 	.byte	0x2f
@@ -4187,7 +4200,7 @@ tcs34725_write_register:
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -13
-	.uleb128 0x1f
+	.uleb128 0x20
 	.string	"num_regs"
 	.byte	0x1
 	.byte	0x2f
@@ -4195,15 +4208,15 @@ tcs34725_write_register:
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -14
-	.uleb128 0x1f
+	.uleb128 0x20
 	.string	"reg_vals"
 	.byte	0x1
 	.byte	0x2f
-	.uaword	0x2727
+	.uaword	0x271c
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -20
-	.uleb128 0x20
+	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
 	.byte	0x30
@@ -4215,7 +4228,7 @@ tcs34725_write_register:
 	.uleb128 0x6
 	.byte	0x4
 	.uaword	0x259
-	.uleb128 0x1e
+	.uleb128 0x1f
 	.byte	0x1
 	.string	"tcs34725_write_register"
 	.byte	0x1
@@ -4227,16 +4240,16 @@ tcs34725_write_register:
 	.byte	0x1
 	.byte	0x9c
 	.byte	0x1
-	.uaword	0x279a
-	.uleb128 0x1f
+	.uaword	0x278f
+	.uleb128 0x20
 	.string	"dev"
 	.byte	0x1
 	.byte	0x41
-	.uaword	0x25fa
+	.uaword	0x25ef
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -12
-	.uleb128 0x23
+	.uleb128 0x24
 	.uaword	.LASF24
 	.byte	0x1
 	.byte	0x41
@@ -4244,7 +4257,7 @@ tcs34725_write_register:
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -13
-	.uleb128 0x1f
+	.uleb128 0x20
 	.string	"reg_val"
 	.byte	0x1
 	.byte	0x41
@@ -4252,7 +4265,7 @@ tcs34725_write_register:
 	.byte	0x2
 	.byte	0x8e
 	.sleb128 -14
-	.uleb128 0x20
+	.uleb128 0x21
 	.uaword	.LASF23
 	.byte	0x1
 	.byte	0x42
@@ -4263,37 +4276,30 @@ tcs34725_write_register:
 	.byte	0
 	.uleb128 0x3
 	.uaword	0x2d1
-	.uaword	0x27aa
+	.uaword	0x279f
 	.uleb128 0x4
 	.uaword	0x229
 	.byte	0x2
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.string	"IfxCpu_cfg_indexMap"
 	.byte	0x6
 	.byte	0x96
-	.uaword	0x27c7
+	.uaword	0x27bc
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x22
-	.uaword	0x279a
-	.uleb128 0x3
-	.uaword	0x259
-	.uaword	0x27dc
-	.uleb128 0x4
-	.uaword	0x229
-	.byte	0x1b
-	.byte	0
-	.uleb128 0x25
+	.uleb128 0x23
+	.uaword	0x278f
+	.uleb128 0x26
 	.string	"tcs34725_i2c_data"
 	.byte	0x1
 	.byte	0x6
-	.uaword	0x27cc
+	.uaword	0x268b
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.uaword	tcs34725_i2c_data
-	.uleb128 0x24
+	.uleb128 0x25
 	.string	"g_i2c_bus_access_mtx"
 	.byte	0x1
 	.byte	0x8
@@ -4699,6 +4705,17 @@ tcs34725_write_register:
 	.byte	0
 	.byte	0
 	.uleb128 0x1e
+	.uleb128 0x13
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0xb
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.byte	0
+	.byte	0
+	.uleb128 0x1f
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -4725,26 +4742,11 @@ tcs34725_write_register:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x1f
+	.uleb128 0x20
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
 	.uleb128 0x8
-	.uleb128 0x3a
-	.uleb128 0xb
-	.uleb128 0x3b
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.uleb128 0x2
-	.uleb128 0xa
-	.byte	0
-	.byte	0
-	.uleb128 0x20
-	.uleb128 0x34
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0xe
 	.uleb128 0x3a
 	.uleb128 0xb
 	.uleb128 0x3b
@@ -4759,7 +4761,7 @@ tcs34725_write_register:
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
-	.uleb128 0x8
+	.uleb128 0xe
 	.uleb128 0x3a
 	.uleb128 0xb
 	.uleb128 0x3b
@@ -4771,13 +4773,28 @@ tcs34725_write_register:
 	.byte	0
 	.byte	0
 	.uleb128 0x22
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0x8
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x2
+	.uleb128 0xa
+	.byte	0
+	.byte	0
+	.uleb128 0x23
 	.uleb128 0x26
 	.byte	0
 	.uleb128 0x49
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -4792,7 +4809,7 @@ tcs34725_write_register:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -4809,7 +4826,7 @@ tcs34725_write_register:
 	.uleb128 0xc
 	.byte	0
 	.byte	0
-	.uleb128 0x25
+	.uleb128 0x26
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -4892,10 +4909,10 @@ tcs34725_write_register:
 	.string	"reserved_16"
 .LASF21:
 	.string	"TX_END"
-	.extern	IfxI2c_I2c_write,STT_FUNC,0
 	.extern	memcpy,STT_FUNC,0
 	.extern	IfxCpu_releaseMutex,STT_FUNC,0
 	.extern	IfxI2c_I2c_read,STT_FUNC,0
+	.extern	IfxI2c_I2c_write,STT_FUNC,0
 	.extern	IfxCpu_acquireMutex,STT_FUNC,0
 	.extern	g_i2c_bus_access_mtx,STT_OBJECT,4
 	.extern	memset,STT_FUNC,0

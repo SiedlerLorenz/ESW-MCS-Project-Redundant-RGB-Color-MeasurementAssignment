@@ -13357,11 +13357,9 @@ extern IfxI2c_I2c_Status IfxI2c_I2c_write(IfxI2c_I2c_Device *i2cDevice, volatile
 # 3 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
 # 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
-# 56 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 47 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
-    IfxI2c_I2c i2c;
-    IfxI2c_I2c_Device i2cDev;
 } tcs34725_params_t;
 
 typedef struct
@@ -13371,30 +13369,31 @@ typedef struct
     uint16 green;
     uint16 blue;
 } tcs34725_rgbc_data_t;
-# 80 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 69 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
-# 93 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 82 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 94 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 116 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
 # 4 "0_Src/0_AppSw/Tricore/lib/tcs34725.c" 2
 
 
-uint8 tcs34725_i2c_data[28];
+uint8 tcs34725_i2c_data[8];
 
 extern IfxCpu_mutexLock g_i2c_bus_access_mtx;
 
 sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params) {
   sint8 ret_val = -1;
-
   uint8 device_id = 0;
+  uint8 reg_enable = 0;
+
   tcs34725_read_registers(dev, (0x12), 1, &device_id);
   if (device_id == (0x44)) {
     tcs34725_write_register(dev, (0x00), 0x03);
-    tcs34725_read_registers(dev, (0x00), 1, &device_id);
-    if (device_id != 0x03) {
+    tcs34725_read_registers(dev, (0x00), 1, &reg_enable);
+    if (reg_enable != 0x03) {
       ret_val = -1;
     } else {
       ret_val = 0;
@@ -13411,8 +13410,7 @@ sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data
 
   tcs34725_read_registers(dev, (0x13), 1, &reg_val);
   if (reg_val | (1 << 0)) {
-
-    memcpy(rgbc_reg_buf, &tcs34725_i2c_data[(0x14)], 8);
+    tcs34725_read_registers(dev, (0x14), 8, rgbc_reg_buf);
 
     rgbc_data->clear = rgbc_reg_buf[1] << 8 | rgbc_reg_buf[0];
     rgbc_data->red = rgbc_reg_buf[3] << 8 | rgbc_reg_buf[2];
@@ -13425,17 +13423,17 @@ sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data
 
 sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_vals) {
   sint8 ret_val = -1;
+  tcs34725_i2c_data[0] = reg_addr | (1 << 7);
 
 
-  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx))
-    ;
+  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx));
 
-  while (IfxI2c_I2c_read(dev, &tcs34725_i2c_data[0], 28) == IfxI2c_I2c_Status_nak)
-    ;
+  while (IfxI2c_I2c_write(dev, tcs34725_i2c_data, 1) == IfxI2c_I2c_Status_nak);
+  while (IfxI2c_I2c_read(dev, tcs34725_i2c_data, num_regs) == IfxI2c_I2c_Status_nak);
 
   IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
 
-  memcpy(reg_vals, &tcs34725_i2c_data[reg_addr], num_regs);
+  memcpy(reg_vals, &tcs34725_i2c_data, num_regs);
 
   ret_val = 0;
   return ret_val;
@@ -13445,16 +13443,12 @@ sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_
   sint8 ret_val = -1;
 
 
-  tcs34725_i2c_data[0] = reg_addr;
+  tcs34725_i2c_data[0] = reg_addr | (1 << 7);
   tcs34725_i2c_data[1] = reg_val;
 
 
-  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx))
-    ;
-
-  while (IfxI2c_I2c_write(dev, tcs34725_i2c_data, 2) == IfxI2c_I2c_Status_nak)
-    ;
-
+  while (!IfxCpu_acquireMutex(&g_i2c_bus_access_mtx));
+  while (IfxI2c_I2c_write(dev, tcs34725_i2c_data, 2) == IfxI2c_I2c_Status_nak);
 
   IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
 
