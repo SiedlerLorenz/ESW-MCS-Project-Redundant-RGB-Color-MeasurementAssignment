@@ -1,12 +1,46 @@
+/**
+ * @file apds9960.h
+ * @author Letofsky Herwig
+ * @brief 
+ * @version 0.1
+ * @date 2020-12-29
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
+
 #pragma once
 #include <Cpu/Std/Platform_Types.h>
 #include <I2c/I2c/IfxI2c_I2c.h>
 
-// #define APDS9960_SENSOR_NOT_CONNECTED   0
-// #define APDS9960_SENSOR_CONNECTED       1
-
 /**
  * @brief return codes used by apds9960 function to indecate failure or success
+ * 
+ * A typical error handling code would look like this \n
+ * 
+ * apds9960_error_code_t apds9960_error_code; \n
+ * ...                                        \n
+ * switch(apds9960_error_code) {              \n
+ *   case APDS9960_SUCCESS:                   \n
+ *     ...                                    \n
+ *     break;                                 \n
+ *   case APDS9960_FAIL:                      \n
+ *     ...                                    \n
+ *     break;                                 \n
+ *   case APDS9960_SENSOR_CONNECTED:          \n
+ *     ...                                    \n
+ *     break;                                 \n
+ *   case APDS9960_SENSOR_NOT_CONNECTED:      \n
+ *     ...                                    \n
+ *     break;                                 \n
+ *   case APDS9960_INITIALIZATION_INCOMPLETE: \n
+ *     ...                                    \n
+ *     break;                                 \n
+ *   case APDS9960_NO_VALID_COLOR_VALUES:     \n
+ *     ...                                    \n
+ *     break;                                 \n
+ *   default:                                 \n
+ * }
  */
 typedef enum {
   APDS9960_FAIL,
@@ -17,9 +51,15 @@ typedef enum {
   APDS9960_NO_VALID_COLOR_VALUES
 } apds9960_error_code_t;
 
+
+
 #define APDS9960_DEVICE_I2C_ADDRESS (0x39)
 #define APDS9960_DEVICE_ID (0xAB)
 
+/**
+ * @name Register addresses
+ * @{
+ */
 #define APDS9960_REG_ENABLE (0x80)      // R/W Enable states and interrupts 0x00
 #define APDS9960_REG_ATIME (0x81)       // R/W ADC integration time 0xFF
 #define APDS9960_REG_WTIME (0x83)       // R/W Wait time (non-gesture) 0xFF
@@ -69,6 +109,7 @@ typedef enum {
 #define APDS9960_REG_GFIFO_D (0xFD)     // R Gesture FIFO DOWN value 0x00
 #define APDS9960_REG_GFIFO_L (0xFE)     // R Gesture FIFO LEFT value 0x00
 #define APDS9960_REG_GFIFO_R (0xFF)     // R Gesture FIFO RIGHT value
+/** @} */ /** Register addresses */
 
 /*
  * Bit offsets within the individual registers
@@ -301,8 +342,10 @@ typedef struct {
  * @param[in]  dev          An apds9960 i2c slave device
  * @param[in]  params       Configuration parameters
  *
- * @return sint8             0 on success
- * @return sint8            -1 on error
+ * @return apds9960_error_code_t
+ *   @retval APDS9960_SUCCESS
+ *   @retval APDS9960_SENSOR_NOT_CONNECTED
+ *   @retval APDS9960_INITIALIZATION_INCOMPLETE
  */
 apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
 
@@ -311,8 +354,9 @@ apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960
  *
  * @param[in]  dev          An apds9960 i2c slave device
  *
- * @return sint8            APDS9960_SENSOR_CONNECTED if a sensor is connected
- * @return sint8            APDS9960_SENSOR_NOT_CONNECTED if no sensor is connected
+ * @return apds9960_error_code_t
+ *   @retval APDS9960_SENSOR_CONNECTED
+ *   @retval APDS9960_SENSOR_NOT_CONNECTED
  */
 apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev);
 
@@ -324,8 +368,9 @@ apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev);
  * @param[in]  num_regs     Number of registers to read
  * @param[out] reg_val      Value of the read register
  *
- * @return sint8             0 on success
- * @return sint8            -1 on error
+ * @return apds9960_error_code_t
+ *   @retval APDS9960_SUCCESS
+ *   @retval APDS9960_FAIL
  */
 apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs,
                                               uint8 *reg_val);
@@ -337,8 +382,9 @@ apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint
  * @param[in]  reg_addr     Address of the register to read
  * @param[in]  reg_val      Value to write into the register
  *
- * @return sint8             0 on success
- * @return sint8            -1 on error
+ * @return apds9960_error_code_t
+ *   @retval APDS9960_SUCCESS
+ *   @retval APDS9960_FAIL
  */
 apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
 
@@ -348,7 +394,10 @@ apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint
  * @param[in]  dev          An apds9960 i2c slave device
  * @param[out] rgbc_data    Color data output buffer
  *
- * @return sint8             0 on success
- * @return sint8            -1 on error
+ * @return apds9960_error_code_t
+ *   @retval APDS9960_SUCCESS
+ *   @retval APDS9960_FAIL
+ *   @retval APDS9960_SENSOR_NOT_CONNECTED
+ *   @retval APDS9960_NO_VALID_COLOR_VALUES
  */
 apds9960_error_code_t apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
