@@ -7,43 +7,58 @@ uint8 i2c_data[64];
 
 extern IfxCpu_mutexLock g_i2c_bus_access_mtx;
 
-sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
-  sint8 ret_val = -1;
-
-  uint8 device_id = 0;
-  apds9960_read_registers(dev, APDS9960_REG_ID, 1, &device_id);
-  if (device_id == APDS9960_DEVICE_ID) {
-    apds9960_write_register(dev, APDS9960_REG_ENABLE, 0x03);
-    apds9960_read_registers(dev, APDS9960_REG_ENABLE, 1, &device_id);
-    if (device_id != 0x03) {
-      ret_val = -1;
+apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
+  sint8 ret_val = APDS9960_SENSOR_NOT_CONNECTED;
+  uint8 get_enable_reg = 0;
+  uint8 set_enable_reg = APDS9960_ENABLE_REG_AEN_MASK | APDS9960_ENABLE_REG_PON_MASK;
+  if (apds9960_is_connected(dev) == APDS9960_SENSOR_CONNECTED) {
+    apds9960_write_register(dev, APDS9960_REG_ENABLE, set_enable_reg);
+    apds9960_read_registers(dev, APDS9960_REG_ENABLE, 1, &get_enable_reg);
+    if (get_enable_reg != set_enable_reg) {
+      ret_val = APDS9960_INITIALIZATION_INCOMPLETE;
     } else {
-      ret_val = 0;
+      ret_val = APDS9960_SUCCESS;
     }
   }
   return ret_val;
 }
 
-sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev) {
+  sint8 connection_status = APDS9960_SENSOR_NOT_CONNECTED;
+  uint8 device_id = 0;
+  apds9960_read_registers(dev, APDS9960_REG_ID, 1, &device_id);
+  if (device_id == APDS9960_DEVICE_ID) {
+    connection_status = APDS9960_SENSOR_CONNECTED;
+  }
+  return connection_status;
+}
+
+apds9960_error_code_t apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data) {
+  sint8 ret_val = APDS9960_FAIL;
   uint8 rgbc_reg_buf[8] = {0};
   uint8 reg_val = 0;
 
-  apds9960_read_registers(dev, APDS9960_REG_STATUS, 1, &reg_val);
-  if (reg_val | APDS9960_STATUS_REG_AVALID_MASK) {
-    apds9960_read_registers(dev, APDS9960_REG_CDATAL, 8, rgbc_reg_buf);
+  if (apds9960_is_connected(dev) == APDS9960_SENSOR_CONNECTED) {
+    apds9960_read_registers(dev, APDS9960_REG_STATUS, 1, &reg_val);
+    if (reg_val | APDS9960_STATUS_REG_AVALID_MASK) {
+      apds9960_read_registers(dev, APDS9960_REG_CDATAL, 8, rgbc_reg_buf);
 
-    rgbc_data->c = rgbc_reg_buf[1] << 8 | rgbc_reg_buf[0];
-    rgbc_data->r = rgbc_reg_buf[3] << 8 | rgbc_reg_buf[2];
-    rgbc_data->g = rgbc_reg_buf[5] << 8 | rgbc_reg_buf[4];
-    rgbc_data->b = rgbc_reg_buf[7] << 8 | rgbc_reg_buf[6];
-    ret_val = 0;
+      rgbc_data->c = rgbc_reg_buf[1] << 8 | rgbc_reg_buf[0];
+      rgbc_data->r = rgbc_reg_buf[3] << 8 | rgbc_reg_buf[2];
+      rgbc_data->g = rgbc_reg_buf[5] << 8 | rgbc_reg_buf[4];
+      rgbc_data->b = rgbc_reg_buf[7] << 8 | rgbc_reg_buf[6];
+      ret_val = APDS9960_SUCCESS;
+    } else {
+      ret_val = APDS9960_NO_VALID_COLOR_VALUES;
+    }
+  } else {
+    ret_val = APDS9960_SENSOR_NOT_CONNECTED;
   }
   return ret_val;
 }
 
-sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_vals) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_vals) {
+  sint8 ret_val = APDS9960_FAIL;
 
   // setup internal address to be read from
   i2c_data[0] = reg_addr;
@@ -60,12 +75,12 @@ sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
 
   memcpy(reg_vals, &i2c_data, num_regs);
 
-  ret_val = 0;
+  ret_val = APDS9960_SUCCESS;
   return ret_val;
 }
 
-sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val) {
+  sint8 ret_val = APDS9960_FAIL;
 
   // setup internal address to be read from
   i2c_data[0] = reg_addr;
@@ -79,6 +94,6 @@ sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
   // release i2c module again
   IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
 
-  ret_val = 0;
+  ret_val = APDS9960_SUCCESS;
   return ret_val;
 }

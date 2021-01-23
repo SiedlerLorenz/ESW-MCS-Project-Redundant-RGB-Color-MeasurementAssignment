@@ -4,11 +4,14 @@
  * @version v0.1
  * @author Letofsky Herwig
  *
- * @brief Core2 runs a QSPI slave with core1 as its master.
- * Furthermore, it configures a timer module TOM1CH0 to interrupt every ms.
- * The timer increments a global time variable every 100ms.
- * Upon correct request over QSPI this time will be sent to the master
- * otherwise 0x00 will be transmitted.
+ * @brief Core2 uses i2c to repeately read color values from an apds9960 sensor.
+ * After a successful read the color values are transmitted to core0 via shared
+ * memory given that the shared memory is currenty not accquired by core0.
+ *
+ * If no sensor is connected at start up the core will wait till a device is
+ * connected to the bus and then proceed with the above behaviour.
+ * If the sensor is disconnected from the bus during execution the programm will
+ * notice an report to core 0 via shared memory.
  *
  */
 
@@ -47,13 +50,13 @@
 /******************************************************************************/
 
 /// @brief for i2c
-extern IfxI2c_I2c g_i2c_handle;              // i2c handle
+extern IfxI2c_I2c g_i2c_handle;  // i2c handle
 
-/// @brief 
-static IfxI2c_I2c_Device g_apds9960_i2cDev;  // slave device handle
+/// @brief device handle to communicate with apds9960 sensor
+static IfxI2c_I2c_Device g_apds9960_i2cDev;
 
 IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
-apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
+apds9960_shared_data_t g_apds9960_shared_data;
 
 /******************************************************************************/
 /*------------------------Inline/Private Function Prototypes------------------*/
@@ -73,21 +76,6 @@ void core2_main(void) {
    * */
   IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
-
-  // /* create config structure */
-  // IfxI2c_I2c_Config config;
-
-  // /* fill structure with default values and Module address */
-  // IfxI2c_I2c_initConfig(&config, &MODULE_I2C0);
-
-  // /* configure pins */
-  // const IfxI2c_Pins pins = {&IfxI2c0_SCL_P02_5_INOUT, &IfxI2c0_SDA_P02_4_INOUT, IfxPort_PadDriver_cmosAutomotiveSpeed1};
-
-  // config.pins = &pins;
-  // config.baudrate = 100000;  // 100 kHz
-
-  // /* initialize module */
-  // IfxI2c_I2c_initModule(&g_i2c_handle, &config);
 
   /* create device config */
   IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
@@ -112,18 +100,50 @@ void core2_main(void) {
   apds9960_rgbc_data_t apds9960_rgbc_data;
 
   /* initialize the apds9960 sensor */
-  apds9960_init(&g_apds9960_i2cDev, &apds9960_params);
+  while (apds9960_init(&g_apds9960_i2cDev, &apds9960_params) != APDS9960_SUCCESS)
+    ;
+
+  apds9960_error_code_t apds9960_err;
 
   /* Background loop */
   while (TRUE) {
     /* read rgbc data from sensor */
-    apds9960_read_rgbc(&g_apds9960_i2cDev, &apds9960_rgbc_data);
-    /* acquire lock to write safely to the shared memory */
-    if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
-      /* write the read data to the shared memory */
-      g_apds9960_rgbc_shared_data = apds9960_rgbc_data;
-      /* release lock for core0 to read the shared memory again */
-      IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+    apds9960_err = apds9960_read_rgbc(&g_apds9960_i2cDev, &apds9960_rgbc_data);
+
+    switch (apds9960_err) {
+      case APDS9960_SUCCESS:
+        /* copy the rgbc data into shared memory */
+        {
+          /* acquire lock to write safely to the shared memory */
+          if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
+            /* write the read data to the shared memory */
+            g_apds9960_shared_data.rgbc = apds9960_rgbc_data;
+            g_apds9960_shared_data.status = APDS9960_SUCCESS;
+            /* release lock for core0 to read the shared memory again */
+            IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+          }
+        }
+        break;
+      case APDS9960_SENSOR_NOT_CONNECTED:
+        /* report sensor disconnect to core0 */
+        /* wait till sensor is reconnected */
+        {
+          /* acquire lock to write safely to the shared memory */
+          if (IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx)) {
+            /* write the read data to the shared memory */
+            g_apds9960_shared_data.status = APDS9960_SENSOR_NOT_CONNECTED;
+            /* release lock for core0 to read the shared memory again */
+            IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+          }
+        }
+        break;
+      case APDS9960_NO_VALID_COLOR_VALUES:
+        /* do not copy the rgbc data into shared memory */
+        break;
+      case APDS9960_FAIL:
+      default:
+        /* do nothing */
+        break;
     }
   }
 }

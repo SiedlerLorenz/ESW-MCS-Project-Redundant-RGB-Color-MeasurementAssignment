@@ -1,0 +1,27 @@
+```plantuml
+
+@startuml
+
+start
+:synchronize to other cores;
+
+repeat
+:intiliaize APDS9960 sensor;
+repeat while (no APDS9960 sensor found?)
+
+repeat
+    :read rgbc values from sensor;
+
+    if (read was successful?) then (yes) 
+        :transmit read rgbc data to core 0;
+    elseif (sensor got disconnected?) then (yes)
+        :report sensor disconnect to core0;
+    elseif (read data invalid) then (yes)
+    
+    else (no)
+
+    endif
+
+@enduml
+
+```

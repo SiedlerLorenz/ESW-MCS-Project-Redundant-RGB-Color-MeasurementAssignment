@@ -2,6 +2,21 @@
 #include <Cpu/Std/Platform_Types.h>
 #include <I2c/I2c/IfxI2c_I2c.h>
 
+// #define APDS9960_SENSOR_NOT_CONNECTED   0
+// #define APDS9960_SENSOR_CONNECTED       1
+
+/**
+ * @brief return codes used by apds9960 function to indecate failure or success
+ */
+typedef enum {
+  APDS9960_FAIL,
+  APDS9960_SUCCESS,
+  APDS9960_SENSOR_CONNECTED,
+  APDS9960_SENSOR_NOT_CONNECTED,
+  APDS9960_INITIALIZATION_INCOMPLETE,
+  APDS9960_NO_VALID_COLOR_VALUES
+} apds9960_error_code_t;
+
 #define APDS9960_DEVICE_I2C_ADDRESS (0x39)
 #define APDS9960_DEVICE_ID (0xAB)
 
@@ -260,11 +275,19 @@
  * @brief   Result vector for color measurement
  */
 typedef struct {
-  sint16 c; /**< Color value of the clear channel */
-  sint16 r; /**< Color value of the red channel */
-  sint16 g; /**< Color value of the green channel */
-  sint16 b; /**< Color value of the blue channel */
+  uint16 c; /** Color value of the clear channel */
+  uint16 r; /** Color value of the red channel */
+  uint16 g; /** Color value of the green channel */
+  uint16 b; /** Color value of the blue channel */
 } apds9960_rgbc_data_t;
+
+/**
+ * @brief   Result vector for color measurement including a sensor status
+ */
+typedef struct {
+  apds9960_rgbc_data_t rgbc;    /** RGBC Color values */
+  apds9960_error_code_t status; /** Flag indicate the sensor status */
+} apds9960_shared_data_t;
 
 /**
  * @brief   Configuration parameters for APDS9960 devices
@@ -278,10 +301,20 @@ typedef struct {
  * @param[in]  dev          An apds9960 i2c slave device
  * @param[in]  params       Configuration parameters
  *
- * @return                  0 on success
- * @return                  -1 on error
+ * @return sint8             0 on success
+ * @return sint8            -1 on error
  */
-sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+
+/**
+ * @brief Check if a apds9960 sensor is connected to the i2c bus
+ *
+ * @param[in]  dev          An apds9960 i2c slave device
+ *
+ * @return sint8            APDS9960_SENSOR_CONNECTED if a sensor is connected
+ * @return sint8            APDS9960_SENSOR_NOT_CONNECTED if no sensor is connected
+ */
+apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev);
 
 /**
  * @brief Read values from sequential registers
@@ -291,30 +324,31 @@ sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *param
  * @param[in]  num_regs     Number of registers to read
  * @param[out] reg_val      Value of the read register
  *
- * @return                  0 on success
- * @return                  -1 on error
+ * @return sint8             0 on success
+ * @return sint8            -1 on error
  */
-sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
+apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs,
+                                              uint8 *reg_val);
 
 /**
  * @brief Read values from sequential registers
  *
  * @param[in]  dev          An apds9960 i2c slave device
  * @param[in]  reg_addr     Address of the register to read
- * @param[in] reg_val       Value to write into the register
+ * @param[in]  reg_val      Value to write into the register
  *
- * @return                  0 on success
- * @return                  -1 on error
+ * @return sint8             0 on success
+ * @return sint8            -1 on error
  */
-sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
 
 /**
  * @brief   Read red, green, blue and clear channel data
  *
  * @param[in]  dev          An apds9960 i2c slave device
- * @param[out] rgbc_data     Color data output buffer
+ * @param[out] rgbc_data    Color data output buffer
  *
- * @return                  0 on success
- * @return                  -1 on error
+ * @return sint8             0 on success
+ * @return sint8            -1 on error
  */
-sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
+apds9960_error_code_t apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
