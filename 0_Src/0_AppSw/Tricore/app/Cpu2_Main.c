@@ -50,7 +50,7 @@
 /******************************************************************************/
 
 /// @brief for i2c
-extern IfxI2c_I2c g_i2c_handle;  // i2c handle
+extern IfxI2c_I2c g_i2c_handle;
 
 /// @brief device handle to communicate with apds9960 sensor
 static IfxI2c_I2c_Device g_apds9960_i2cDev;

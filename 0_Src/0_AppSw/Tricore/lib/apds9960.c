@@ -9,16 +9,26 @@ extern IfxCpu_mutexLock g_i2c_bus_access_mtx;
 
 apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
   sint8 ret_val = APDS9960_SENSOR_NOT_CONNECTED;
-  uint8 get_enable_reg = 0;
-  uint8 set_enable_reg = APDS9960_ENABLE_REG_AEN_MASK | APDS9960_ENABLE_REG_PON_MASK;
+  uint8 reg_val = 0;
+
   if (apds9960_is_connected(dev) == APDS9960_SENSOR_CONNECTED) {
-    apds9960_write_register(dev, APDS9960_REG_ENABLE, set_enable_reg);
-    apds9960_read_registers(dev, APDS9960_REG_ENABLE, 1, &get_enable_reg);
-    if (get_enable_reg != set_enable_reg) {
-      ret_val = APDS9960_INITIALIZATION_INCOMPLETE;
-    } else {
-      ret_val = APDS9960_SUCCESS;
-    }
+    /* clear enable register - turn of the sensor and all functionalities */
+    apds9960_write_register(dev, APDS9960_REG_ENABLE, 0x00);
+    apds9960_read_registers(dev, APDS9960_REG_ENABLE, 1, &reg_val);
+    /* power on the sensor */
+    apds9960_write_register(dev, APDS9960_REG_ENABLE, APDS9960_ENABLE_REG_PON_MASK);
+    apds9960_read_registers(dev, APDS9960_REG_ENABLE, 1, &reg_val);
+    /* set integration time */
+    apds9960_write_register(dev, APDS9960_REG_ATIME, 0x01);
+    apds9960_read_registers(dev, APDS9960_REG_ATIME, 1, &reg_val);
+    /* set the ALS and color gain of sensor to 1 */
+    apds9960_write_register(dev, APDS9960_REG_CONTROL, APDS9960_CONTROL_REG_AGAIN_1X_MASK);
+    apds9960_read_registers(dev, APDS9960_REG_CONTROL, 1, &reg_val);
+    /* enable color sensing */
+    apds9960_write_register(dev, APDS9960_REG_ENABLE, APDS9960_ENABLE_REG_AEN_MASK | APDS9960_ENABLE_REG_PON_MASK);
+    apds9960_read_registers(dev, APDS9960_REG_ENABLE, 1, &reg_val);
+
+    ret_val = APDS9960_SUCCESS;
   }
   return ret_val;
 }

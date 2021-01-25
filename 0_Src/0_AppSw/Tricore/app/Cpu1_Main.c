@@ -68,11 +68,7 @@ int core1_main (void)
   IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
 
-  /* create config structure */
-  IfxI2c_I2c_Config config;
 
-  /* fill structure with default values and Module address */
-  IfxI2c_I2c_initConfig(&config, &MODULE_I2C0);
 
   /* configure pins */
   const IfxI2c_Pins pins = {
@@ -88,15 +84,15 @@ int core1_main (void)
   IfxI2c_I2c_initModule(&g_i2c_handle, &config);
 
   /* create device config */
-  IfxI2c_I2c_deviceConfig apds9960_i2c_deviceConfig;
+  IfxI2c_I2c_deviceConfig tcs34725_i2c_deviceConfig;
 
   /* fill structure with default values and i2c Handler */
-  IfxI2c_I2c_initDeviceConfig(&apds9960_i2c_deviceConfig, &g_i2c_handle); /* Device config for Bus of i2c handle */
+  IfxI2c_I2c_initDeviceConfig(&tcs34725_i2c_deviceConfig, &g_i2c_handle); /* Device config for Bus of i2c handle */
 
   /* initialize the i2c device handle */
-  apds9960_i2c_deviceConfig.deviceAddress = TCS34725_DEVICE_I2C_ADDRESS << 1; // 0x29=30; standard Device specific address TCS34725
+  tcs34725_i2c_deviceConfig.deviceAddress = TCS34725_DEVICE_I2C_ADDRESS << 1; // 0x29=30; standard Device specific address TCS34725
 
-  IfxI2c_I2c_initDevice(&g_tcs34725_i2cDev, &apds9960_i2c_deviceConfig);	// initialize registers/address
+  IfxI2c_I2c_initDevice(&g_tcs34725_i2cDev, &tcs34725_i2c_deviceConfig);	// initialize registers/address
 
   /* Enable the global interrupts of this CPU */
   IfxCpu_enableInterrupts();
