@@ -72,7 +72,7 @@ $(function() {
 <div class="contents">
 
   <h2>Flowchart</h2>
-  <img src="core0.png"/>
+  <img src="core0_flowchart.png"/>
   <br>
 
 <p>This application configures the UART Interface Module #3 to 115200,8N1. Furthermore, it configures a timer module TOM1CH0 to interrupt every ms. Within the main-loop the UART RX-FIFO is checked if any bytes are received. If a determined start-byte '#' is received the trailing bytes are received until a dedicated end-byte '$' is received. If there is a mismatch with the start-byte an error-message is sent via the UART TX- FIFO. If the correct start-byte and end-byte are recognized the string is copied into a TX buffer which is sent via the UART TX-FIFO back to the sender. Hence, every main-loop cycle a mutex semaphore is checked, if it is acquired (which means the a time of 1ms * UPDATE_RATE_MS has passed). If the mutex is acquired the mutex is released to be re-acquired and the �C-Pin P33.2 is toggled.  

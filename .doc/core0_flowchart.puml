@@ -1,0 +1,38 @@
+```plantuml
+
+@startuml
+
+start
+:synchronize to other cores;
+
+
+repeat
+
+
+repeat
+:aquire mutex for 
+adps9960 share memory;
+repeat while (mutex acquired sucessful)
+
+:copy adps9960 shared memory into local memory;
+
+:release the apds9960 shared memory mutex;
+
+repeat
+:aquire mutex for 
+tcs34527 share memory;
+repeat while (mutex acquired sucessful)
+
+:copy tcs34527 shared memory into local memory;
+:release the tcs34527 shared memory mutex;
+
+if ( core2 data is valid) then (no)
+:replace the received data from 
+core2 with data from core1;
+endif
+:calculate and output data via UART;
+:wait;
+
+@enduml
+
+```
