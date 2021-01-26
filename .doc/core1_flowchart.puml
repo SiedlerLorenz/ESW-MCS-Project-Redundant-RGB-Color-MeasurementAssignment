@@ -1,0 +1,28 @@
+```plantuml
+
+@startuml
+
+start
+:intiliaize i2c module;
+:synchronize to other cores;
+
+repeat
+:intiliaize TCS34527 sensor;
+repeat while (no TCS34527 sensor found?)
+
+repeat
+    :read rgbc values from sensor;
+
+    if (read was successful?) then (yes) 
+        if (aquire mutex for shared memory) then (mtx free)
+            :write rgbc data to shared memory;
+            :release mutex for shared memory;
+        else (mtx locked)
+        endif
+    else (no)
+
+    endif
+
+@enduml
+
+```

@@ -13,11 +13,15 @@ repeat
     :read rgbc values from sensor;
 
     if (read was successful?) then (yes) 
-        :transmit read rgbc data to core 0;
+        :transmit rgbc data
+        to core 0;
     elseif (sensor got disconnected?) then (yes)
-        :report sensor disconnect to core0;
+        :report sensor disconnect
+        to core0;
     elseif (read data invalid) then (yes)
-    
+        :report data that 
+        no new data is 
+        available yet to core0;
     else (no)
 
     endif
