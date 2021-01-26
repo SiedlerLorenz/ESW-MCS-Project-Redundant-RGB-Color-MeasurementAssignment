@@ -35,6 +35,9 @@
 #include <main.h>
 #include <aurix_tc27x_uart_app.h>
 
+#include <tcs34725.h>
+#include <apds9960.h>
+
 /******************************************************************************/
 /*-----------------------------------Macros-----------------------------------*/
 /******************************************************************************/
@@ -55,6 +58,8 @@
 
 #define RX_START_BYTE 0x23 /* '#' */
 #define RX_END_BYTE 0x24   /* '$' */
+
+#define WAIT_TIME   1000
 
 /******************************************************************************/
 /*------------------------------Global variables------------------------------*/
@@ -81,6 +86,7 @@ typedef struct
     uint32 slotOneMs;
   }isrCounter;
 }App_GtmTomTimer;
+
 
 App_GtmTomTimer GtmTomTimer;
 IfxCpu_mutexLock tim_ms_mutex;
@@ -158,13 +164,11 @@ int core0_main (void)
 {
   _aurix_tc27x_app_uart_t uart_struct;
   IfxGtm_Tom_Timer_Config timer_struct;
-  uint16 idx = 0;
-  uint8 tx_buffer[TX_BUFFER_SIZE] = {0};
-  uint8 rx_buffer[RX_BUFFER_SIZE] = {0};
-  uint8 rx_error[RX_BUFFER_SIZE] = {"wrong start byte\n"};
-  uint16 tx_buffer_size = TX_BUFFER_SIZE-1;
-  uint16 rx_buffer_size = RX_BUFFER_SIZE-1;
-  sint32 rx_fifo_bytes_available = 0;
+
+  uint8 tx_error_msg[RX_BUFFER_SIZE] = {"no values received"};
+
+  uint8 high_tmp;
+  uint8 low_tmp;
 
 	/*
 	 * !!WATCHDOG0 AND SAFETY WATCHDOG ARE DISABLED HERE!!
@@ -199,53 +203,76 @@ int core0_main (void)
   IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
 
 
+  tcs34725_rgbc_data_t tcs34725_rgbc_shared_data_tmp;
+  apds9960_shared_data_t apds9960_rgbc_shared_data_tmp;
+
+
   while (TRUE){
-    /* check if UART-FIFO received any symbols */
-    rx_fifo_bytes_available = uart_app_getread_count();
-    /* if UART-FIFO has received any symbols */
-    if(rx_fifo_bytes_available != 0)
-    {
-      /* receive one byte from UART-FIFO */
-      uart_app_receive_byte(&uart_struct,&rx_buffer[0],RX_TIMEOUT);
-      /* check if received byte is # otherwise jumo the else-statement */
-      if(rx_buffer[0] == RX_START_BYTE)
-      {
-        /* if start byte was correct */
-        idx=1;
-        do{
-          /* receive other bytes until end-byte $ was received */
-          uart_app_receive_byte(&uart_struct,&rx_buffer[idx],RX_TIMEOUT);
-          /* increment index to save new byte */
-          idx++;
-        }while((rx_buffer[idx] != RX_END_BYTE));
-        /* if bytes have been received copy bytes from RX to TX buffer */
-        memcpy(&tx_buffer[0],&rx_buffer[0],strlen((char *)&rx_buffer));
-        /* determine the length of the content of the TX buffer */
-        tx_buffer_size = strlen((char *)&tx_buffer);
-        /* send TX buffer via UART-FIFO back to the PC */
-        uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,TX_TIMEOUT);
-        /* reset the content of both RX and TX buffer */
-        memset(&rx_buffer,0,rx_buffer_size);
-        memset(&tx_buffer,0,tx_buffer_size);
-      }
-      /* if wrong start byte was received print out error message */
-      else{
-        /* loop through the error message buffer and send bytewise */
-        for(idx=0;idx<=strlen((char *)&rx_error);idx++)
-        {
-          /* send one byte to the UART-FIFO buffer */
-          uart_app_send_byte(&uart_struct,&rx_error[idx],TX_TIMEOUT);
-        }
-        /* reset RX buffer to make sure wrong content is deleted */
-        memset(&rx_buffer,0,rx_buffer_size);
-      }
-    }
-    /* check if the Mutex is acquired - Timer has reached UPDATE_RATE_MS*/
-    if(IfxCpu_getMutexStatus(&tim_ms_mutex))
-    {
-      /* free/release Mutex in order to ensure re-acquisition */
-      IfxCpu_releaseMutex(&tim_ms_mutex);
-      LED_toggle_P33(DBG_LED);
-    }
-  }
+
+
+	  while (!IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx));
+		  /* write the read data to the shared memory */
+		  tcs34725_rgbc_shared_data_tmp = g_tcs34725_rgbc_shared_data;
+
+		  high_tmp = tcs34725_rgbc_shared_data_tmp.clear >> 8;
+		  low_tmp = tcs34725_rgbc_shared_data_tmp.clear;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+
+		  high_tmp = g_tcs34725_rgbc_shared_data.red >> 8;
+		  low_tmp = g_tcs34725_rgbc_shared_data.red;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+
+		  high_tmp = g_tcs34725_rgbc_shared_data.green >> 8;
+		  low_tmp = g_tcs34725_rgbc_shared_data.green;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+
+		  high_tmp = g_tcs34725_rgbc_shared_data.blue >> 8;
+		  low_tmp = g_tcs34725_rgbc_shared_data.blue;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+		  /* release lock for core0 to read the shared memory again */
+		  IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
+
+
+	  while (!IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx));
+
+
+			/* write the read data to the shared memory */
+		  apds9960_rgbc_shared_data_tmp = g_apds9960_shared_data;
+
+		  high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.c >> 8;
+		  low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.c;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+
+		  high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.r >> 8;
+		  low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.r;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+
+		  high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.g >> 8;
+		  low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.g;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+
+		  high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.b >> 8;
+		  low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.b;
+
+		  uart_app_send_byte(&uart_struct, &high_tmp,TX_TIMEOUT);
+		  uart_app_send_byte(&uart_struct, &low_tmp,TX_TIMEOUT);
+			/* release lock for core0 to read the shared memory again */
+		  IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+
+  	  waitTime(IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, WAIT_TIME));
+	}
 }
