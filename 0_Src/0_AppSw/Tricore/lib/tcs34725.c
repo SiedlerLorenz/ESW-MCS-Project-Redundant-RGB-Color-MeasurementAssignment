@@ -12,8 +12,10 @@ sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params) {
   uint8 device_id = 0;
   uint8 reg_enable = 0;
 
+  /* check the ID register whether the correct sensor has been connected */
   tcs34725_read_registers(dev, TCS34725_REG_ID, 1, &device_id);
   if (device_id == TCS34725_DEVICE_ID) {
+	/* configuration of the ENABLE Register to activate the measurement of the RGBC values */
     tcs34725_write_register(dev, TCS34725_REG_ENABLE, 0x03);
     tcs34725_read_registers(dev, TCS34725_REG_ENABLE, 1, &reg_enable);
     if (reg_enable != 0x03) {
@@ -22,6 +24,7 @@ sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params) {
       ret_val = 0;
     }
   }
+  /* clear the array with 0 for reuse */
   memset(tcs34725_i2c_data, 0, sizeof(int) * 28);
   return ret_val;
 }
@@ -31,8 +34,10 @@ sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data
   uint8 rgbc_reg_buf[8] = {0};
   uint8 reg_val = 0;
 
+  /* check if the RGBC values are valid to read */
   tcs34725_read_registers(dev, TCS34725_REG_STATUS, 1, &reg_val);
   if (reg_val | TCS34725_STATUS_REG_AVALID_MASK) {
+	/* read the RGBC values from the sensor */
     tcs34725_read_registers(dev, TCS34725_REG_CDATAL, 8, rgbc_reg_buf);
 
     rgbc_data->clear = rgbc_reg_buf[1] << 8 | rgbc_reg_buf[0];

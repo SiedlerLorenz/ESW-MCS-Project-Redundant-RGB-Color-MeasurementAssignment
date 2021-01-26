@@ -1,3 +1,14 @@
+/**
+ * @file tcs34725.h
+ * @author Siedler Lorenz
+ * @brief
+ * @version 0.1
+ * @date 2021-01-06
+ *
+ * @copyright Copyright (c) 2020
+ *
+ */
+
 #pragma once
 #include <I2c/I2c/IfxI2c_I2c.h>
 #include <Cpu/Std/Platform_Types.h>
@@ -5,7 +16,10 @@
 #define TCS34725_DEVICE_I2C_ADDRESS (0x29)
 #define TCS34725_DEVICE_ID (0x44)
 
-
+/**
+ * @name Register addresses
+ * @{
+ */
 #define TCS34725_REG_ENABLE (0x00)      // R/W Enable states and interrupts 0x00
 #define TCS34725_REG_RGBC (0x01)       // R/W ADC integration time 0xFF
 #define TCS34725_REG_WTIME (0x03)       // R/W Wait time (non-gesture) 0xFF
@@ -43,17 +57,22 @@
  */
 #define TCS34725_STATUS_REG_AVALID_MASK (1 << 0)
 
-
+/**
+ * @brief   Configuration parameters for APDS9960 devices
+ */
 typedef struct
 {
 } tcs34725_params_t;
 
+/**
+ * @brief   Result vector for color measurement
+ */
 typedef struct
 {
-    uint16          clear;
-    uint16			red;
-    uint16      	green;
-    uint16          blue;
+    uint16          clear;	/** Color value of the clear channel */
+    uint16			red;	/** Color value of the red channel */
+    uint16      	green;	/** Color value of the green channel */
+    uint16          blue;	/** Color value of the blue channel */
 } tcs34725_rgbc_data_t;
 
 

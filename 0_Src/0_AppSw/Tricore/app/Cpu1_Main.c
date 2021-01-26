@@ -4,7 +4,10 @@
  * @version v0.1
  * @author Siedler Lorenz
  *
- * @brief ToDO
+ * @brief Core1 uses i2c to repeately read color values from an tcs34725 sensor.
+ * After a successful read the color values are transmitted to core0 via shared
+ * memory given that the shared memory is currenty not accquired by core0.
+ *
  */
 
 /******************************************************************************/
@@ -47,6 +50,8 @@ tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
 IfxCpu_mutexLock g_i2c_bus_access_mtx;
 IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
 
+/* Sensor connection */
+sint8 tcs34725_con;
 
 /******************************************************************************/
 /*------------------------Inline/Private Function Prototypes------------------*/
@@ -57,7 +62,7 @@ IfxCpu_mutexLock g_tcs34725_rgbc_shared_data_mtx;
 /*-------------------------Function Implementations---------------------------*/
 /******************************************************************************/
 
-/** \brief Main entry point for CPU0  */
+/** \brief Main entry point for CPU1  */
 int core1_main (void)
 {
 
@@ -68,7 +73,11 @@ int core1_main (void)
   IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
   IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
 
+  /* create config structure */
+  IfxI2c_I2c_Config config;
 
+  /* fill structure with default values and Module address */
+  IfxI2c_I2c_initConfig(&config, &MODULE_I2C0);
 
   /* configure pins */
   const IfxI2c_Pins pins = {
@@ -102,21 +111,24 @@ int core1_main (void)
   IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
 
   tcs34725_rgbc_data_t tcs34725_rgbc_data;
+  /* default value */
+  tcs34725_con = 0;
   
   /* initialize the apds9960 sensor */
-  tcs34725_init(&g_tcs34725_i2cDev, &g_tcs34725_params);
+  tcs34725_con = tcs34725_init(&g_tcs34725_i2cDev, &g_tcs34725_params);
 
   while (TRUE){
-	/* read rgbc data from sensor */
-	tcs34725_read_rgbc(&g_tcs34725_i2cDev, &tcs34725_rgbc_data);
-	/* acquire lock to write safely to the shared memory */
-	if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
-	  /* write the read data to the shared memory */
-		g_tcs34725_rgbc_shared_data = tcs34725_rgbc_data;
-	  /* release lock for core0 to read the shared memory again */
-	  IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
+	  if (tcs34725_con != -1){
+		/* read rgbc data from sensor */
+		tcs34725_read_rgbc(&g_tcs34725_i2cDev, &tcs34725_rgbc_data);
+		/* acquire lock to write safely to the shared memory */
+		if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
+		  /* write the read data to the shared memory */
+		  g_tcs34725_rgbc_shared_data = tcs34725_rgbc_data;
+		  /* release lock for core0 to read the shared memory again */
+		  IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
+		}
 	}
-
   }
 
 }
