@@ -40,7 +40,7 @@ extern tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
 extern IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
 
 /// @brief Shared memory to exchange rgbc color data between core0 and core2
-extern apds9960_shared_data_t g_apds9960_rgbc_shared_data;
+extern apds9960_shared_data_t g_apds9960_shared_data;
 
 
 #endif /* _MAIN_H_ */
