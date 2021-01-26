@@ -4,6 +4,7 @@
 # 1 "<command-line>"
 # 1 "0_Src/0_AppSw/Tricore/lib/apds9960.c"
 # 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
+# 12 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
        
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
 # 88 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h"
@@ -24,7 +25,7 @@ typedef signed long sint16_least;
 typedef signed long sint32_least;
 
 typedef unsigned char boolean;
-# 3 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
+# 14 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
 # 1 "./0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h" 1
 # 288 "./0_Src/4_McHal/Tricore/I2c/I2c/IfxI2c_I2c.h"
 # 1 "./0_Src/4_McHal/Tricore/I2c/Std/IfxI2c.h" 1
@@ -12753,28 +12754,48 @@ extern IfxI2c_I2c_Status IfxI2c_I2c_read(IfxI2c_I2c_Device *i2cDevice, volatile 
 
 
 extern IfxI2c_I2c_Status IfxI2c_I2c_write(IfxI2c_I2c_Device *i2cDevice, volatile uint8 *data, Ifx_SizeT size);
-# 4 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
-# 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+# 15 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 2
+# 45 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+typedef enum {
+  APDS9960_FAIL,
+  APDS9960_SUCCESS,
+  APDS9960_SENSOR_CONNECTED,
+  APDS9960_SENSOR_NOT_CONNECTED,
+  APDS9960_INITIALIZATION_INCOMPLETE,
+  APDS9960_NO_VALID_COLOR_VALUES
+} apds9960_error_code_t;
+# 318 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
 typedef struct {
-  sint16 c;
-  sint16 r;
-  sint16 g;
-  sint16 b;
+  uint16 c;
+  uint16 r;
+  uint16 g;
+  uint16 b;
 } apds9960_rgbc_data_t;
 
 
 
 
 typedef struct {
+  apds9960_rgbc_data_t rgbc;
+  apds9960_error_code_t status;
+} apds9960_shared_data_t;
+
+
+
+
+typedef struct {
 } apds9960_params_t;
-# 284 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
-# 297 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 309 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 320 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
+# 350 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+# 361 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev);
+# 375 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs,
+                                              uint8 *reg_val);
+# 389 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 403 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
 # 2 "0_Src/0_AppSw/Tricore/lib/apds9960.c" 2
 # 1 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 1 3
 # 10 "c:\\hightec\\toolchains\\tricore\\v4.9.1.0-infineon-2.0\\tricore\\include\\stdlib.h" 3
@@ -13385,43 +13406,68 @@ uint8 i2c_data[64];
 
 extern IfxCpu_mutexLock g_i2c_bus_access_mtx;
 
-sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params) {
+  sint8 ret_val = APDS9960_SENSOR_NOT_CONNECTED;
+  uint8 reg_val = 0;
 
+  if (apds9960_is_connected(dev) == APDS9960_SENSOR_CONNECTED) {
+
+    apds9960_write_register(dev, (0x80), 0x00);
+    apds9960_read_registers(dev, (0x80), 1, &reg_val);
+
+    apds9960_write_register(dev, (0x80), (1 << 0));
+    apds9960_read_registers(dev, (0x80), 1, &reg_val);
+
+    apds9960_write_register(dev, (0x81), 0x01);
+    apds9960_read_registers(dev, (0x81), 1, &reg_val);
+
+    apds9960_write_register(dev, (0x8F), (0 << 0));
+    apds9960_read_registers(dev, (0x8F), 1, &reg_val);
+
+    apds9960_write_register(dev, (0x80), (1 << 1) | (1 << 0));
+    apds9960_read_registers(dev, (0x80), 1, &reg_val);
+
+    ret_val = APDS9960_SUCCESS;
+  }
+  return ret_val;
+}
+
+apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev) {
+  sint8 connection_status = APDS9960_SENSOR_NOT_CONNECTED;
   uint8 device_id = 0;
   apds9960_read_registers(dev, (0x92), 1, &device_id);
   if (device_id == (0xAB)) {
-    apds9960_write_register(dev, (0x80), 0x03);
-    apds9960_read_registers(dev, (0x80), 1, &device_id);
-    if (device_id != 0x03) {
-      ret_val = -1;
-    } else {
-      ret_val = 0;
-    }
+    connection_status = APDS9960_SENSOR_CONNECTED;
   }
-  return ret_val;
+  return connection_status;
 }
 
-sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data) {
+  sint8 ret_val = APDS9960_FAIL;
   uint8 rgbc_reg_buf[8] = {0};
   uint8 reg_val = 0;
 
-  apds9960_read_registers(dev, (0x93), 1, &reg_val);
-  if (reg_val | (1 << 0)) {
-    apds9960_read_registers(dev, (0x94), 8, rgbc_reg_buf);
+  if (apds9960_is_connected(dev) == APDS9960_SENSOR_CONNECTED) {
+    apds9960_read_registers(dev, (0x93), 1, &reg_val);
+    if (reg_val | (1 << 0)) {
+      apds9960_read_registers(dev, (0x94), 8, rgbc_reg_buf);
 
-    rgbc_data->c = rgbc_reg_buf[1] << 8 | rgbc_reg_buf[0];
-    rgbc_data->r = rgbc_reg_buf[3] << 8 | rgbc_reg_buf[2];
-    rgbc_data->g = rgbc_reg_buf[5] << 8 | rgbc_reg_buf[4];
-    rgbc_data->b = rgbc_reg_buf[7] << 8 | rgbc_reg_buf[6];
-    ret_val = 0;
+      rgbc_data->c = rgbc_reg_buf[1] << 8 | rgbc_reg_buf[0];
+      rgbc_data->r = rgbc_reg_buf[3] << 8 | rgbc_reg_buf[2];
+      rgbc_data->g = rgbc_reg_buf[5] << 8 | rgbc_reg_buf[4];
+      rgbc_data->b = rgbc_reg_buf[7] << 8 | rgbc_reg_buf[6];
+      ret_val = APDS9960_SUCCESS;
+    } else {
+      ret_val = APDS9960_NO_VALID_COLOR_VALUES;
+    }
+  } else {
+    ret_val = APDS9960_SENSOR_NOT_CONNECTED;
   }
   return ret_val;
 }
 
-sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_vals) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_vals) {
+  sint8 ret_val = APDS9960_FAIL;
 
 
   i2c_data[0] = reg_addr;
@@ -13438,12 +13484,12 @@ sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
 
   memcpy(reg_vals, &i2c_data, num_regs);
 
-  ret_val = 0;
+  ret_val = APDS9960_SUCCESS;
   return ret_val;
 }
 
-sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val) {
-  sint8 ret_val = -1;
+apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val) {
+  sint8 ret_val = APDS9960_FAIL;
 
 
   i2c_data[0] = reg_addr;
@@ -13457,6 +13503,6 @@ sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint
 
   IfxCpu_releaseMutex(&g_i2c_bus_access_mtx);
 
-  ret_val = 0;
+  ret_val = APDS9960_SUCCESS;
   return ret_val;
 }

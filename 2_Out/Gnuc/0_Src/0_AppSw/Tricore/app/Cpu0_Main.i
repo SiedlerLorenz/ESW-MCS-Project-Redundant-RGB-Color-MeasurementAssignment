@@ -28658,14 +28658,18 @@ extern const char _ctype_[];
 # 22 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 
 # 1 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 1
+# 12 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
        
 
 # 1 "./0_Src/4_McHal/Tricore/Cpu/Std/Platform_Types.h" 1
-# 4 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
-# 47 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 15 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h" 2
+# 63 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 typedef struct
 {
 } tcs34725_params_t;
+
+
+
 
 typedef struct
 {
@@ -28674,38 +28678,59 @@ typedef struct
     uint16 green;
     uint16 blue;
 } tcs34725_rgbc_data_t;
-# 69 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 88 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_init(IfxI2c_I2c_Device *dev, const tcs34725_params_t *params);
-# 82 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 101 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_registers(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 94 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 113 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_write_register(IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 105 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
+# 124 "./0_Src/0_AppSw/Tricore/lib/tcs34725.h"
 sint8 tcs34725_read_rgbc(IfxI2c_I2c_Device *dev, tcs34725_rgbc_data_t *rgbc_data);
 # 24 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 # 1 "./0_Src/0_AppSw/Tricore/lib/apds9960.h" 1
+# 12 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
        
-# 262 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+# 45 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+typedef enum {
+  APDS9960_FAIL,
+  APDS9960_SUCCESS,
+  APDS9960_SENSOR_CONNECTED,
+  APDS9960_SENSOR_NOT_CONNECTED,
+  APDS9960_INITIALIZATION_INCOMPLETE,
+  APDS9960_NO_VALID_COLOR_VALUES
+} apds9960_error_code_t;
+# 318 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
 typedef struct {
-  sint16 c;
-  sint16 r;
-  sint16 g;
-  sint16 b;
+  uint16 c;
+  uint16 r;
+  uint16 g;
+  uint16 b;
 } apds9960_rgbc_data_t;
 
 
 
 
 typedef struct {
+  apds9960_rgbc_data_t rgbc;
+  apds9960_error_code_t status;
+} apds9960_shared_data_t;
+
+
+
+
+typedef struct {
 } apds9960_params_t;
-# 284 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
-# 297 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs, uint8 *reg_val);
-# 309 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
-# 320 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
-sint8 apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
+# 350 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_init(const IfxI2c_I2c_Device *dev, const apds9960_params_t *params);
+# 361 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_is_connected(const IfxI2c_I2c_Device *dev);
+# 375 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_read_registers(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 num_regs,
+                                              uint8 *reg_val);
+# 389 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_write_register(const IfxI2c_I2c_Device *dev, uint8 reg_addr, uint8 reg_val);
+# 403 "./0_Src/0_AppSw/Tricore/lib/apds9960.h"
+apds9960_error_code_t apds9960_read_rgbc(const IfxI2c_I2c_Device *dev, apds9960_rgbc_data_t *rgbc_data);
 # 25 "./0_Src/0_AppSw/Tricore/lib/main.h" 2
 
 
@@ -28725,7 +28750,7 @@ extern tcs34725_rgbc_data_t g_tcs34725_rgbc_shared_data;
 extern IfxCpu_mutexLock g_apds9960_rgbc_shared_data_mtx;
 
 
-extern apds9960_rgbc_data_t g_apds9960_rgbc_shared_data;
+extern apds9960_shared_data_t g_apds9960_rgbc_shared_data;
 # 36 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
 # 1 "./0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_app.h" 1
 # 25 "./0_Src/0_AppSw/Tricore/lib/aurix_tc27x_uart_app.h"
@@ -32702,7 +32727,7 @@ _aurix_tc27x_app_uart_err_t uart_app_flush_rx(_aurix_tc27x_app_uart_t *pUARTStru
 _aurix_tc27x_app_uart_err_t uart_app_flush_tx(_aurix_tc27x_app_uart_t *pUARTStruct);
 sint32 uart_app_getread_count();
 # 37 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c" 2
-# 65 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
+# 70 "0_Src/0_AppSw/Tricore/app/Cpu0_Main.c"
 IfxCpu_syncEvent g_sync_cores_event;
 uint32 g_sync_cores_timeout_ms = 1000;
 
@@ -32722,6 +32747,7 @@ typedef struct
     uint32 slotOneMs;
   }isrCounter;
 }App_GtmTomTimer;
+
 
 App_GtmTomTimer GtmTomTimer;
 IfxCpu_mutexLock tim_ms_mutex;
@@ -32799,13 +32825,11 @@ int core0_main (void)
 {
   _aurix_tc27x_app_uart_t uart_struct;
   IfxGtm_Tom_Timer_Config timer_struct;
-  uint16 idx = 0;
-  uint8 tx_buffer[26] = {0};
-  uint8 rx_buffer[26] = {0};
-  uint8 rx_error[26] = {"wrong start byte\n"};
-  uint16 tx_buffer_size = 26 -1;
-  uint16 rx_buffer_size = 26 -1;
-  sint32 rx_fifo_bytes_available = 0;
+
+  uint8 tx_error_msg[26] = {"no values received"};
+
+  uint8 high_tmp;
+  uint8 low_tmp;
 
 
 
@@ -32840,53 +32864,76 @@ int core0_main (void)
   IfxCpu_waitEvent(&g_sync_cores_event, g_sync_cores_timeout_ms);
 
 
+  tcs34725_rgbc_data_t tcs34725_rgbc_shared_data_tmp;
+  apds9960_shared_data_t apds9960_rgbc_shared_data_tmp;
+
+
   while (1){
 
-    rx_fifo_bytes_available = uart_app_getread_count();
 
-    if(rx_fifo_bytes_available != 0)
-    {
+   while (!IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx));
 
-      uart_app_receive_byte(&uart_struct,&rx_buffer[0],10000);
+    tcs34725_rgbc_shared_data_tmp = g_tcs34725_rgbc_shared_data;
 
-      if(rx_buffer[0] == 0x23)
-      {
+    high_tmp = tcs34725_rgbc_shared_data_tmp.clear >> 8;
+    low_tmp = tcs34725_rgbc_shared_data_tmp.clear;
 
-        idx=1;
-        do{
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
 
-          uart_app_receive_byte(&uart_struct,&rx_buffer[idx],10000);
+    high_tmp = g_tcs34725_rgbc_shared_data.red >> 8;
+    low_tmp = g_tcs34725_rgbc_shared_data.red;
 
-          idx++;
-        }while((rx_buffer[idx] != 0x24));
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
 
-        memcpy(&tx_buffer[0],&rx_buffer[0],strlen((char *)&rx_buffer));
+    high_tmp = g_tcs34725_rgbc_shared_data.green >> 8;
+    low_tmp = g_tcs34725_rgbc_shared_data.green;
 
-        tx_buffer_size = strlen((char *)&tx_buffer);
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
 
-        uart_app_send_nbyte(&uart_struct,(uint8 *)&tx_buffer,(Ifx_SizeT *)&tx_buffer_size,10000);
+    high_tmp = g_tcs34725_rgbc_shared_data.blue >> 8;
+    low_tmp = g_tcs34725_rgbc_shared_data.blue;
 
-        memset(&rx_buffer,0,rx_buffer_size);
-        memset(&tx_buffer,0,tx_buffer_size);
-      }
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
 
-      else{
+    IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
 
-        for(idx=0;idx<=strlen((char *)&rx_error);idx++)
-        {
 
-          uart_app_send_byte(&uart_struct,&rx_error[idx],10000);
-        }
+   while (!IfxCpu_acquireMutex(&g_apds9960_rgbc_shared_data_mtx));
 
-        memset(&rx_buffer,0,rx_buffer_size);
-      }
-    }
 
-    if(IfxCpu_getMutexStatus(&tim_ms_mutex))
-    {
 
-      IfxCpu_releaseMutex(&tim_ms_mutex);
-      IfxPort_togglePin(&((*(Ifx_P *)0xF003D300u)),2);
-    }
-  }
+    apds9960_rgbc_shared_data_tmp = g_apds9960_shared_data;
+
+    high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.c >> 8;
+    low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.c;
+
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
+
+    high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.r >> 8;
+    low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.r;
+
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
+
+    high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.g >> 8;
+    low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.g;
+
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
+
+    high_tmp = apds9960_rgbc_shared_data_tmp.rgbc.b >> 8;
+    low_tmp = apds9960_rgbc_shared_data_tmp.rgbc.b;
+
+    uart_app_send_byte(&uart_struct, &high_tmp,10000);
+    uart_app_send_byte(&uart_struct, &low_tmp,10000);
+
+    IfxCpu_releaseMutex(&g_apds9960_rgbc_shared_data_mtx);
+
+     waitTime(IfxStm_getTicksFromMilliseconds((&((*(Ifx_STM *)0xF0000000u))), 1000));
+ }
 }

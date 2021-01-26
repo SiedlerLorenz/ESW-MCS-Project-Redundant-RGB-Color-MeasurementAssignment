@@ -112,22 +112,22 @@ int core1_main (void)
 
   tcs34725_rgbc_data_t tcs34725_rgbc_data;
   /* default value */
-  tcs34725_con = 0;
+  tcs34725_con = -1;
   
-  /* initialize the apds9960 sensor */
+  /* initialize the tcs34725 sensor */
+  do {
   tcs34725_con = tcs34725_init(&g_tcs34725_i2cDev, &g_tcs34725_params);
+  }while(tcs34725_con == -1);
 
   while (TRUE){
-	  if (tcs34725_con != -1){
-		/* read rgbc data from sensor */
-		tcs34725_read_rgbc(&g_tcs34725_i2cDev, &tcs34725_rgbc_data);
-		/* acquire lock to write safely to the shared memory */
-		if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
-		  /* write the read data to the shared memory */
-		  g_tcs34725_rgbc_shared_data = tcs34725_rgbc_data;
-		  /* release lock for core0 to read the shared memory again */
-		  IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
-		}
+	/* read rgbc data from sensor */
+	tcs34725_read_rgbc(&g_tcs34725_i2cDev, &tcs34725_rgbc_data);
+	/* acquire lock to write safely to the shared memory */
+	if (IfxCpu_acquireMutex(&g_tcs34725_rgbc_shared_data_mtx)) {
+	  /* write the read data to the shared memory */
+	  g_tcs34725_rgbc_shared_data = tcs34725_rgbc_data;
+	  /* release lock for core0 to read the shared memory again */
+	  IfxCpu_releaseMutex(&g_tcs34725_rgbc_shared_data_mtx);
 	}
   }
 
