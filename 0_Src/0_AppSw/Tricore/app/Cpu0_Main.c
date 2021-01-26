@@ -197,6 +197,8 @@ int core0_main (void)
 
 	/* info message about invalid data from core2 */
 	uint8 rx_invalid_data_core2[RX_BUFFER_SIZE] = {"no data from core2. Only core1 considered\n"};
+	/* info message about invalid data from core2 */
+	uint8 rx_valid_data_core2[RX_BUFFER_SIZE] = {"valid data from core2\n"};
 	/* info message about clear data coming up */
 	uint8 rx_data_clear[RX_BUFFER_SIZE] = {"\nclear:"};
 	/* info message about red data coming up */
@@ -231,11 +233,24 @@ int core0_main (void)
 	  IfxCpu_releaseMutex( & g_apds9960_rgbc_shared_data_mtx);
 
 
-	  if (!apds9960_rgbc_shared_data_tmp.status == APDS9960_SUCCESS) {
+	  if (apds9960_rgbc_shared_data_tmp.status != APDS9960_SUCCESS) {
 		  for(arr_cnt=0;arr_cnt<=strlen((char *)&rx_invalid_data_core2)-1;arr_cnt++)
 		  {
 			/* send one byte to the UART-FIFO buffer */
 			uart_app_send_byte(&uart_struct,&rx_invalid_data_core2[arr_cnt],TX_TIMEOUT);
+		  }
+
+
+			apds9960_rgbc_shared_data_tmp.rgbc.c = tcs34725_rgbc_shared_data_tmp.clear;
+			apds9960_rgbc_shared_data_tmp.rgbc.r = tcs34725_rgbc_shared_data_tmp.red;
+			apds9960_rgbc_shared_data_tmp.rgbc.g = tcs34725_rgbc_shared_data_tmp.green;
+			apds9960_rgbc_shared_data_tmp.rgbc.b = tcs34725_rgbc_shared_data_tmp.blue;
+
+	  } else {
+		  for(arr_cnt=0;arr_cnt<=strlen((char *)&rx_valid_data_core2)-1;arr_cnt++)
+		  {
+			/* send one byte to the UART-FIFO buffer */
+			uart_app_send_byte(&uart_struct,&rx_valid_data_core2[arr_cnt],TX_TIMEOUT);
 		  }
 	  }
 

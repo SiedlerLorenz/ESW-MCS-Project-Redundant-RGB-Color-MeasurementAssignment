@@ -4,10 +4,7 @@
  * @version v0.1
  * @author Siedler Lorenz
  *
- * @brief Core1 uses i2c to repeately read color values from an tcs34725 sensor.
- * After a successful read the color values are transmitted to core0 via shared
- * memory given that the shared memory is currenty not accquired by core0.
- *
+ * @brief ToDO
  */
 
 /******************************************************************************/
